@@ -1,0 +1,288 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 15</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 15</h1>
+
+	 <h2>Generalized Combinations</h2>
+
+
+    <p>Sometimes, rather than picking a bunch of things from a fixed set, we may
+    want to choose some objects from a set of <em>types</em> of things.
+
+    <p><strong>Example 17.1.</strong> Suppose you're ordering six scoops of ice
+    cream and there is a choice of four types, say cookies & cream, pralines &
+    cream, salted caramel, and gold medal ribbon. How many different
+    combinations can you make, with repetition? For an ordinary combination, we
+    would only choose one of each flavor, but because we're concerned about
+    classes of objects rather than single objects, we're able to choose
+    multiples of a particular type.
+
+    <p>Let's begin by considering one possible selection, $C,P,G,C,C,G$ (three
+    cookie, one praline, two gold), assuming this is the order in which we chose
+    our scoops. However, since this is a combination and some of the elements
+    are indistinguishable anyway, the order doesn't really matter, so let's
+    group them together into $CCCPGG$. Now, let's separate these so they don't
+    touch each other and cross contaminate the flavours or something, and we
+    have something that looks like $CCC|P|GG$. 
+
+    <p>We can play with this analogy further and suppose we have a cup for each
+    flavor, regardless of the number that we end up choosing, so we have
+    something like $CCC|P||GG$. Finally, we note that since each cup contains a
+    specific flavor, we don't need to specifically denote the flavor, and we can
+    represent our choice by $***|*||**$.
+
+    <p>Let's consider another possible choice: $*||*|****$, which is one cookies
+    & cream, one salted caramel, and four gold medal ribbon. What we observe is
+    that each choice of six items from four classes can be represented by an
+    arrangement of six stars representing the items and three bars representing
+    the division of classes of items.
+
+    <p>But this is something we've already seen before: it's just a string
+    problem over the alphabet $\{*,|\}$. Since we have six objects and four
+    classes, we can view our possible selections as a string of length 9 with 6
+    $*$s and 3 $|$s and ask how many such strings there are. There are $$\binom
+    9 6 = \binom 9 3 = \frac{9!}{6!3!} = \frac{9 \cdot 8 \cdot 7}{3 \cdot 2
+    \cdot 1} = 3 \cdot 4 \cdot 7 = 84$$ such strings.
+
+    <p>This method of using stars and bars to denote the objects and categories
+    was popularized by William Feller's <cite>An Introduction to Probability
+    Theory and its Applications</cite> in 1950.
+
+  <p><strong>Theorem 17.2. (Bose-Einstein)</strong> There are $\binom{k+n-1}{k}
+  = \binom{k+n-1}{n-1} = \frac{(k+n-1)!}{k!(n-1)!}$ outcomes when sampling from
+  a set $A$ of $n$ elements <em>with</em> repetition and <em>without</em> order.
+
+    <p><em>Proof.</em> We can view each possible selection as a string of length
+    $k+n-1$ over the alphabet $\{\star,|\}$. We know that each string contains
+    exactly $k$ $\star$'s and $n-1$ $|$'s. Then there are $\binom{k+n-1}{k}$
+    possible ways to choose spots for the $k$ $\star$s. Since all remaining
+    spots must be occupied by $|$s, this is the same as choosing spots for $n-1$
+    $|$s, and there are $\binom{k+n-1}{n-1}$ ways to do so.  $\tag*{$\Box$}$
+
+    <p>The type of counting in Theorem 17.2 is sometimes called
+    <em>Bose-Einstein statistics</em>. At the end of this lecture
+    we will discuss the story behind this name.
+
+    <p><strong>Example 17.3.</strong> How many solutions to $x+y+z = 13$ are
+    there, for non-negative integers $x,y,z$? Here, we can think of $x,y,z$ as our types of objects, of which we want to choose 13 in some combination. For instance, one solution would be to choose 6 $x$s, 4 $y$s, and 3 $z$s, which would give us $6+4+3 = 13$. Then the number of solutions is just 
+    $$\binom{13+3-1}{13} = \frac{15!}{13!2!} = \frac{15 \cdot 14}{2} = 105.$$
+
+    <p>Just like with generalizing combinations, we can also think about how to generalize permutations.
+
+    <p><strong>Example 17.4.</strong> How many distinguishable permutations of the word $ACGACGA$ are there? There are two approaches we can take. The first is something we've seen already, by counting the number of ways to choose positions in a word. Here, we have three $A$s, two $C$s, and two $G$s. So we can choose three of seven positions for the $A$s and there are $\binom 7 3$ ways to do so. This leaves four spots. We choose two for the $C$s and there are $\binom 4 2$ ways to do so, leaving two spots for the two $G$s with $\binom 2 2$ ways to place them. In total, we have
+    $$\binom 7 3 \binom 4 2 \binom 2 2 = \frac{7!}{3!4!} \cdot \frac{4!}{2!2!} \cdot \frac{2!}{2!0!} = \frac{7!}{3!2!2!} = 210.$$
+
+    <p>The other way to consider this problem is to suppose that each symbol of our word is distinguishable, by adding marks to each symbol in some way. So suppose we have $A_1 C_1 G_1 A_2 C_2 G_2 A_3$. It is clear that there are $7!$ permutations of this word. However, we know that these symbols aren't really distinguishable, so we treat each such permutation as equivalent. For instance, there are $P(3,3) = 3!$ permutations of $A_1 A_2 A_3$ and we know these are equivalent once we make these indistinguishable. By removing all the indistinguishable permutations for each symbol, we get
+    $$\frac{7!}{3!2!2!}$$
+    as before.
+
+    <h3>Multinomial Coefficients</h3>
+
+    <p>The pattern those problems motivates the notation in the following
+    definition. In that definition, we say that a tuple of sets $(S_1,...,S_\ell)$
+    is a <em>partition of $X$</em> if all the $S_i$ are disjoint and
+    $\bigcup_{i=1}^\ell S_i = X$. 
+
+    <p><strong>Definition 17.5.</strong> Let $n\geq 0$ and $r_1,\ldots,r_\ell$.
+    We define the notation
+    $$
+    \binom{n}{r_1,r_2, \dots, r_\ell} 
+    =
+    {\large|}\left\{ (S_1,\ldots,S_\ell) \ : \ (S_1,\ldots,S_\ell) \ 
+    \text{is a partition of $X$} \wedge \forall i, |S_i| = r_i \right\}{\large|},
+    $$
+    where $X$ is any set of size $n$.
+    
+    <p>Intuitively, it is clear that which particular set $X$ is used doesn't
+    matter, as long as it has size $n$. Also note that the definition cares
+    about the order of the $S_i$; It says that $S_1$ should have $r_1$ elements,
+    $S_2$ has $r_2$, and so on. However, it is true that 
+    $\binom{n}{r_1,r_2} = \binom{n}{r_2,r_1}$.
+
+    <p>This multinomial coefficient notation looks like the notation for
+    binomial coefficients from the previous lecture, but it is distinguished
+    from it because it has multiple numbers separated by commas on the bottom.
+    However, there is a relationship between these notations that you can try to
+    see in the next exercise.
+
+    <p><strong>Exercise.</strong> Let $n\geq 0$ and $0 \leq k \leq n$
+    be integers. Prove that $\binom{n}{k} = \binom{n}{k, n-k}$, using
+    the definitions of binomial and multinomial coefficients.
+
+    <p>The reasoning behind the two solutions to Exercise 17.4 justifies
+    the two formulas in the next theorem.
+
+    <p><strong>Theorem 17.6.</strong> Let $n\geq 0$ and $r_1,\ldots,r_\ell$ be
+    integers. Then if any $r_i\lt 0$ or $\sum_{i=1}^\ell r_i \neq n$, we have $
+    \binom{n}{r_1,r_2, \dots, r_\ell} = 0$. If all $r_i \geq 0$ and
+    $\sum_{i=1}^\ell r_i = n$ then
+    $$
+    \binom{n}{r_1,r_2, \dots, r_\ell} 
+    =
+    \binom{n}{r_1}\binom{n-r_1}{r_2}\binom{n-r_1-r_2}{r_3}\cdots 
+    \binom{n-r_1-\cdots-r_{\ell-1}}{r_\ell}
+    =
+    \frac{n!}{r_1! r_2! \cdots r_\ell!}.
+    $$
+
+    <p>(Metaphorical) Boxes and (metaphorically) putting things in boxes are a
+    popular formulation for combinatorial problems. There are a few variations,
+    depending on whether the objects or the boxes are distinguishable or
+    indistinguishable. This gives us four different kinds of problems.
+
+    <p>If our boxes are distinguishable, then we'll see that we can apply the
+    generalized counting techniques we've seen today.
+
+    <p><strong>Example 17.7.</strong> Suppose you've narrowed down a list of
+    courses you might want to take in the 2022-2023 year to 14. Assuming every
+    course on your list is offered every quarter, how many different ways to
+    take 3 courses per quarter are there? This is the case of
+    <em>distinguishable items</em> (courses) into <em>distinguishable boxes</em>
+    (quarters). In the autumn quarter, you take 3 and there are 14 courses to
+    choose from, so there would be $\binom{14}{3}$. For the winter quarter,
+    you'd have 11 courses left to choose from, giving you $\binom{11}{3}$
+    possibilities, leaving $\binom 8 3$ choices for the spring quarter. Then
+    this gives us
+    $$\binom{14}{3} \binom{11}{3} \binom 9 3 
+    = \frac{14!}{11!3!} \frac{11!}{8!3!} \frac{8!}{5!3!} 
+    = \frac{14!}{3!3!3!5!}$$
+    possible choices in total. This looks suspiciously like a number of
+    distinguishable permutations with repeated elements. One way to think about
+    this is to play the same trick that we did with the stars and bars and think
+    about strings. If we want to dispense 14 objects, we consider a string of
+    length 14, with each spot corresponding to an object. Then we assign that
+    position a symbol $A,W,S,N$ for autumn, winter, spring, or none. Then this
+    becomes exactly our permutation with repetition problem from above, with 3
+    $A$s, $W$s, and $S$s and 5 $N$s.
+
+    <p><strong>Example 17.8.</strong> Suppose that you go to a canned tomato
+    factory and grab six unlabelled cans off of the assembly line. How many
+    different ways are there to brand your premium tomatoes if you have four
+    types of labels? This is the case of <em>indistinguishable items</em> (cans
+    of tomatoes) and <em>distinguishable boxes</em> (labels). This turns out to
+    be identical to combinations with repetitions. We have six objects that we
+    need to assign four types. Then this is just
+    $$\binom{6+4-1}{6} = \frac{9!}{3!6!} 
+    = \frac{9 \cdot 8 \cdot 7}{3 \cdot 2 \cdot 1} 
+    = 3 \cdot 4 \cdot 7 = 84.$$
+    In other words, we can think of the act of taking $n$ generic objects from
+    $k$ distinct types in the same way as putting $n$ generic objects things
+    into $k$ distinct boxes.
+
+    <p>Now, if our boxes are indistinguishable, the problem is much harder and
+    there aren't any "nice" ways to compute the following numbers except to
+    enumerate the possibilities.
+
+    <p><strong>Example 17.9. (Optional)</strong> Suppose you're moving and you
+    pack a cast iron skillet, a saucepan, a stainless steel skillet, and an
+    enameled cast iron dutch oven into three boxes but forgot to label them. How
+    many possible ways could you have packed them? This is the case of
+    <em>distinguishable items</em> (cookware) and <em>indistinguishable
+    boxes</em> (unlabelled boxes). Essentially, what we would like to do is take
+  our $n$ objects and distribute them into $k$ sets. So in our case, if we label
+  our cookware by $1,2,3,4$, then some possible distributions include
+  $\{\{1\},\{2\},\{3,4\}\}$, $\{\{1,2,3\},\{4\},\emptyset\}$, and
+  $\{\{1,2,3,4\},\emptyset,\emptyset\}$. But, if you remember our definitions
+  from set theory, you'd remember that the last one would be
+  $\{\{1,2,3,4\},\emptyset\}$. This means we need to account for the number of
+  empty/non-empty boxes when counting.
+    
+    <p>It turns out that the number of all of these sets can be described by using <a href="http://oeis.org/A008277">Stirling numbers of the second kind</a>. The Stirling number of the second kind for $n$ and $j$ is defined by 
+    $$\genfrac\{\}{0pt}{} n j = \frac 1 {j!} \sum_{i=0}^{j-1} (-1)^i \binom j i (j-i)^n.$$
+    This number describes the number of ways to distribute $n$ objects into exactly $j$ non-empty boxes. Then the total number of ways to distribute $n$ distinguishable objects into $k$ boxes where boxes can be empty is
+    $$\sum_{j=1}^k \genfrac\{\}{0pt}{} n j = \sum_{j=1}^k \frac 1{j!} \sum_{i=0}^{j-1} (-1)^i \binom j i (j-i)^n.$$
+    As you might expect/hope, this is not something we'll get into further.
+
+    <p><strong>Example 17.10. (Optional)</strong> Suppose you're moving and you
+    pack six black t-shirts into four 
+    identical suitcases. How many ways can you distribute the t-shirts? This is
+    the case of <em>indistinguishable objects</em> (black t-shirts) into
+    <em>indistinguishable boxes</em> (identical suitcases). Again, we can
+    enumerate these. This problem is equivalent to asking to find solutions to
+    $a_1 + a_2 + a_3 + a_4 = 6$, with $0 \leq a_1 \leq a_2 \leq a_3 \leq a_4
+    \leq 6$.
+    This looks similar to the combination with repetitions problem above, but
+    the difference here is that the "order" in which the coefficients are
+    assigned doesn't matter (this is enforced by the ordering condition on the
+    $a_i$'s). Such a choice for $a_1, a_2, a_3, a_4$ is called a partition of an
+    integer $n$ (6) into at most $k$ (4) positive integers. These are described
+    by the <a href="http://oeis.org/A000041">partition numbers</a> and have no
+    simple closed form.
+
+    <h3>Application to Probability</h3>
+
+    <p>Suppose we throw $k$ balls into $n$ bins, with all outcomes equally
+    likely. This scenario is particularly interesting for questions about data
+    structures like hash tables, where the balls are items being inserted and
+    the bins are cells in an array. Interesting questions include calculating
+    the probability that a particular bin is empty, or that some bin is
+    empty, or that some bin gets many balls, etc.
+
+    <p>How should be model these balls-in-bins scenarios? The correct sample
+    space has size $|\Omega| = n^k$. That is, it's just sampling with
+    replacement (with order): The first ball picks one of $n$ bins, and then the
+    second ball picks one of $n$ bits, and so on.
+    
+    <p>But what if the balls appear identical? If one turns away from the actual
+    throwing of the balls, then we are in a setting of sampling with replacement
+    and without order, so there will only be $\binom{n-k+1}{k}$ distinguishable
+    outcomes.
+
+    <p>One resolution is that even though the balls are identical in appearance,
+    they are different physical objects that "know" who they are. A more
+    concrete argument is that using Bose-Einstein statistics simply gives the
+    wrong predictions while sampling with replacement gives the right answer.
+
+    <p>For instance, consider throwin $k=2$ balls into $n=2$ bins. The outcome
+    where the two balls land in the first bin should be $1/4$, a fact that you
+    can try to convince yourself of intuitively (it's an experimental fact, not
+    a theorem). The outcome where one ball lands in each bin should be $1/2$
+    (one again, a fact, not a theorem; note that we're not saying which ball
+    lands in which bin).
+
+    <p>Using sampling with replacement matches what should be true: There is one
+    of the $n^k = 4$ outcomes that puts two balls in the first bin, but two
+    outcomes that put one ball in each bin.
+
+    <p>On the other hand, by Bose-Einstein, there are $\binom{n+k-1}{k} =
+    \binom{3}{2} = 3$ possible outcomes. These can't be equally likely while
+    still matching reality.
+
+    <p>The famous story behind Bose-Einstein statistics is repeated <a
+                                                                        href="https://en.wikipedia.org/wiki/Bose%E2%80%93Einstein_statistics#History">on
+                                                                        Wikipedia</a>
+    (and therefore must be true). It turns out that in certain scenarios quantum
+    particles <strong>do</strong> behave like Bose-Einstein statistics would
+    predict (i.e. the latter case we rejected above), going very strongly
+    against intuition!
+
+
+
+   <h3>Recommend Exercises</h3> 
+
+	<p>
+	<a
+    href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Blitzstein
+    and Hwang</a>, Section 1.9, Problem 13.
+
+	<p>Rosen, Section 6.5, has a lot of good problems related to this lecture.
+

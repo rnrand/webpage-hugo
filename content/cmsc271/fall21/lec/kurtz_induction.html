@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>CMSC-27100 &mdash; Lecture 6: Induction, I</title>
+    <base href="http://CMSC-27100.cs.uchicago.edu/2018-winter/"/>
+    <link rel="stylesheet" href="course.css" type="text/css" media="all" />
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      processEscapes: true,
+      processEnvironments: true,
+      TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+       }
+    });
+    </script>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+ </head>
+<body>
+<div id="header">
+    <h1>CMSC-27100</h1>
+    <h2>Discrete Math</h2>
+    <h2>Winter Quarter, 2018</h2>
+</div>
+
+<div id="navigation">
+    <a href=".">Home</a>
+    <a href="lectures.php">Lectures</a>
+    <a href="policies.php">Policies</a>
+	<hr/>
+	<a href="https://piazza.com/uchicago/winter2018/cmsc27100/home">Piazza</a>
+</div>
+
+<div id="content">
+
+
+<h1>Lecture 6: Induction, I</h1>
+
+\(
+    \newcommand{\set}[1]{\{#1\}}
+    \newcommand{\comprehension}[2]{\{#1\,\vert\,#2\}}
+    \newcommand{\size}[1]{\vert#1\vert}
+    \newcommand{\true}{\top}
+    \newcommand{\false}{\bot}
+    \newcommand{\limplies}{\rightarrow}
+    \newcommand{\divides}{\mathbin{\vert}}
+    \newcommand{\mult}{\mathbin{\cdot}}
+    \newcommand{\xor}{\oplus}
+    \newcommand{\union}{\cup}
+    \newcommand{\intersect}{\cap}
+    \newcommand{\complement}[1]{\overline#1}
+    \newcommand{\powerset}{\mathcal{P}}
+    \newcommand{\ixUnion}{\bigcup}
+    \newcommand{\ixIntersect}{\bigcap}
+    \newcommand{\Div}{\mathrm{div}}
+    \newcommand{\gcd}{\mathrm{gcd}}
+    \newcommand{\divmod}{\mathop{\mathbf{divmod}}}
+    \newcommand{\div}{\mathop{\mathbf{div}}}
+    \newcommand{\mod}{\mathop{\mathbf{mod}}}
+\)
+
+<p>Today begins a three-lecture unit on proofs by induction. The goal is to improve your familiarity and confidence with proofs by induction. Yes, we really do expect you to master and apply this skill! Like any such skill, the way to learn is through observation, mimicry, practice, practice, and practice.</p>
+
+<p>The basic idea is to prove a universal statement $\forall n,\, \varphi(n)$ we show the basis case $\varphi(0)$, and inductive step $\varphi(n) \limplies \varphi(n+1)$ for all $n$. We can then think of the inductive step as showing us how to build a proof of $\varphi(1)$ from our proof of $\varphi(0)$, how to build a proof of $\varphi(2)$ from a proof of $\varphi(1)$, etc.</p>
+
+<p>Another way to think about this is that if a universal statement $\forall n,\, \varphi(n)$ is false, then the set of counter-examples $C = \comprehension{n\in\mathbb{N}}{\lnot \varphi(n)}$ is non-empty, and so must have a least element. The hypotheses of a proof by induction rule out the possibility that $0$ is a least counter-example, or that a successor is the least-counterexample, for the latter, using the fact that if $S \, n$ is the least counterexample of $\forall n,\, \varphi(n)$, then $\varphi(n)$ must be true.</p>
+
+<p>In a slight variation on this theme, we want to prove an almost-universal statement, e.g., $\forall n \geq k, \varphi(n)$. In such a case, it is easier, as well as conceptually more natural, to do an induction on the formula $\varphi(n)$ with a basis case $n = k$, rather than trying to prove the slightly more complicated $n > k \limplies \varphi(n)$ starting at $0$.</p>
+
+<p>But whatever the precise details, a proof by induction should be written as follows:</p>
+<ol class="open-list">
+    <li><span class="sc">Statement</span>: Begin with a precise statement of the
+        formula to be proven, and the variable you'll be inducting over.</li>
+    <li><span class="sc">The Basis Case</span>: State the number $k$ where you're 
+        starting your induction, and the formula $\varphi(k)$ to be proven, and then
+        prove it.</li>
+    <li><span class="sc">The Induction Case</span>: State the inductive hypothesis
+        $\varphi(n)$, and the formula $\varphi(n+1)$ to be proven. Prove the result,
+        clearly indicating when the inductive hypothesis (often abbreviated IH) is
+        used.</li>
+</ol>
+
+<h3>A simple sum</h3>
+
+<p>There's a story that's told about the famous mathematician Carl Friedrich Gauss, as a young boy. He was assigned the busy-work task of computing $1 + 2 + \ldots + 100$, in the hope it would keep him occupied for a while. It didn't. Instead, he wrote</p>
+
+\begin{align*}
+    x &= \phantom{00}1 \,+ \, \phantom{0}2 \, + \, \ldots \, + \, 99 \, + \, 100\\
+    x &= 100 \, + \, 99 \, + \, \ldots \, + \, \phantom{0}2 \, + \, \phantom{00}1\\
+\end{align*}
+
+<p>and then added the two lines,</p>
+\begin{align*}
+    2 \cdot x &= 101 + 101 + \ldots + 101 + 101\\
+    2 \cdot x &= 100 \mult 101\\
+            x &= 50 \mult 101\\
+            x &= 5050
+\end{align*}
+    
+<p>Applying the same technique more generally, with $n$ rather than $100$, we arrive at the following summation formula:</p>
+\begin{equation*} 
+    1 + 2 + \ldots + n = n \mult (n+1) \, / \, 2
+\end{equation*}
+
+<p>Such sums occur often, and so we have a special notation for them:</p>
+\begin{equation*} 
+    \sum_{i=1}^n a_i = a_1 + a_2 + \ldots + a_n
+\end{equation*}
+
+<p>and with this, can recast our formula as follows:</p>
+
+<p><b>Theorem 6.1</b> For all $n \geq 1$,
+\begin{equation*}
+    \sum_{i=1}^n i = {n (n+1) \over 2}
+\end{equation*}
+
+<p><b>Proof</b> By induction on $n$. 
+
+<p><span class="sc">Basis Case</span>: $n=1$. We must show $\sum_{i=1}^1 = 1 \mult (1+1) \, / \, 2$, but this is trivial, as both equal $1$.</p>
+
+<p><span class="sc">Inductive Case</span>: Our inductive hypothesis is $\sum_{i=1}^n i = n (n+1) \, / \, 2$, and we must prove $\sum_{i=1}^{n+1} i = (n+1) (n+2) \, / \, 2$. We compute as follows:</p>
+\begin{align*}
+\sum_{i=1}^{n+1} i &= \sum_{i=1}^{n} i + (n+1)\tag{Break off last term of sum} \\
+                   &= n  (n+1) \, / \, 2 +(n+1) \tag{By IH}\\
+                   &= (n+1)  (n \,/\, 2 + 1)\tag{Factor out $(n+1)$}\\
+                   &= (n+1)  (n \,/\, 2 + 2 \,/\, 2)\\
+                   &= (n+1)  (n+2) \,/\, 2
+\end{align*}
+
+<p>$\Box$ Theorem 6.1</p>
+
+<p>Of course, you may ask <i>why</i> it was deemed necessary to give an inductive proof, as Gauss's demonstration seems perfectly clear. Much of this has to do with our standards of proof: Gauss's argument is suggestive, with ellipses used to suggest a process that differs in small but predictable ways as we compute summations up to different $n$. The inductive proof avoids “suggestiveness,” in favor of axiomatic rigor. Moreover, we'll see that there's a real value in learning both the sources of mathematical inspiration (like Gauss's) and the formal tools needed to rigorously prove the conjectures that flow from these inspirations. This is a pattern we'll see repeated through the course.</p>
+
+<h3>Another summation</h3>
+
+<p>Gauss's strategy for summing the first $n$ integers involved a simple insight. But sometimes, rather than working from the bottom up, i.e., from a problem to an answer, we can get a top-down insight, by working from an answer to a problem. For example, let's suppose we wanted to develop a summation formula like this: $$\sum_{i=1}^n f(i) = n^2.$$ How would we proceed? Naturally enough, by considering the difference between two consecutive squares. Let's first reason geometrically:</p>
+
+<img width="100%" class="center" src="Lectures/06/graphics/squares.svg" alt="diagram of squares"/>
+
+<p>From this, we can see that passing from the square of $n-1$ to the square of $n$ requires adding two edges of size $n-1$ and a corner piece of size $1$. Thus $(n-1)^2 + 2 \mult (n-1) + 1 = n^2$, a fact we can easily verify algebraically.</p>
+
+\begin{align*}
+  (n-1)^2 + 2 \mult (n-1) + 1 &= (n^2 - 2 n + 1) + 2  n - 2 + 1 \\
+                              &= n^2 - 2 n + 1 + 2  n -1\\
+                              &= n^2
+\end{align*}
+
+<p>As $2\mult(n-1)+1 = 2 n -1$, we conjecture:</p>
+
+<p><b>Theorem 6.2</b> For all $n\geq 1$,</p>
+\begin{equation*}
+    \sum_{i = 1}^n (2 i - 1) = n^2
+\end{equation*}
+
+<p>Note: Summation binds more tightly than ordinary arithmetic operations, necessitating our use of parentheses above.</p>
+
+<p><b>Proof</b> By induction on $n$.</p>
+
+<p><span class="sc">Basis Case</span>: $n=1$. We have to show $\sum_{i=1}^1 (2 i - 1) = 1^2$. This is trivial, as both equal $1$.</p>
+
+<p><span class="sc">Inductive Case</span>: Our inductive hypothesis is $\sum_{i = 1}^n (2 i - 1) = n^2$, and we have to show $\sum_{i = 1}^{n+1} (2 i - 1) = (n+1)^2$. To that end, we compute</p>
+
+\begin{align*}
+    \sum_{i = 1}^{n+1} (2 i - 1) 
+        &= \sum_{i = 1}^{n} (2 i - 1) + 2 \mult(n+1) - 1\tag{Break off last term of sum.}\\
+        &= n^2 + 2n +2 -1\tag{By IH.}\\
+        &= n^2 + 2n + 1\\
+        &= (n+1)^2
+\end{align*}
+
+<p>$\Box$ Theorem 6.2
+<p>There's a third approach we can take to obtain the same result, which involves building a small amount of general purpose machinery that we can use to manipulate sums.</p>
+
+<div class="exercise">
+<p>*<b>Exercise 6.3</b> Prove $\sum_{i=1}^n 1 = n$ for all $n \geq 1$ by induction on $n$.</p>
+</div>
+
+<p><b>Theorem 6.4</b> For all $n\geq 1$,</p>
+\begin{equation*}
+    \sum_{i=1}^n (a_i + b_i) = \sum_{i=1}^n a_i + \sum_{i=1}^n b_i 
+\end{equation*} 
+<p><b>Proof</b> By induction on $n$.</p>
+
+<p><span class="sc">Basis Case</span>: $n=1$. We have to show $\sum_{i=1}^1 (a_i + b_i) = \sum_{i=1}^1 a_i + \sum_{i=1}^1 b_i$, which follows from the observation that both equal $a_1 + b_1$.</p>
+
+<p><span class="sc">Inductive Case</span>: We assume</p>
+
+\begin{equation*}
+\sum_{i=1}^n (a_i + b_i) = \sum_{i=1}^n a_i + \sum_{i=1}^n b_i
+\end{equation*}
+
+<p>as our inductive hypothesis, and must show</p>
+\begin{equation*}
+\sum_{i=1}^{n+1} (a_i + b_i) = \sum_{i=1}^{n+1} a_i + \sum_{i=1}^{n+1} b_i.
+\end{equation*}
+<p>To that end,</p>
+\begin{align*}
+    \sum_{i=1}^{n+1} (a_i + b_i)
+        &= \sum_{i=1}^n (a_i + b_i) + (a_{n+1} + b_{n+1})
+                \tag{Breaking off the last term.}\\
+        &= \sum_{i=1}^n a_i + \sum_{i=1}^n b_i + a_{n+1} + b_{n+1}
+                \tag{By IH.}\\
+        &= (\sum_{i=1}^n a_i + a_{n+1}) + (\sum_{i=1}^n b_i + b_{n+1})\\
+        &= \sum_{i=1}^{n+1} a_i + \sum_{i=1}^{n+1} b_i
+\end{align*}
+<p>$\Box$ Theorem 6.4
+<div class="exercise">
+<p>*<b>Exercise 6.5</b> Prove $\sum_{i=1}^n c \mult a_i = c \mult \sum_{i=1}^n a_i$ for all $n \geq 1$ by induction on $n$.</p>
+</div>
+
+<p>These last few facts enable us to deal with summations such as $\sum_{i = 1}^{n+1} (2 i - 1)$ by distributing the summation across sums (or differences), and multiplication (or division) by a constant, and then finally appealing to a small list of standard summation formula. Thus,</p>
+
+\begin{align*}
+    \sum_{i=1}^n (2 i - 1)
+        &=  \sum_{i=1}^n 2i - \sum_{i=1}^n 1 \\
+        &= 2 \sum_{i=1}^n i - n\\
+        &= 2 n (n+1)/2 -n\\
+        &= n (n+1) - n\\
+        &= n^2 + n - n\\
+        &= n^2
+\end{align*}
+
+<div class="exercise">
+<p><b>Exercise 6.6</b> Compute $\sum_{i=1}^n (3i+4)$.</p>
+</div>
+
+
+<div class="exercise">
+<p><b>Exercise 6.7</b> Compute $\sum_{x=1}^n \sum_{y=1}^n(x+y-1)$.</p>
+</div> 
+
+<div class="exercise">
+<p><b>Exercise 6.8</b> This sort of approach can be used to derive new summation formula. For example, by extending from two dimensions to three the approach we used to guess $\sum_{i = 1}^n (2 i - 1) = n^2$, we could guess $\sum_{i=1}^n 3 (i-1)^2 + 3(i-1) + 1 = n^3$.</p>
+
+<ul class="open-list">
+<li>Prove $\sum_{i=1}^n 3 (i-1)^2 + 3(i-1) + 1 = n^3$ by induction on $n$.</li>
+<li>Use this result to derive a formula for $\sum_{i=1}^n i^2$.</li>
+</ul>
+</div>
+
+<h3>The Peano Axioms</h3>
+
+<p>We'll see soon enough that induction isn't just for the natural numbers, but the natural numbers and their properties provide the paradigmatic context for learning about proofs by induction</p>
+
+<p>As we mentioned in the first lecture, $\mathscr{L}_{\text{PA}} = \set{S,+,\times,0,\le}$, i.e., the language of Peano arithmetic includes the constant symbol $0$, a unary function symbol $S$, binary function symbols $+$ and $\times$, and a binary relation symbol $\le$. The axioms come in several groups.</p>
+
+<p>I strongly recommend that you work through this material out of class, providing the necessary inductive proofs. Not only is it good practice, there's something intensely satisfying about revisiting these old results, and <i>proving for yourself</i> what you've thus far had to take on authority and intuition.</p>
+
+<h4>Successor axioms</h4>
+
+<p>The properties of $S$ are critical:</p>
+
+<ul>
+<li>$S$ is one-to-one: $\forall x\,y,\,S\,x = S\,y \limplies x = y$. Note the syntactic convention that we don't bother with parentheses around simple arguments to $S$.</li>
+<li>$0$ is not in the range of $S$: $\forall x, S\, x \not= 0$.</li>
+<li>Every non-zero number is a successor: $\forall x,\, x \not= 0 \limplies \exists y,\, S \, y = x$.</li>
+<li>Induction on $S$. For all formula $\varphi(x)$, we have $\varphi(0)\land (\forall x,\, \varphi(x) \limplies \varphi(S\,x)) \limplies \forall x,\, \varphi(x)$.</li>
+</ul>
+
+<h4>The definition of $+$</h4>
+
+<ul>
+    <li>$\forall n, 0+n = n$.</li>
+    <li>$\forall n\, m, S \, n + m = S \, (n+m)$. Note here that $S$ binds more tightly than $+$.</li>
+</ul>
+
+<p>The addition function $+$ is defined here by  induction on its first argument, and that means that the definition is asymmetric in how it handles the arguments of $+$. A first crucial step in developing the theory is to re-establish that symmetry.</p>
+
+<h4>The definition of $\times$</h4>
+<ul>
+    <li>$\forall n, 0\times n = 0$.</li>
+    <li>$\forall n\, m, S \, n \times m = n \times m + m$.</li>
+</ul>
+
+<p>Note again the asymmetry in how the arguments of $\times$ are handled by this definition.</p>
+
+<h4>The definition of $\leq$</h4>
+
+<ul>
+<li>$\forall n\,m,\, n \leq m \iff \exists p,\, n+p = m$.</li>
+</ul>
+
+<h4>The elementary theory of arithmetic</h4>
+
+<p>In this section, we're just going to state a sequence of lemmas and theorems, each of which can be proven by induction, which build up the standard properties of the natural numbers. It is worthwhile working through each, as a way of practicing this proof technique.</p>
+
+<p>The first two lemmas establish symmetry in how $S$ and $+$ interact:</p>
+
+<p><b>Lemma 6.9</b> $\forall n,\, n+0 = n$.</p>
+<p><b>Lemma 6.10</b> $\forall n\,m,\, n+S\,m = S \, (n+m)$.</p>
+
+<p>This sets us up to prove the commutative and associative laws for addition:</p>
+
+<p><b>Theorem 6.11</b> <b>(The Commutative Law for Addition)</b> $\forall n\, m,\, n+m = m+n$.</p>
+<p><b>Theorem 6.12</b> <b>(The Associative Law for Addition)</b> $\forall n\, m\, p,\, n + (m+p) = (n+m) + p$.</p>
+
+<p>Both of these can be proven by induction on $n$.</p>
+
+<p>Next, we establish symmetry in how $S$ and $\times$ interact.</p>
+
+<p><b>Lemma 6.13</b> $\forall n,\, n\times 0 = 0$.</p>
+<p><b>Lemma 6.14</b> $\forall n\,m,\, n \times S\,m = n + (n\times m)$.</p>
+
+<p>As before, we can use to prove commutative, associative, and distributive laws for multiplication:</p>
+<p><b>Theorem 6.15</b> <b>(The Commutative Law for Multiplication)</b> $\forall n\, m,\, n\times m = m \times n$.</p>
+<p><b>Theorem 6.16</b> <b>(The Associative Law for Multiplication)</b> $\forall n\, m\, p,\, n \times (m \times p) = (n\times m) \times p$.</p>
+<p><b>Theorem 6.17</b> <b>(The Distributive Law for Multiplication over Addition)</b> $\forall n\, m\, p,\, n \times (m + p) = (n\times m) + (n \times p)$.</p>
+</div>
+
+</div>
+<div id="foot">
+<hr/>
+&copy; 2016&ndash;2018 Stuart A. Kurtz<br />
+Last modified: March 19, 2018</div>
+</body>
+</html>

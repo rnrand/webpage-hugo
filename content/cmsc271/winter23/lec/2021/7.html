@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 7</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 7</h1>
+
+
+    <p><strong>Definition 7.1.</strong> Let $n$ and $d \gt 0$ be integers. We define the functions $n \mathop{\mathbf{div}} d = q$ and $n \mathop{\mathbf{mod}} d = r$, where $q$ and $r$ are as defined by the Division Theorem (4.7).
+
+    <p>These functions are defined as in the Rosen textbook and are standard definitions. We can think of $\mathbf{div}$ as the integer division operation in many programming languages that just returns the quotient and $\mathbf{mod}$ is the modulus operator. However, if we recall the painstaking work to define functions as a special kind of relation, these aren't really functions because they're undefined for $d = 0$. Unfortunately, this is the way it is.
+    
+    <p><strong>Definition 7.2.</strong> The set of divisors of $n$ is defined by $\operatorname{Div}(n) = \{a : a \mid n\}$.
+
+    <p>This is a nice definition because it is obvious what the common divisors of $m$ and $n$ are supposed to be: the intersection of $\operatorname{Div}(m)$ and $\operatorname{Div}(n)$.
+
+    <p><strong>Definition 7.3.</strong> If $m$ and $n$ are integers with $m \neq 0$ or $n \neq 0$, then the <strong>greatest common divisor</strong> of $m$ and $n$, denoted $\gcd(m,n)$, is the largest element of $\operatorname{Div}(m) \cap \operatorname{Div}(n)$.
+    </blockquote>
+
+    <p>From the way we've defined this, it's not entirely obvious that the gcd should exist. Without loss of generality, let $m \neq 0$. Then $\operatorname{Div}(m)$ has a largest element $m$ and a smallest element $-m$. This means that $\operatorname{Div}(m)$ is finite and that $\operatorname{Div}(m) \cap \operatorname{Div}(n)$ is also finite. Since 1 is a divisor for every integer, we know that $1 \in \operatorname{Div}(m) \cap \operatorname{Div}(n)$, which means that $\operatorname{Div}(m) \cap \operatorname{Div}(n)$ is non-empty. Since it's not empty, $\operatorname{Div}(m) \cap \operatorname{Div}(n)$ must contain a largest element, which is the gcd.
+
+    <p>From the Division Theorem, we get the following result about the gcd by Étienne Bézout in the mid-1700s. 
+
+    <p><strong>Theorem 7.4 (Bézout's Identity).</strong> For all integers $m$ and $n$ where $m$ or $n$ is nonzero, there exist integers $a$ and $b$ such that $\gcd(m,n) = a \cdot m + b \cdot n$.
+
+    <p><em>Proof.</em> Consider the set $S = \{am + bn \mid a,b \in \mathbb Z\}$. Let $d$ be the least nonzero positive integer in $S$ and let $a$ and $b$ be such that $d \in S$. First, we will show that $d$ is a common divisor of $m$ and $n$. 
+
+    <p>Suppose otherwise that $d$ isn't a common divisor of $m$ and $n$. Without loss of generality, say $d \not \mid m$. Then by the Division Theorem, there exist $q$ and $r$ such that $m = q \cdot d + r$ and $d \gt r \neq 0$. Then we have
+    \begin{align*}
+    r &= m - q \cdot d \\
+    &= m - q \cdot (am + bn) \\
+    &= (1-qa)m + (-bq)n
+    \end{align*}
+    This gives us $r \in S$. But since $r \lt d$, this contradicts $d = \min S$. Therefore, $d$ must be a common divisor of $m$ and $n$.
+
+    <p>Now, consider any common divisor $c$ of $m$ and $n$. Then there exist integers $s$ and $t$ such that $m = cs$ and $n = ct$.  This gives us
+    \begin{align*}
+    d &= am + bn \\
+    &= acs + bct \\
+    &= c \cdot (as + bt)
+    \end{align*}
+    Therefore, $c \mid d$ and therefore $c \leq d$. Thus, $d = \gcd(m,n)$.
+    $$\tag*{$\Box$}$$
+
+    <p>Bézout's identity is interesting in that it provides a characterization for the gcd of $m$ and $n$. Suppose we have $m$, $n$, and what we think is $\gcd(m,n)$. Is there a way to check that the gcd is really correct without computing it? If we had the coefficients of Bézout's identity for $m$ and $n$, then we could check very easily. Of course, we're getting a bit ahead of ourselves, but keep this idea in mind while we tackle a more immediate question: how does one compute the gcd? 
+
+    <p>The obvious way to do this is to compute the set of divisors for $m$ and $n$, compute their intersection, and take the largest element in the intersection. The big problem with this approach is that factoring integers is a notoriously hard problem to solve efficiently. There are some heuristics that we can apply and some tricks that we can pull, but in general we do not have a fast algorithm for factoring numbers. This fact happens to be the backbone of many public-key cryptographic systems we use today.
+
+    <p>However, if all we care about is the <em>greatest</em> common divisor and not any of the other divisors, then the following theorem will get us there efficiently.
+
+    <p><strong>Theorem 7.5.</strong> If $d = \gcd(a,b)$, $b \neq 0$, and $r = a \mathop{\mathbf{mod}} b$, then $d = \gcd(b,r)$.
+
+    <p><em>Proof.</em> Let $a$ and $b \neq 0$ be arbitrary. Let $q$ be such that $a = qb + r$. (Note that we're using the general form of the Division Theorem here.) If $d \mid a$ and $d \mid qb$, then $d \mid (a - qb)$, and therefore, $d \mid r$. In other words, $d$ is a common divisor of $b$ and $r$. Now consider an arbitrary common divisor $c$ of $b$ and $r$. If $c \mid b$ and $c \mid r$, we have $c \mid (qb+r) = a$, so $c$ is also a common divisor for $a$. This means we must have $c \leq d$. Therefore, $\gcd(b,r) = d = \gcd(a,b)$.
+    $$\tag*{$\Box$}$$
+
+    <p>This result gives us a way to compute the gcd:
+    $$\gcd(a,b) = \begin{cases} a & \text{if $b = 0$,} \\ \gcd(b, a \mathop{\mathbf{mod}} b) & \text{otherwise.} \end{cases}$$
+
+    <p>This algorithm is called Euclid's algorithm, named after Euclid who describes it in the Elements. Euclid is the Greek mathematician from around 300 BC who, in the Elements, describes a lot of the elementary geometry, algebra, and number theory that we learn in school.
+
+    <p><strong>Example 5.4.</strong> Suppose we want to compute the gcd of 232 and 72. We apply Euclid's algorithm as follows:
+    \begin{align*}
+    \gcd(232,72) &= \gcd(72,16) \\
+    &= \gcd(16,8) \\
+    &= \gcd(8,0) \\
+    &= 8
+    \end{align*}
+
+    <p>This leads us to the notion of the existence of an <em>Extended</em> Euclidean algorithm. The EEA is an algorithm that computes the gcd of $m$ and $n$ <em>and</em> the coefficients $a$ and $b$ from Bézout's lemma. We can treat these coefficients as a certificate or sanity test that the gcd we computed was really correct without having recompute the entire thing later on. The EEA gives us a way to compute the gcd so that without doing a lot of extra work, $a$ and $b$ fall out almost for free.
+
+    <!--
+    <p>How does it work? For two integers $x$ and $y$, we iteratively compute the following values:
+    <ul>
+        <li>$a_i = a_{x,i} \cdot x + a_{y,i} \cdot y$,
+        <li>$b_i = b_{x,i} \cdot x + b_{y,i} \cdot y$,
+        <li>$\gcd(a_i,b_i) = \gcd(x,y)$.
+    </ul>
+    <p>using initial values
+    <ul>
+        <li>$a_0 = x, a_{x,0} = 1, a_{y,0} = 0$, and
+        <li>$b_0 = y, b_{x,0} = 0, b_{y,0} = 1$.
+    </ul>
+
+    <p>We then compute $q$ and $r$ by computing the following:
+    \begin{align*}
+    r &= a_i - q \cdot b_i \\
+    &= (a_{x,i} \cdot x + a_{y,i} \cdot y) - q \cdot (b_{x,i} \cdot x + b_{y,i} \cdot y) \\
+    &= (a_{x,i} - q \cdot b_{x,i}) + (a_{y,i} - q \cdot b_{y,i}) \cdot y.
+    \end{align*}
+    <p>Once we have these values, we can set the next iteration by
+    <ul>
+        <li>$a_{i+1} = b_i, a_{x,i+1} = b_{x,i}, a_{y,i+1} = b_{y,i}$,
+        <li>$b_{i+1} = r, b_{x,i+1} = a_{x,i} - q \cdot b_{x,i}, b_{y,i+1} = a_{y,i} - q \cdot b_{y,i}$.
+    </ul>
+
+    <p><strong>Example 4.15.</strong> Repeating our computation from above, we set $x = 232$ and $y = 72$. The EEA gives us the following.
+
+    <table>
+    <tr><th>$i$ <th>$a$ <th>$a_x$ <th>$a_y$ <th>$b$ <th>$b_x$ <th>$b_y$
+    <tr><td>1 <td>232 <td>1 <td>0 <td>72 <td>0 <td>1
+    <tr><td>2 <td>72 <td>0 <td>1 <td>16 <td>1 <td>-3
+    <tr><td>3 <td>16 <td>1 <td>-3 <td>8 <td>-4 <td>13
+    <tr><td>4 <td>8 <td>-4 <td>13 <td>0 <td>9 <td>-29
+    </table>
+    <p>From the final row of the table, we get $\gcd(232,72) = 8, a = -4, b = 13$. Put together, we check $8 = 232 \cdot (-4) + 72 \cdot 13$.
+    -->

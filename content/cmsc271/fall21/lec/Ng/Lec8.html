@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 8</title>
+	<link rel="stylesheet" href="../style.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 8</h1>
+
+    <h3>The Fundamental Theorem of Arithmetic</h3>
+    <p>Now, we're almost ready to prove the Fundamental Theorem of Arithmetic. There are two parts to this. We'll first prove the fact that we can factor numbers into primes and then show that this factorization is unique. The proof of prime factorization involves an alternate form of mathematical induction which we'll call <em>strong induction</em>. 
+
+    <p>First, let's think about the problem. We want to show that every natural number $n$ has a prime factorization. So assuming that we set everything up properly, we make our hypothesis, that if $n$ has a prime factorization, then $n+1$ has a prime factorization. So we consider $n+1$. If it's prime, then we're good. If it isn't, then we observe that $n+1 = ab$ for some natural numbers $a$ and $b$. What we want is that we can apply our inductive hypothesis to $a$ and $b$. However, our inductive hypothesis doesn't quite say what we want: it says specifically that $n$ has a prime factorization, not $a$ or $b$!
+
+    <p>Strong induction is a reformulation of induction that gives us a "stronger" hypothesis to say these kinds of things.
+
+    <p><strong>Definition 8.1.</strong> Let $\varphi(n)$ be a statement that depends on $n \in \mathbb N$. If
+    <ol>
+    <li>$\varphi(0)$, and
+    <li>for all $k \in \mathbb N$, if $\varphi(j)$ for all $j \leq k$, then $\varphi(k+1)$
+    </ol>
+    <p> are both true, then the following is true:
+    <ol start="3">
+    <li>for all $n \in \mathbb N$, $\varphi(n)$ holds.
+    </ol>
+    <p>This is called the <strong>principle of strong induction</strong>.
+
+    <p>What is the difference between ordinary mathematical induction and <em>strong</em> induction? Or, in other words, what makes strong induction strong? The hypothesis that we make in each of our implications is stronger. Recall that ordinary induction was stated as a chain of implications $\varphi(k) \rightarrow \varphi(k+1)$. Strong induction is a chain of implications of the form
+    $$\varphi(0) \wedge \varphi(1) \wedge \varphi(2) \wedge \cdots \wedge \varphi(k) \rightarrow \varphi(k+1).$$
+    Then what we're really proving is all of the following statements,
+    \begin{align*}
+    &\varphi(0), \\
+    \varphi(0) \rightarrow &\varphi(1), \\
+    \varphi(0) \wedge \varphi(1) \rightarrow &\varphi(2), \\
+    \varphi(0) \wedge \varphi(1) \wedge \varphi(2) \rightarrow &\varphi(3), \\
+    & \vdots
+    \end{align*}
+    
+    <p>It's important to note that strong induction is not stronger in the sense that it allows us to prove things that we wouldn't be able to with mathematical induction. This is why I described strong induction as an alternate form of mathematical induction. It is possible to use mathematical induction to prove anything we would prove with strong induction, but this involves slightly altering the statement that you want to prove to incorporate your stronger assumptions.
+    
+    <p>A proof by strong induction looks similar to a proof by mathematical induction.
+    <ol>
+    <li><strong>Statement.</strong> Clearly state the statement $\varphi$ that you want to prove and what you want to show induction on.
+    <li><strong>Base case.</strong> Prove $\varphi(0)$.
+    <li><strong>Inductive case.</strong> State the <em>inductive hypothesis</em>, $\forall k \lt n, \varphi(n)$. Then, using the assumption that $\varphi(k)$ for all $n \lt k$, prove $\varphi(n)$. Clearly indicate when the inductive hypothesis is used.
+    </ol>
+
+    <p><strong>Theorem 8.2.</strong> Every natural number $n \gt 1$ can be written as a product of primes.
+
+    <p><em>Proof.</em> We will prove that for $n \gt 1$, $n$ can be written as a product of primes via strong induction on $n$.
+
+    <p><strong>Base case.</strong> $n = 2$. Clearly, 2 is a product of primes because 2 itself is a prime number.
+
+    <p><strong>Inductive case.</strong> Assume that for $2 \leq m \lt k$, $m$ can be written as a product of primes. We want to show that $k$ can be written as a product of primes. There are two cases to consider.
+    <ul>
+    <li>If $k$ is <em>prime</em>, then $k$ can clearly be written as a product of primes since $k$ is itself a prime number.
+    <li>If $k$ is <em>composite</em>, then we can write $k = a \cdot b$ for some $a, b \in \mathbb N$. Observe that $2 \leq a, b \lt k$. Therefore, by the inductive hypothesis, $a$ and $b$ can be written as a product of primes. Let $a = p_1 p_2 \cdots p_s$ and $b = q_1 q_2 \cdots q_t$, where $p_1, p_2, \dots, p_s, q_1, q_2, \dots, q_t$ are primes. Then
+    $$k = a \cdot b = p_1 p_2 \cdots p_s q_1 q_2 \cdots q_t$$
+    and therefore $k$ can be written as a product of primes.
+    </ul>
+    $\tag*{$\Box$}$
+
+    <p>Now, we will finish the proof of Theorem 7.1 by showing that prime factorizations are unique.
+
+    <p><em>Proof of Theorem 7.1.</em> By Theorem 8.2, every natural number $n \gt 1$ has a prime factorization. Suppose that prime factorizations are not unique. Let $n$ be the smallest number that doesn't have a unique prime factorization, so
+    $$n = p_1 \cdots p_k = q_1 \cdots q_\ell,$$
+    where $p_i$ is prime for $1 \leq i \leq k$ and $q_j$ is prime for $1 \leq j \leq \ell$. Clearly, $p_1 \mid n$. Then by Lemma 7.6, $p_1 = q_j$ for some $j$. Now, we divide each factorization by $p_1$. This gives us 
+    $$\frac n {p_1} = p_2 p_3 \cdots p_k = q_1 q_1 \cdots q_{j-1} q_{j+1} \cdots q_\ell.$$ 
+    But this is a smaller number with more than one prime factorization, contradicting the minimality of $n$.
+    $\tag*{$\Box$}$
+
+    <p>The following result is another of Euclid's from the Elements.
+
+    <p><strong>Theorem 8.3 (Euclid's Theorem).</strong> There exist infinitely many primes.
+
+    <p><em>Proof.</em> Assume for a contradiction that there are only finitely many primes $p_1, p_2, \dots, p_k$. Consider $n = p_1 \cdot p_2 \cdots p_k + 1$. Since $n \gt p_i$ for all $i$, it cannot be a prime. Observe that for each prime $p_i$, we can write $n = q \cdot p_i + 1$ for some integer $q$. 
+
+    <p>By the division theorem, this means that we have a remainder of 1 when dividing $n$ by any of the primes $p_i$. Since $1 \neq 0$ and $1 \lt p_i$, it must be the case that $p_i$ does not divide $n$ for all $i$. In other words, $n$ cannot be factored into primes. But this is a contradiction of the Fundamental Theorem of Arithmetic. Therefore, our assumption that there were only finitely many primes was incorrect and there must exist infinitely many primes.
+    $\tag*{$\Box$}$
+
+
+    <p><strong>Definition 8.4.</strong> We define the factorial function $n!$ recursively by
+    <ul>
+        <li>if $n = 0$, then $0! = 1$, and
+        <li>if $n \gt 0$, then $n! = (n-1)! \cdot n$.
+    </ul>
+
+    <p>The following result is called Wilson's Theorem, because it was stated by John Wilson in the 1700s. It turns out that it was stated around 700 years prior by an Arab mathematician, Hasan Ibn al-Haytham.
+
+    <p><strong>Theorem 8.5 (Wilson's Theorem).</strong> For all primes $p$, $(p-1)! = -1 \pmod p$.
+
+    <p><em>Proof.</em> Consider the equation $x^2 = 1 \pmod p$. We can rewrite this as $x^2 - 1 = 0 \pmod p$ and factor it to get $(x+1)(x-1) = 0 \pmod p$. Then $p \mid (p+1)(p-1)$ and therefore, $p \mid (p+1)$ or $p \mid (p-1)$. Thus, $x+1 = 0 \pmod p$ or $x-1 = 0 \pmod p$ and therefore $x = \pm 1 \pmod p$.
+
+    <p>This means that for $2 \leq x \leq p-2$, $x \neq x^{-1} \pmod p$. Since each element has a multiplicative inverse and the inverses are unique, each of $2, 3, \dots, p-2$ can be paired with its inverse to cancel out to 1. Thus, we have
+    $$1 \cdot 2 \cdot \cdots \cdot p-2 \cdot p-1 = 1 \cdot p-1  = 1 \cdot -1 = -1 \pmod p.$$
+    $\tag*{$\Box$}$
+
+    <p>The following theorem is due to Pierre de Fermat, which is called Fermat's <em>Little</em> Theorem, to distinguish it from the more famous Fermat theorem, Fermat's <em>Last</em> Theorem (there are no integers $a,b,c$ such that $a^n + b^n = c^n$ for $n \gt 2$). Much like Fermat's Last Theorem, Fermat stated the result in the mid 1600s but declined to give a proof of it because the proof was "too long".
+
+    <p>While it would be about 400 years before Fermat's Last Theorem gets proven (by Andrew Wiles in 1995), Fermat's Little Theorem was proved only about 100 years later, by Leonhard Euler. The following proof, using modular arithmetic, is due to James Ivory in the early 1800s and a bit later by Dirichlet.
+
+    <p><strong>Theorem 8.6 (Fermat's Little Theorem).</strong> For all prime numbers $p$ and integers $a$ such that $\gcd(a,p) = 1$, $a^{p-1} \equiv 1 \pmod p$.
+

@@ -1,0 +1,98 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb, amsmath, graphicx, subfigure}
+\usepackage{hyperref}
+\usepackage{parskip}
+
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\heading}[6]{
+  \renewcommand{\thepage}{#1-\arabic{page}}
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { \textbf{#2} \hfill #3 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #6  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { \textit{Instructor: #4 \hfill #5} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\newenvironment{proof}{\noindent{\bf Proof:} \hspace*{1mm}}{
+	\hspace*{\fill} $\Box$ }
+\newenvironment{proof_of}[1]{\noindent {\bf Proof of #1:}
+	\hspace*{1mm}}{\hspace*{\fill} $\Box$ }
+\newenvironment{proof_claim}{\begin{quotation} \noindent}{
+	\hspace*{\fill} $\diamond$ \end{quotation}}
+
+\newcommand{\problemset}[3]{\heading{#1}{CMSC 27100-3}{#2}{Robert Rand}{#3}{Problem Set #1}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PLEASE MODIFY THESE FIELDS AS APPROPRIATE
+\newcommand{\problemsetnum}{8}          % problem set number
+\newcommand{\duedate}{Due: Friday, \textbf{December 03, 2021}}  % problem set deadline
+\newcommand{\studentname}{}    % full name of student (i.e., you)
+% PUT HERE ANY PACKAGES, MACROS, etc., ADDED BY YOU
+% ...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\problemset{\problemsetnum}{\duedate}{\studentname}
+
+
+\section{Probability Theory}
+
+{\bf{Problem 1:}} In class, we claimed that if $X$ and $Y$ are independent, then $E(XY) = E(X)*E(Y)$. Prove it. We'll start you off:
+\begin{align*}
+    E(XY) = \sum_{r \in \{ r_1r_2 \mid r_1 \in im(X), r_2 \in im(Y)  \}} P(XY = r) * r = \sum \sum \dots
+\end{align*}
+~\\[10pt]
+
+\noindent{\bf{Problem 2:}} The following is the likelihood that a given dish will show up at a given American Thankgiving dinner, along with its fairly arbitrary deliciousness rating $R$.
+
+\begin{tabular}{|l|l|l|}
+Food & Frequency & Rating \\ \hline
+Turkey & 90\% & 6 \\
+Mashed Potatoes & 80\% & 4 \\
+Stuffing & 70\% & 1 \\
+Cornbread & 50\% & 6 \\
+Green Bean Casserole & 60\% & 1 \\
+Sweet Potato Casserole & 60\% & 8 \\
+Pumpkin Pie & 80\% & 8 \\
+Pecan Pie  & 40\% & 20
+\end{tabular}
+
+What is the expected total deliciousness rating of a thanksgiving meal?
+~\\[10pt]
+
+\noindent{\bf{Problem 3:}} Assume that the likelihood of each dish appearing is independent, except for Pecan and Pumpkin Pie, which only have a 25\% chance of appearing at the same meal. What is the variance of a meal's deliciousness rating?
+~\\[10pt]
+
+\noindent{\bf{Problem 4:}} The human genome contains 22 chromosome pairs, excluding the ones that determine their sex. For each pair, one is randomly drawn from the mother's two corresponding chromosomes and one from the father's two chromosomes (i.e. two options for each). Prove that the likelihood that two siblings have fewer than 16 chromosomes in common is less than one third. (You might observe that it's actually less than one sixth.)
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 2</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+<script>
+MathJax = {
+  loader: {load: ['[tex]/bussproofs']},
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+	packages: {'[+]': ['bussproofs']}  
+  },
+  svg: {
+    fontCache: 'global'
+  }  
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 3</h1>
+    <h3>Predicate logic</h3>
+
+    <p>Now, one thing you might notice is that propositions as we've defined them don't quite let us say everything we may want to. For instance, if I wanted to talk about some property about integers, I can certainly define propositions for them. However, there's no way to relate the various propositions about integers to the fact that we're talking about the same kinds of objects. For that, we need to expand our language a bit further. The extension that we'll be talking about is called <em>predicate</em> or <em>first-order</em> logic.
+
+    <p>First, we need to determine a <strong>domain</strong> of discourse, which is the set to which all of our objects belong. This can be something like the natural numbers $\mathbb N$ or the integers $\mathbb Z$ or matrices or functions or graphs and so on. There's also nothing stopping us from making our domain the set of all dogs, if what we really wanted to do was express statements about dogs, or other "real-world" types of objects. This occurs less in math but more in places like database theory. 
+    
+    <p>This brings us to an important thing to keep in mind: statements that may be true in one domain will not necessarily be true in another domain. Obviously, statements that we make about integers will not necessarily hold true for dogs, but it is important to remember that the same could be said for integers vs. natural numbers.
+
+    <p><strong>Definition 2.1.</strong> Here are some useful domains/sets:
+    <ul>
+    <li>the set of <strong>integers</strong>, $\mathbb Z = \{\dots, -3, -2, -1, 0, 1, 2, 3, \dots \}$,
+    <li>the set of <strong>natural numbers</strong>, $\mathbb N = \{0, 1, 2, \dots\}$,
+    <li>the set of <strong>real numbers</strong>, $\mathbb R$,
+    <li>the set of <strong>rational numbers</strong>, $\mathbb Q$,
+    <li>the set of <strong>complex numbers</strong>, $\mathbb C$.
+    </ul>
+
+    <p>Note that in this course, <strong>we consider 0 to be a natural number</strong>. Not everyone agrees!
+
+	<p>Often, particularly when analyzing logical systems alone, we will not specify a domain. This is fine. The only important underlying assumption is that our domain is non-empty (assuming otherwise would create problems where saying "for every $x$" could be vacuously true).
+
+    <p>Then, we want to express properties and relationships about the objects in our domain. For this, we need to define <strong>predicates</strong>. Predicates have an <em>arity</em> associated with them. A $k$-ary predicate is a predicate with $k$ arguments. So a unary or 1-ary predicate would be expressing some property of a particular object, while predicates with arity greater than 1 can be thought of as expressing some relationship between a number of objects.
+
+    <p><strong>Example 2.2.</strong> For example, if we define $E$ to be a unary predicate that expresses the evenness property, then we can say that $E(x)$ means "$x$ is an even number". We would then have $E(12000)$ is true while $E(765)$ is false.
+
+    <p>The less-than relation is another example of a predicate, although because it's pretty important, we've given it its own symbol and usage. We can define a predicate $L(x,y)$ to mean "$x$ is less than $y$" or "$x \lt y$". Then we can say that $L(3,30)$ is true and $L(30,3)$ is false.
+
+    <p>In the previous examples, almost instinctively, we used both concrete objects and <strong>variables</strong> with our predicates. When we use specific objects with predicates, our statements are not all that different from propositions. However, variables are considered placeholders for objects in the domain and it's the use of variables, together with <strong>quantifiers</strong>, that gives us more expressive power than propositional logic.
+
+    <p><strong>Definition 2.3.</strong> The symbol $\forall$ is called the <strong>universal quantifier</strong> and is read "for all". The symbol $\exists$ is called the <strong>existential quantifier</strong> and is read "there exists".
+
+    <p>Basically, we use $\forall$ when we want to make a statement about all objects in our domain and we use $\exists$ when we want to say that there is some object out there in our domain that has a particular property.
+
+    <p><strong>Example 2.4.</strong> We can use predicates and quantifiers together with the logical connectives we introduced with propositional logic to say things like $\forall x (E(x) \rightarrow \neg E(x+1))$. If we take our domain to be $\mathbb Z$, this says that for every integer $x$, if $x$ is even, then $x+1$ is not even.
+
+    <p><strong>Example 2.5.</strong> Let's fix our domain to be $\mathbb N$. Recalling our less than predicate $L$ from above, we can consider the following proposition:
+    $$\forall x \exists y L(x,y).$$
+    This reads "for every natural number $x$, there exists a natural number $y$ such that $x \lt y$". This statement turns out to be true: every natural number does have some other natural number that it's less than. Now, let's consider the following similar statement, where the order of the quantifiers is reversed:
+    $$\exists y \forall x L(x,y).$$
+    Here, we're saying that there is a natural number $y$ for which every other natural number $x$ is less than it. In other words, this says that there is a "biggest" natural number, which is obviously not true. As we can see, the order of the quantifiers matters.
+
+    <p><strong>Note:</strong> Remember that the domain is important. For instance, if we are working in $\mathbb N$ and we modify the above example slightly to $\forall x \exists y L(y,x)$, we have the statement that "for every natural number $x$, there is some natural number $y$ that is less than $x$". This statement is false if we consider $x = 0$. However, this statement is true if our domain is $\mathbb Z$ (for every integer $x$, there is some integer $y$ that is less than $x$).
+
+
+<h2>Natural Deduction with Quantifiers</h2>
+	
+<p>The existence of quantifiers provides a compelling justification for an inference system like natural deduction. Whereas previously we could use truth tables to check an arbitrary formula in propositional logic, predicate logic quantifies over potentially infinite sets, rendering this approach impossible. 
+
+<p>Instead, we can simply augment our deduction system for propositional logic with rules for $\forall$ and $\exists$. Let's start with the universal quantifier:
+
+\begin{prooftree}
+\AxiomC{$P(a)$}
+\RightLabel{$\forall$-I$\qquad$}
+\UnaryInfC{$\forall x, P(x)$}
+\AxiomC{$\forall x, P(x)$}
+\RightLabel{$\forall$-E$\qquad$}
+\UnaryInfC{$P(a)$}
+\end{prooftree}
+
+<p><strong>Proviso:</strong> In the introduction rule, $a$ must be <em>arbitrary</em>. That is, it is a label we chose and upon which nothing relies. This is, if we have $D(s) =$ "Spot is a dog" or $E(6) =$ "six is even", you obviously cannot conclude that every animal is a dog or that every number is even. Here's an example of a valid use of $\forall-I$:
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{$1$}
+\UnaryInfC{$D(a)$}
+\RightLabel{$\to$-I-$1$}
+\UnaryInfC{$D(a)\to D(a)$}
+\RightLabel{$\forall$-I}
+\UnaryInfC{$\forall x, D(x) \to D(x)$}
+\end{prooftree}
+<p>A was created to refer to an arbitrarily chosen animal, assumed to be a dog. We were able to discharge that assumption in showing that $D(a)$ implies $D(a)$. At that point we could do universal introduction and conclude that every dog is a dog.
+	
+<p>By contrast, I can assign the outcome of forall elimination to any unbound variable. By unbound, I mean that it isn't the subject of a $\forall x$ or $\exists x$: Those variables don't refer to individual entities. So I can't use $\forall x,\exists y, L(x,y)$ to conclude that $\forall y, L(y,y)$. If $L$ means "less than", the former statement is true while the latter is false. (A simple way to avoid this problem is to leave x, y and z for bound variables.) However, the following derivation is valid:
+\begin{prooftree}
+\AxiomC{$\forall x, \forall y, P(x,y)$}
+\RightLabel{$\forall$-E}
+\UnaryInfC{$\forall y, P(a,y)$}
+\RightLabel{$\forall$-E}
+\UnaryInfC{$P(a,a)$}
+\RightLabel{$\forall$-I}
+\UnaryInfC{$\forall x, P(x,x)$}
+\end{prooftree}
+This is a valid derivation and if I interpret $P(x,y)$ as "x and y can be plotted on the Cartesian plane", my (narrower) conclusion is that "any pair (x,x) can be plotted on the Cartesian plane". (Note, however, that this can't be done by simply eliminating the first x into a y – that y was not available to us.)
+
+<p>Here are the rules for "exists":
+
+<!-- \begin{prooftree}
+\AxiomC{$P(e)$}
+\RightLabel{$\exists$-I$\qquad$}
+\UnaryInfC{$\exists x, P(x)$}
+\AxiomC{$\exists x, P(x)$}
+\AxiomC{}
+\RightLabel{$n$}
+\UnaryInfC{$P(a)$}
+\UnaryInfC{$\vdots$}
+\UnaryInfC{$Q$}
+\RightLabel{$\exists$-E-$n$}
+\BinaryInfC{$Q$}
+\end{prooftree} -->
+	
+\begin{prooftree}
+\AxiomC{$P(e)$}
+\RightLabel{$\exists$-I$\qquad$}
+\UnaryInfC{$\exists x, P(x)$}
+\AxiomC{$\exists x, P(x)$}
+\AxiomC{$P(a) \to Q$}
+\RightLabel{$\exists$-E-$n$}
+\BinaryInfC{$Q$}
+\end{prooftree}
+
+Here, the introduction case is trivial. If we can show that $P(e)$ for some $e$, then there exists an $e$ for which $P$ holds. By contrast, the rule for existential elimination is harder. Once again, we introduce an arbitrary $a$, and if we can prove $B$ (some proposition that <em>doesn't</em> mention $a$), we can conclude that $B$ is true. Once again, all instances of $a$ must be discharged.
+
+Let's prove that there is nothing that is both a dog and not a dog (recalling that $\neg P$ is notation for $P \to \bot$).
+
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{$1$}
+\UnaryInfC{$\exists x, D(x) \wedge \neg D(x)$}
+\AxiomC{}
+\RightLabel{$2$}
+\UnaryInfC{$D(a) \wedge \neg D(a)$}
+\LeftLabel{$\wedge$-E-L}
+\RightLabel{$\wedge$-E-R}
+\UnaryInfC{$D(a) \qquad \neg D(a)$}
+\RightLabel{$\to$-E}
+\UnaryInfC{$\bot$}
+\RightLabel{$\to$-I-$2$}
+\UnaryInfC{$D(a) \wedge \neg D(a) \to \bot$}
+\RightLabel{$\exists$-E}
+\BinaryInfC{$\bot$}
+\RightLabel{$\to$-I-$1$}
+\UnaryInfC{$\neg \exists x, D(x) \wedge \neg D(x)$}
+\end{prooftree}
+
+<p>Note that we applied both the left and right elimination rules to the assumption $D(a) \wedge \neg D(a)$. That's okay, we can use our statements multiple times. It does create difficulties for formatting proofs, however. In these cases, we will often use arrows or dotted lines to move our statements to their appropriate location.
+
+<p>Note that natural deduction system we are using in our proofs is not unique. A variety of equivalent systems exist. Some of these, like the sequent calculus, take a similar form to natural deduction, though each step of a sequent calculus derivation has the form $P_1,\dots,P_n \vdash Q$, where $P_i$s are premises. Others may take the form of a numbered list as in this application of Modus Ponens:
+	<ol>
+	  <li>$P$ &emsp; &emsp; (A)</li>
+	  <li>$P \to Q$ (A)</li>
+	  <li>$Q$ &emsp; &emsp; (MP 1,2)</li>
+	</ol>
+<p>A final presentation of interest is the of the <a href="https://incredible.pm/">Incredible Proof Machine</a>, which takes a graphical approach to connecting propositions and introduces and eliminates connectives via boxes. Conveniently, its underlying deductive system is almost identical to ours, and I encourage you to play around with it to build familiarity with logical deductions. Ultimately, presentation matters less than the rules themselves, which in turn matter less than a systems soundness and completeness for predicate logic.
+
+<p>Speaking of completeness, Gödel's completeness theorem proved that the Hilbert-Ackermann proof system (which is equivalent to the systems described above) can prove any tautology in a finite number of steps. But just because Gödel showed that there's a proof out there for every "true" formula doesn't mean that we necessarily have a way of finding it. This is the question (or <em>Entscheidungsproblem</em>) that Hilbert asked in 1928: is there a way to "algorithmically" figure out whether a first-order sentence is true or not (although he wouldn't have used quite the same terminology)? If the answer is yes, this process would basically give us a proof of the validity of that sentence. But Alonzo Church and Alan Turing both proved that the answer was no, using distinct but mathematically equivalent definitions of algorithms. Church's approach was called the lambda calculus and heavily influenced functional programming languages, Turing's definition was called the Turing machine, essentially a mathematical description of a computer.
+
+    <p>You might wonder why predicate logic is called first-order logic and whether that means there is a second-order logic. First-order logic is an extension of propositional logic which does not allow for any quantification. First-order logic adds quantification over elements of the domain. Second-order logic extends first-order logic by adding quantification over predicates. And of course, you can guess that mathematicians have continued in this pattern since.

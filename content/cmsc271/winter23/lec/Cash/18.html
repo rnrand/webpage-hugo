@@ -1,0 +1,260 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 18</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 18</h1>
+
+<h2>Discrete Probability Spaces</h2>
+
+<p>This lecture initiates the development of probability theory that is general
+enough to model cases where outcomes might have different probabilities.  Our
+first task will be to define what is a valid way of assigning probabilities.
+Obviously we want to rule out things like assigning negative probabilities, or
+probabilities that do not add up to $1$.  The next definition gives a
+definition of consistency for some assignment of numbers to represent
+probabilities of events. This version of the definition is an interesting
+example of mathematicians purifying necessary rules down into a short, elegant
+list that happens to imply everything we'd expect.
+
+
+<p>In this definition, we use $2^\Omega$ to mean the power set of 
+$\Omega$ (instead of $P(\Omega)$, which may be confusing in this context).
+
+<p><strong>Definition 18.1.</strong> A <strong>discrete probability
+	space</strong> is a pair $(\Omega,\Pr)$ where $\Omega$ is a set
+(called the sample space) and 
+$\Pr : 2^\Omega \to \mathbb R$ is a function satisfying the
+following three requirements (called "axioms of probability"):
+    <ol>
+        <li>(1st axiom) For all $E \subseteq \Omega, \Pr(E) \geq 0$.
+        <li>(2nd axiom) $\Pr(\Omega) = 1$.
+        <li>(3rd axiom) For all sequences of disjoint events $E_1,E_2,\ldots$ 
+					(where $E_i \subseteq \Omega$ for all $i$),
+					$$
+					\Pr\left(\bigcup_{i=1}^\infty E_i\right) = \sum_{i=1}^\infty \Pr(E_i).
+					$$
+    </ol>
+
+<p>The motivation for this definition may seem obscure; it came out of
+nowhere. As we said above, it is the agreed-upon definition because
+it implies everything that we will eventually expect to be true. But
+let's take it at face value and understand the axioms. The first
+says that no probabilities are negative, which is intuitively
+a reasonable requirement. The second says that the probability assigned
+to $\Omega$, the entire space, is $1$. This makes sense because $\Omega$
+contains every outcome that we are modeling (as in naive probability).
+
+<p>The third condition is more complicated. Don't let the infinities
+intimidate you. The infinite union is simply
+$$
+\bigcup_{i=1}^\infty E_i = \{ x \ | \ \exists i, x\in E_i\},
+$$
+which is no different from finite unions. The sum in this rule is, sadly,
+a limit which needs to be defined with calculus. We will avoid dealing with
+these sums too much, and when it comes to proofs we will appeal to calculus
+without proving things about sums ourselves.
+
+<p>In any case, that third rule says that when you want the probability
+of a union of <em>disjoint</em> events, you can just add up their individual
+probabilities.
+
+<p>You may have noticed that we call this a <em>discrete</em> probability
+space. There is indeed a more general notion of probability space that is able
+to handle "continuous" spaces like choosing real numbers. We won't discuss this
+direction further because it gets highly technical (with the sort of
+technicalities we do not want to study now).
+
+<p>The magic of the definition is that you can prove lots of other stuff
+assuming only it. Here are some examples.
+
+<p><strong>Theorem 18.2.</strong> Let $(\Omega,\Pr)$ be a discrete probability
+space. Then $\Pr(\emptyset)=0$.
+
+<p><em>Proof.</em> Define an infinite sequence $E_1,E_2,\ldots$ by
+$E_i = \emptyset$ for all $i$. Then these events are disjoint, and
+$\bigcup_{i=1}^\infty E_i = \emptyset$. By the third axiom of
+probability, 
+$$
+\Pr(\emptyset)
+= \Pr\left(\bigcup_{i=1}^\infty E_i\right)
+= \sum_{i=1}^\infty \Pr(E_i)
+= \sum_{i=1}^\infty \Pr(\emptyset).
+$$
+If $\Pr(\emptyset)\neq 0$ then the right hand side would diverge while the
+left hand side would not, a contradiction.
+    $\tag*{$\Box$}$
+
+		<p>Let's prove some more!
+
+<p><strong>Theorem 18.3.</strong> Let $(\Omega,\Pr)$ be a discrete probability space.
+Then for any finite sequence of disjoint events $E_1,\ldots,E_n$,
+$$
+\Pr\left(\bigcup_{i=1}^n E_i\right) = \sum_{i=1}^n \Pr(E_i).
+$$
+<p><em>Proof.</em> This may feel trivial, but it's not: We only
+now it's true for infinite sequences. So consider a finite sequence
+$E_1,\ldots,E_n$. Define $E_i = \emptyset$ for all $i>n$, and apply
+the third axiom to this sequence (which is still disjoint):
+\begin{align*}
+\Pr\left(\bigcup_{i=1}^n E_i\right) 
+&= \Pr\left(\bigcup_{i=1}^\infty E_i\right)  \\
+&= \sum_{i=1}^\infty \Pr(E_i) & \text{(by the third axiom)} \\
+&= \sum_{i=1}^n \Pr(E_i) + \sum_{i=n+1}^\infty \Pr(E_i)\\
+&= \sum_{i=1}^n \Pr(E_i). & \text{(by Theorem 18.2)}
+\end{align*}
+    $\tag*{$\Box$}$
+
+
+<p>A simple form of Theorem 18.3 is when $n=2$: It says that for disjoint
+events $E,F$, $\Pr(E\cup F) = \Pr(E) + \Pr(F)$.  
+
+<p><strong>Corollary 18.4.</strong> Let $(\Omega,\Pr)$ be a discrete probability
+space and $E\subseteq \Omega$ be an event. Then $\Pr(E^c) = 1 - \Pr(E)$.
+
+<p><em>Proof.</em> The events $E$ and $E^c$ are disjoint and their
+union is $\Omega$. By the second axiom and Theorem 18.3, 
+$1 = \Pr(\Omega) = \Pr(E\cup E^c) = \Pr(E) + \Pr(E^c)$.
+    $\tag*{$\Box$}$
+
+<p>The next theorem gets a
+formula for the case when the events are not disjoint.
+
+<p><strong>Theorem 18.5.</strong> Let $(\Omega,\Pr)$ be a discrete probability
+space.  Then for all events $E,F$,
+$$
+\Pr(E\cup F) = \Pr(E) + \Pr(F) - \Pr(E \cap F).
+$$
+
+<p><em>Proof.</em> This proof takes a bit more work. Our general strategy with
+proofs like this is always to try and "disjointify": Barring using a previous
+theorem, our only real tool is the third axiom, which only applies to disjoint
+event. So let's start by writing $E\cup F = E \cup (F\cap E^c)$, which you can
+justify by direct proof or by drawing a Venn diagram. We have that
+$E$ and $F\cap E^c$ are disjoint, so by Theorem 18.3 
+$$
+\Pr(E\cup F) = \Pr(E) + \Pr(F\cap E^c). 
+$$
+<p>
+We can complete the proof by showing that $\Pr(F\cap E^c) = \Pr(F)-\Pr(E\cap
+F)$. But as soon as we write that, the strategy presents itself:
+We have $F= (F \cap E) \cup (F\cap E^c)$, and this is a union of disjoint sets,
+so
+$$
+\Pr(F)= \Pr(F \cap E) + \Pr(F\cap E^c)
+$$
+by Theorem 18.3. Plugging this in gives the theorem.
+    $\tag*{$\Box$}$
+
+
+<h3>Inclusion-Exclusion</h3> 
+
+<p>Theorem 18.5 is a special case of something called
+<em>inclusion-exclusion</em>. It is fairly intuitive if you draw a Venn diagram
+and think of the formula as correcting for overcounting: It adds up two
+circles, and then subtracts the intersection, which gets counted twice.
+
+<p>For three sets $E,F,G$, Theorem 18.5 generalizes to this formula:
+\begin{align*}
+\Pr(E\cup F\cup G) 
+= & \Pr(E) + \Pr(F) +\Pr(G) \\
+  & - \Pr(E \cap F) - \Pr(E \cap G) - \Pr(F \cap G) \\
+  & + \Pr(E\cap F\cap G).
+\end{align*}
+
+<p>Once again, drawing a Venn diagram (or looking to the diagrams
+in the Rosen or
+Blitzstein-Hwang texts) is helpful in understanding this formula. One
+is add up the "sizes" of the three sets, but this counts their
+intersections twice and their three-wise intersection three times.
+So we substract their pairwise intersections. But now we've gone too
+far with the three-wise intersection: We counted it three time and
+subtracted it three times, so we add it back.
+
+<p>Here is the general theorem, which can be proved by induction (we'll use
+this but we won't prove it; Like life, 9 week quarters are short!).
+
+<p><strong>Theorem 18.6.</strong> Let $(\Omega,\Pr)$ be a discrete probability
+space.  Then for all events $E_1,E_2,\ldots,E_n$,
+\begin{align*}
+\Pr\left(\bigcup_{i=1}^n E_i\right) 
+= \sum_{1 \leq i \leq n} \Pr(E_i) 
+  - \sum_{1 \leq i\lt j \leq n} \Pr(E_i\cap E_j) 
+  & + \sum_{1 \leq i\lt j \lt k \leq n} \Pr(E_i\cap E_j\cap E_k) 
+	- \cdots \\
+	& + (-1)^{n+1}\Pr(E_1 \cap \cdots \cap E_n).
+\end{align*}
+
+<p>The notation in the theorem means that the first sum is over all of the
+individual events, the second sum is over all $\binom{n}{2}$ pairs of events,
+and in general the $i$-th sum is over all $\binom{n}{i}$ sets of $i$ events.
+
+<p>Inclusion-exclusion is usually a last resort for probability and counting
+problems, and it can get hairy even for moderately sized $n$. It can however
+give nice formulas when the problem has a lot symmetry, like the next two
+examples.
+
+<p><strong>Example.</strong> We say that poker hand is <em>void</em> in
+a suit if contains no cards of that suit. What is the probability that
+a $10$-card poker hand is void in at least one suit?
+
+<p>You can try this by counting the complement, but it looks pretty complicated.
+Let's use inclusion-exclusion. Define events $E_1,E_2,E_3,E_4$ that correspond
+to being void in each of the four suits. We want $\Pr(E_1 \cup E_2 \cup E_3 \cup
+E_4)$. 
+
+<p>We first calculate $\Pr(E_i)=\binom{39}{10}/\binom{52}{10}$, because being
+void in a suit means avoiding the 13 cards of the suit, i.e. picking from the
+remaining 39 cards. Similarly, for any $i\neq j$, $\Pr(E_i\cap
+E_j)=\binom{26}{10}/\binom{52}{10}$ since being void in two suits means avoiding
+the 26 cards of those suits. Next, for any distinct $i,j,k$, $\Pr(E_i\cap
+E_j\cap E_k)=\binom{13}{10}/\binom{52}{10}$ by the same reasoning.
+Finally, $\Pr(E_1\cap E_2\cap E_3\cap E_4) =0$; It's impossible to be void
+in all suits.
+
+<p>Now we apply Theorem 18.6. What makes this feasible is <em>symmetry</em>:
+All of the terms in the first sum are the same, and so on. Thus we get that
+$$
+\Pr(E_1 \cup E_2 \cup E_3 \cup E_4)
+= \binom{4}{1}\cdot \frac{\binom{39}{10}}{\binom{52}{10}}
+- \binom{4}{2}\cdot \frac{\binom{26}{10}}{\binom{52}{10}}
++ \binom{4}{3}\cdot \frac{\binom{13}{10}}{\binom{52}{10}}
+- \binom{4}{4}\cdot 0.
+$$
+
+<p><strong>Example.</strong> In class we will do de Montmort's matching problem,
+which you can read about in <a
+                                href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Blitzstein-Hwang</a>;
+                              It is Example 1.6.4 on page 25.
+
+
+<h3>Recommend Exercises</h3> 
+
+	<p>
+	<a
+    href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Blitzstein
+    and Hwang</a>, Section 1.9, Problems 43-48 cover usage of the axioms of
+  probability and 49-55 cover inclusion-exclusion. 
+
+	<p>Rosen, Section 7.2, Problems 13-15 cover axioms of probability.
+  Rosen, Section 8.5, has many problems on inclusion-exclusion, mostly
+  phrased in its counting version (where you replace $\Pr(E)$ with $|E|$;
+  otherwise it is exactly the same).
+

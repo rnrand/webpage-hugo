@@ -1,0 +1,279 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 20</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 20</h1>
+
+<h2>Random Variables</h2>
+
+    <p>Recall at the beginning of the course, when we were first discussing
+    logic, that we could define propositional statements, but at some point we
+    hit a wall in terms of being able to express properties of objects. At that
+    point, we had to introduce predicates into our language to be able to
+    express such notions.
+
+    <p>We have a very similar problem at this point, where we have been
+    discussing and defining events explicitly whenever we want to discuss some
+    particular set of outcomes. What we'd like to do now is develop a language
+    that allows us to say "let $X$ be the outcome of a random die roll" or
+    let "let $Y$ by the number of spades in a random five card poker hand".
+    That is, we want to assign variable names to unknown random values in
+    a rigorous and useful way.
+
+    <p>The following definition formalizes the standard approach for doing this.
+    At first glance, it might seem odd, or even useless. At least it is simple.
+    The motivation will come later.
+
+    <p><strong>Definition 20.1.</strong> A <strong>random variable on a sample
+      space $\Omega$</strong> is a function $X : \Omega \to \mathbb R$. 
+
+    <p>The choice of co-domain $\mathbb R$ is more permissive than prescriptive.
+    A lot of the time, we'll be mapping objects to a particular subset of
+    $\mathbb R$, like $\mathbb N$ or even $\{0,1\}$. And while the standard
+    definition of a random variable is for $\mathbb R$, this can be extended to
+    more exotic co-domains than just $\mathbb R$, but we usually prefer numbers
+    so that we can eventually talk about averages. 
+
+    <p>Now, you may have noticed from our discussion that random variables are
+    not random and are not variables (a random variable is a function, as we can
+    see from the definition above).
+
+    <p>Having set up this mechanism, we can define the probability of a
+    particular outcome of a random variable.
+
+    <p><strong>Definition 20.2.</strong> If $X$ is a random variable, we define
+    the notation
+    $$\Pr(X = r) = \Pr(\{\omega \in \Omega \mid X(\omega) = r\}).$$
+    More generally we extend this notation as follows. If $Q$ is
+    any predicate, we define
+    $$\Pr(Q(X)) = \Pr(\{\omega \in \Omega \mid Q(X(\omega)) \}).$$
+
+
+    <p><strong>Example.</strong> Suppose we flip a coin three times. Let
+    $X(\omega)$ be the random variable that equals the number of heads that
+    appear when $\omega$ is the outcome. So we have 
+    \begin{align*}
+    X(HHH) &= 3, \\
+    X(HHT) = X(HTH) = X(THH) &= 2, \\
+    X(TTH) = X(THT) = X(HHT) &= 1, \\
+    X(TTT) &= 0.
+    \end{align*}
+    Now, suppose that the coin is fair. Since we assume that each of the coin
+    flips is mutually independent, this gives us a probability of $\frac 1 2
+    \frac 1 2 \frac 1 2 = \frac 1 8$ for any one of the above outcomes. Now,
+    let's consider $\Pr(X = k)$:
+    <table>
+    <tr><th>$k$ <th>$\{\omega \in \Omega \mid X(\omega) = k\}$ <th>$\Pr(X = k)$
+    <tr><td>3 <td>$\{HHH\}$ <td>$\frac 1 8$
+    <tr><td>2 <td>$\{HHT,HTH,THH\}$ <td>$\frac 3 8$
+    <tr><td>1 <td>$\{TTH,THT,HTT\}$ <td>$\frac 3 8$
+    <tr><td>0 <td>$\{TTT\}$ <td>$\frac 1 8$
+    </table>
+    <p>Using the notation from the definition, we could write $\Pr(X \leq 1)$
+    to mean $\Pr(\{\omega \ : \ X(\omega) \leq 1\})$; This probability is
+    $1/2$, since $4$ out of $8$ outcomes have at most $1$ Heads.
+
+    <p><strong>Example.</strong> Continuing with the same sample space, we can
+    define a random variable $Y$ that counts the number of tails. Then we have,
+    for all $\omega\in\Omega$, $X(\omega) + Y(\omega)=3$. 
+
+    <p>Notation for random variables often omits the input variable. So one
+    might define a new random variable $Z$ by saying $Z=X-Y$, or in English:
+    $Z$ is the number of heads minus the number of tails. It is important
+    to understand that this is just defining a new function like you did
+    in calculus, where you'd write $h(x) = f(x)+g(x)$. For another example,
+    we could have defined $Y$ above by $Y=3-X$.
+
+
+<h2>The Distribution of a Random Variable</h2>
+
+    When studying random variables and answering questions about them,
+    a very useful concept is their <em>distribution</em>, which is
+    defined next.
+
+    <p><strong>Definition 20.3.</strong> Let $X$ be a random variable
+    on a sample space $\Omega$. The <strong>distribution of $X$</strong>
+    is the function $p_X : \mathbb{R}\to\mathbb{R}$ defined by
+    $$
+    p_X(x) = \Pr(X = x).
+    $$
+    This function is also called the <strong>probability mass function</strong>
+    or <strong>pmf</strong> of $X$.
+
+    <p><strong>Example.</strong> In the three-coin-toss example above,
+    when $X$ counts the number of heads, we have
+    $$
+    p_X(0) = 1/8, \quad
+    p_X(1) = 3/8, \quad
+    p_X(2) = 3/8, \quad
+    p_X(3) = 1/8,
+    $$
+    and $p_X(x) = 0$ for all other $x$.
+
+    <p>Now consider $Y$, which counts the number of tails. This is a different
+    random variable (it is a different function!). But observe that its
+    distribution is
+    $$
+    p_Y(0) = 1/8, \quad
+    p_Y(1) = 3/8, \quad
+    p_Y(2) = 3/8, \quad
+    p_Y(3) = 1/8,
+    $$
+    and $p_Y(x) = 0$ for all other $x$. This is <strong>exactly</strong>
+    the same function of $p_X$. That is, $p_X = p_Y$. This is a very common
+    situation, and the next definition records a term to describe this
+    situation.
+
+    <p><strong>Definition 20.4.</strong> Let $X,Y$ be random variables.  When
+    $p_X=p_Y$, we say that $X$ and $Y$ are <strong>identically
+    distributed</strong>.
+
+
+
+    <p><strong>Example.</strong> Now consider rolling two dice, and let
+    $X$ be the first roll and $Y$ be the second roll. We have that $X$ and
+    $Y$ are identically distributed, and that their distributions assign
+    $1/6$ to $x=1,2,3,4,5,6$ and $0$ to all other $x$.
+    Now define $Z=X+Y$.
+    What is the distribution of $Z$? You can calculate this function
+    by hand; The first few values are
+    $$
+    p_Z(2) = 1/36, \quad
+    p_Z(3) = 2/36, \quad
+    p_Z(4) = 3/36, \quad
+    p_Z(5) = 4/36, \quad
+    p_Z(6) = 5/36,
+    $$
+    and so on (plotting this may be instructive; see the BH textbook, for
+    example.) We can see from this example that we need to be careful
+    when computing distributions of random variables like $X+Y$ from
+    the distributions of $X$ and $Y$. The relationship can be subtle,
+    and it's certainly not that true that the distribution of 
+    $X+Y$ is $p_X+p_Y$!
+
+<h2>Bernoulli and Binomial Distributions</h2>
+
+    <p>When studying probability, the same distributions tend to show up over
+    and over again. Thus several distributions are given names and a compact
+    notation is used to indicate that a random variable has a commonly-known
+    distribution. The simplest example is defined next.
+
+    <p><strong>Definition 20.5.</strong> A random variable $X$ is said to
+    have the <strong>Bernoulli distribution with parameter $p$</strong>,
+    written $X\sim\mathrm{Bern}(p)$, if $\Pr(X=1)=p$ and $\Pr(X=0) = 1-p$.
+
+    <p>Bernoulli random variables are frequently described as <em>trials</em>
+    that either succeed (i.e. output $1$) or fail (i.e. output $0$).
+
+    <p><strong>Example.</strong> Suppose we roll a fair six-sided die,
+    and define
+    $$
+    X(\omega) = \begin{cases}
+    1 & \omega \leq 3 \\
+    0 & \omega > 3 
+    \end{cases}.
+    $$
+    Then $X\sim \mathrm{Bern}(1/2)$. If we define
+    $$
+    Y(\omega) = \begin{cases}
+    1 & \omega \leq 2 \\
+    0 & \omega > 2 
+    \end{cases}
+    $$
+    then $Y\sim \mathrm{Bern}(1/3)$.
+
+    <p>Bernoulli random variables will show up a few times later. 
+    For now we turn to another common distribution that models repeated
+    independent Bernoulli trials. A simple physical example of this is
+    tossing a coin $n$ times and counting the number of Heads that are
+    shown. Each toss can be seen as a trial, and the trials are independent
+    (which we declare by fiat, not calculation). This case is modeled
+    by the <em>binomial distribution</em>, defined next.
+
+    <p><strong>Definition 20.6.</strong> A random variable $X$ is said to
+    have the <strong>binomial distribution with parameters $n$ and $p$</strong>,
+    written $X\sim\mathrm{Bin}(n,p)$, if for $k=0,1,\ldots,n$,
+    $$
+    \Pr(X=k)=\binom{n}{k}p^k(1-p)^{n-k},
+    $$
+    and $\Pr(X=k)=0$ for all other $k\in\mathbb{R}$.
+
+    <p>This is just a definition, but it deserves some explanation. The
+    parameter $n$ corresponds to the number of trials, and $p$ corresponds to
+    the probability of success of each trial. To see why the probabilities are
+    assigned this way, consider first some sequence of successes and failures
+    that describes the aggregate outcome of the $n$ trials; For instance, with
+    $n=5$ we may have the outcome $SFFSS$ to indicate that the second and third
+    trials failed and the rest succeeded.  This particular outcome should have
+    probability $p(1-p)(1-p)pp=p^3(1-p)^2$, since the trials are independent.
+    Indeed, this is probability of any particular outcome that has three
+    successes (and thus two failures).
+
+    <p>Now to calculate $\Pr(X=3)$, we need to count the number of outcomes
+    with example three successes. There are $\binom{5}{3}$ such outcomes,
+    which correspond to strings with three $S$'s and two $F$'s. Adding
+    up these (disjoint) events, we justify that
+    $\Pr(X=3)=\binom{5}{3}p^3(1-p)^2$. The general pattern is justified
+    the same way.
+
+    <p><strong>Example.</strong> Suppose we have a coin that is biased to show
+    Heads with probability $3/4$. If we toss this coin $100$ times and let $X$
+    count the number of Heads, then $X\sim\mathrm{Bin}(100,3/4)$.
+
+    <p><strong>Example.</strong> Here is a less obvious example where the
+    binomial distribution arises. Suppose we have an array of $b$ bins, and
+    we randomly toss $n$ balls so that each ball lands in any bin with
+    equal probability, independently of the other balls. For each
+    $j=1,\ldots,b$, we can define $X_j$ to the number of balls in the $j$-th
+    bin. Then for all $j$, $X_j\sim\mathrm{Bin}(n,1/b)$, since we can view
+    the balls as trials that succeed when the ball lands in the $j$-th bin.
+    Balls-in-bins problems are particularly important for data structures,
+    where the balls are data items and bins are hash table cells.
+
+    <p><strong>Example.</strong> Suppose we deal a five-card poker hand.
+    Then we can define a trial for each of the four aces that succeeds
+    when that ace is in our hand. If we call these $X_1,X_2,X_3,X_4$,
+    then the total number of aces is $Z = X_1+X_2+X_3+X_4$. While $Z$
+    is a sum of Bernoulli trials, it does not have a binomial
+    distribution because the trials are not independent (having three
+    aces in our hand makes it less likely that the fourth ace is in
+    your hand). The next lecture will rigorously define independence to
+    better understand cases like this.
+
+    <p><strong>Exercise.</strong> Let $X\sim\mathrm{Bin}(n,p)$. Verify
+    that 
+    $$
+    \sum_{k=0}^n p_X(k) = 1.
+    $$
+    (Use the Binomial Theorem.)
+
+    <p><strong>Exercise.</strong> Let $X\sim\mathrm{Bin}(n,p)$ and
+    define $Y = n - X$. Verify that $Y\sim\mathrm{Bin}(n,1-p)$.
+
+
+<h3>Recommend Exercises</h3> 
+
+  <p>
+	<a
+    href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Blitzstein
+    and Hwang</a>, Section 3.12, Problems 1, 2, 6, 7, 8, 10, 20.
+
+	<p>Rosen, Section 7.2, Problems 34, 35.

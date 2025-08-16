@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 8</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 8</h1>
+
+    <h2>Modular arithmetic</h2>
+    <p>Now, we'll define a system of arithmetic on integers based around remainders. Many times, we want to do calculations based around multiples of certain numbers, like time. Modular arithmetic formalizes these notions. One of the things we'll see is that in certain cases, working in these structures gives us a notion of "division" that is well-defined. The system of modular arithmetic was first developed by Gauss.
+
+    <p><strong>Definition 8.1.</strong> Let $m$ be an integer. For integers $a$ and $b$, we say that $a$ is <strong>congruent</strong> to $b$ <strong>modulo</strong> $m$, written $a = b \pmod m$ or $a \equiv_m b$, if $m \mid (a-b)$. 
+		
+	<p>We need to be careful to distinguish the notion of equivalence $a \pmod m$ versus the function $a \mathop{\mathbf{mod}} m$. However, there is a tight connection between the two:
+
+    <p><strong>Theorem 8.2.</strong> $a \equiv_m b$ if and only if $a \mathop{\mathbf{mod}} m = b \mathop{\mathbf{mod}} m$.
+
+    <p><em>Proof.</em> 
+    <ol>
+    <li>Using the Division theorem, let $a = q_1m + r_1$ and $b = q_2m + r_2$.
+    <li>Hence $a - b = (q_1 - q_2)m + (r_1 - r_2)$.
+    <li>If $m \mid (a-b)$ then given that $m \mid (q_1 - q_2)m$ we can deduce that $m$ must also divide $r_1 - r_2$. 
+	<li>Since $-|m| \lt r_1 - r_2 \lt |m|$, we have$r_1 - r_2 = 0$, therefore $r_1 = r_2$.
+    <li>In the other direction, if $r_1 = r_2$ then $a - b = (q_1 - q_2)m$. So $m \mid (a-b)$.
+    </ol>
+    $$\tag*{$\Box$}$$
+
+
+    <p>We want to show that $\equiv_m$ is actually an equivalence relation. Recall that an equivalence relation must be <em>reflexive</em>, <em>symmetric</em>, and <em>transitive</em>.
+
+    <p><strong>Theorem 8.3.</strong> For $m \gt 0$, $\equiv_m$ is an equivalence relation.
+
+    <p><em>Proof.</em> 
+    <ol>
+    <li>To see that $\equiv_m$ is reflexive, observe that $m \mid (a-a)$ for all integers $a$. 
+    <li>To see that $\equiv_m$ is symmetric, if $a \equiv_m b$, then $m \mid (a - b)$. This means there is an integer $n$ such that $a - b = mn$. Then we get $b - a = m\cdot (-n)$ and we have $m \mid (b-a)$.
+    <li>To see that $\equiv_m$ is transitive, consider integers $a,b,c$ such that $a \equiv_m b$ and $b \equiv_m c$. We have $m \mid (a-b)$ and $m \mid (b-c)$, which gives us $m \mid (a-b) + (b-c)$ and therefore, $m \mid (a-c)$ and $a \equiv_m c$.
+    </ol>
+    $$\tag*{$\Box$}$$
+	
+	<p>Alternatively, we could have simply appealed to Theorem 8.2 (which uses $\leftrightarrow$, another equivalence relation) and then used the fact that $=$ is an equivalence relation!
+
+    <p>Using the notion of an equivalence relation, we can divide $\mathbb Z$ into sets that contain equivalent members. For instance, if we choose $m = 2$, then all even numbers $e$ are equivalent to each other ($e \equiv_m 0$) and all odd numbers $o$ are equivalent to each other ($o \equiv_m 1$). These sets are called equivalence classes.
+
+    <p><strong>Definition 8.4.</strong> For all $m \gt 0$ and $a \in \mathbb Z$, we define the <strong>equivalence class</strong> modulo $m$ of $a$ to be the set of integers
+    $$[a]_m = \{b \in \mathbb Z \mid b \equiv_m a\}.$$
+
+    <p>Typically, we refer to equivalence classes by the "obvious" name, which is the member of the class that is between 0 and $m-1$. This is called the <em>canonical representative</em> of the class. Of course, we should keep in mind that $[0] = [m] = [2m] = [-m]$ and such. But in addition to this, sometimes the $[]_m$ gets dropped for convenience's sake and we have to determine from context whether "2" means $2 \in \mathbb Z$ or $[2]_m$. Usually, this becomes clear with the usage of $\pmod m$ and we will try to make that explicit, but outside of this course, that's not always guaranteed.
+
+    <p>Now, we'll define how to do arithmetic on these things.
+
+    <p><strong>Theorem 8.5.</strong> We define operations $+$ and $\cdot$ on the equivalence classes of $m$ by
+    <ul>
+    <li>$[a]_m + [b]_m = [a+b]_m$, and
+    <li>$[a]_m \cdot [b]_m = [a \cdot b]_m$.
+    </ul>
+
+    <p>All of this seems a bit obvious, but we should think about what we're really doing here. We've defined operations $+$ and $\cdot$ that look like our usual operations on the integers. However, observe that we're not adding and multiplying integers; we've defined a notion of adding and multiplying <em>sets</em> of integers. 
+
+    <p>In order to prove that this definition of $+$ is a valid function, we will need to prove that every $x \in [a]_m$ and $y \in [b]_m$ yields the same $[x+y]_m$ (i.e. $+$ is single-valued). We will then do the same for multiplication.
+
+    <p><em>Proof.</em> We have to show that for $a_1 \equiv_m a_2$ and $b_1 \equiv_m b_2$, we have $a_1 + b_1 \equiv_m a_2 + b_2$ and $a_1 \cdot b_1 \equiv_m a_2 \cdot b_2$.
+
+    <p>First, by definition, we have that $m \mid (a_1 - a_2)$ and $m \mid (b_1 - b_2)$. Then we have $m \mid ((a_1 - a_2) + (b_1 - b_2))$. We can easily rearrange this to get $m \mid ((a_1 + b_1) - (a_2 + b_2))$ and therefore, $a_1 + b_1 \equiv_m a_2 + b_2$.
+
+    <p>Next, consider $a_1 b_1 - a_2 b_2$. Since $m \mid (a_1 - a_2)$ and $m \mid (b_1 - b_2)$ there exist integers $k$ and $\ell$ such that $km = a_1 - a_2$ and $\ell m = b_1 - b_2$. Then, 
+    \begin{align*}
+    a_1 b_1 - a_2 b_2 &= (a_2 + km) (b_2 + \ell m) - a_2 b_2 \\
+    &= a_2 b_2 + a_2 \ell m + b_2 k m + k \ell m^2 - a_2 b_2 \\
+    &= m(a_2 \ell + b_2 k + k \ell m)
+    \end{align*}
+    and therefore, $m \mid (a_1 b_1 - a_2 b_2)$ and $a_1 b_1 \equiv_m a_2 b_2$.
+    $$\tag*{$\Box$}$$
+
+    <p>Now, we can define our structure.
+    
+    <p><strong>Definition 8.6.</strong> Let $\mathbb Z_m = \{[0]_m, [1]_m, \dots, [m-1]_m\}$. The <strong>integers mod $m$</strong> is the set $\mathbb Z_m$, together with the binary operations $+$ and $\cdot$. The integers mod $m$ are denoted by $\mathbb Z/\equiv_m$ or simply as $\mathbb Z_m$.
+
+    <p>Up to now, we have been working implicitly in the structure $\mathbb Z$, the integers. As I've briefly alluded to before, we're not only talking about the domain $\mathbb Z$ but also how we interpret operations like $+$ and $\cdot$. The integers mod $m$, $\mathbb Z_m$, is another structure, whose basic elements are the equivalence classes with respect to $\equiv_m$.
+
+    <p>These kinds of structures&mdash;a set together with binary operations $+$ and $\cdot$ and identities for both operations&mdash; are called <em>rings</em>. 
+
+    <p>The notation $\mathbb Z/\equiv_m$ gives us a hint at what's happening. We took $\mathbb Z$ and partitioned it into equivalence classes by the relation $\equiv_m$. This idea of taking an algebraic structure and constructing another structure based on an equivalence relation is something that comes up a lot in algebra and is called a <em>quotient</em> structure, where quotient in the algebraic context just means equivalence class.
+
+    <p>I mentioned earlier that one of the things that this structure allows us to do is, under certain conditions, "divide" things in the sense that there is an operation that we can perform on elements of our structure that reverses multiplication. I say "divide" because the operation that we perform is not really division. It's more accurate to say that we'll be showing that <em>multiplicative inverses</em> exist. 
+
+    <p>First, we need the following notions.
+
+    <p><strong>Definition 8.7.</strong> An integer $p$ greater than 1 is called <strong>prime</strong> if the only positive divisors of $p$ are 1 and $p$. Otherwise, $p$ is called <strong>composite</strong>.
+
+    <p><strong>Definition 8.8.</strong> Two integers $a$ and $b$ are <strong>relatively prime</strong> (or <em>coprime</em>) if $\gcd(a,b) = 1$.
+
+    <p><strong>Example 8.9.</strong> Primes are obviously relatively prime to any number less than them, since they don't have any divisors except 1 and themselves. However, non-prime numbers (called composite numbers) can be relatively prime, even to each other. The numbers 10 and 21 are not prime, since $10 = 2 \cdot 5$ and $21 = 3 \cdot 7$. However, they are relatively prime, since $\operatorname{Div}(10) = \{\pm 1, \pm 2, \pm 5, \pm 10\}$ and $\operatorname{Div}(21) = \{\pm 1, \pm 3, \pm 7, \pm 21\}$.
+
+    <p><strong>Theorem 8.10.</strong> If integers $m \gt 0$ and $n$ are relatively prime, then $n$ has a multiplicative inverse mod $m$. That is, there exists an integer $a$ such that $n \cdot a \equiv_m 1$.
+
+    <p><em>Proof.</em> Per Bézout's identity, there exist integers $a$ and $b$ such that $a \cdot n + b \cdot m = 1$. Then,
+    \begin{align*}
+    [1]_m &= [a \cdot n + b \cdot m]_m \\
+    &= [a]_m \cdot [n]_m + [b]_m \cdot [m]_m \\
+    &= [a]_m \cdot [n]_m + [b]_m \cdot [0]_m \\
+    &= [b]_m \cdot [n]_m 
+    \end{align*}
+    $$\tag*{$\Box$}$$
+
+    <p><strong>Example 8.11.</strong> Consider $\mathbb Z_4$. There are four equivalence classes: $0,1,2,3$. Since 1 and 3 are relatively prime to 4, they have inverses: $1^{-1} = 1$ (this is obvious) and $3^{-1} = 3$, which we get by observing that $3 \cdot 3 = 9 = 1 (\pmod 4)$. However, 2 has no inverse:
+    \begin{align*}
+    2 \cdot 0 &= 0 &\pmod 4 \\
+    2 \cdot 1 &= 2 &\pmod 4 \\
+    2 \cdot 2 &= 4 = 0 &\pmod 4 \\
+    2 \cdot 3 &= 6 = 2 &\pmod 4
+    \end{align*}
+
+    <p>One might ask whether there is any integer $m$ for which $\mathbb Z_m$ has a multiplicative inverse for all non-zero elements. Our discussion about prime numbers gives us a hint.
+
+    <p><strong>Corollary 8.12.</strong> If $p$ is prime and $p \not\mid a$, then $a$ has a multiplicative inverse mod $p$.
+
+    <p>This is easy to see since every integer $2, \dots, p-1$ aren't divisors of $p$ and therefore share no non-trivial common divisors with $p$.
+
+    <p><strong>Definition 8.13.</strong> When it exists, we denote the multiplicative inverse of $a$ by $a^{-1}$.
+
+    <p>Up until now, we've been working in $\mathbb Z$, where "division" "doesn't work". However, we've proved sufficient conditions to create structures where "division" does work in a sense, in that multiplicative inverses are guaranteed to exist for every nonzero element. This means that we can solve linear equations like 
+    $$6x \equiv_{17} 144$$
+    using our usual algebraic techniques. In fact, assuming we were working with the same modulus, it's not hard to solve a system of equations in the usual way.

@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 9</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 9</h1>
+
+    <p><strong>Theorem 9.1.</strong> If $a$ and $m$ are relatively prime and $a \gt 1$, then the multiplicative inverse of $a$ modulo $m$ is unique.
+
+    <p><em>Proof.</em> By Theorem 8.10, since $a$ and $m$ are relatively prime, $a$ has a multiplicative inverse modulo $m$. Suppose that $b$ and $c$ are multiplicative inverses of $a$. Then,
+    \begin{align*}
+    b &= b \cdot 1 &\pmod m \\
+    &= b \cdot (c \cdot a) &\pmod m \\
+    &= b \cdot (a \cdot c) &\pmod m \\
+    &= (b \cdot a) \cdot c &\pmod m \\
+    &= 1 \cdot c &\pmod m \\
+    &= c  &\pmod m \\
+    \end{align*}
+    $$\tag*{$\Box$}$$
+
+    <p>In the previous class, we considered systems of equations that use the same modulus. However, what if we throw an additional twist in there and were presented with a system of linear congruences with <em>different</em> moduli? Consider the following:
+    \begin{align*}
+    x &\equiv 2 &\pmod 3 \\
+    x &\equiv 3 &\pmod 5 \\
+    x &\equiv 2 &\pmod 7
+    \end{align*}
+    <p>This problem, solving for $n$, was posed by the Chinese mathematician Sunzi from the third century AD. The following theorem is due to him.
+
+    <p><strong>Theorem 6.15 (Chinese Remainder Theorem).</strong> Consider integers $a_1, a_2, \dots, a_k$ and suppose that $m_1, m_2, \dots, m_k$ are $k$ pairwise positive coprime moduli. Then the system of equations
+    \begin{align*}
+    x & \equiv a_1 & \pmod{m_1} \\
+    x & \equiv a_2 & \pmod{m_2} \\
+     & \vdots \\
+    x & \equiv a_k & \pmod{m_k}
+    \end{align*}
+    has a unique solution modulo $m_1 \cdot m_2 \cdots m_k$.
+
+    <p><em>Proof.</em> Let $a_1, \dots, a_k$ be arbitrary integers and let $m_1, \dots, m_k$ be arbitrary positive integers with $\gcd(m_i, m_j) = 1$ for $1 \leq i \lt j \leq k$. Let $n = m_1 \cdot m_2 \cdots m_k$. For each $1 \leq i \leq k$, we define $n_i = \frac n {m_i}$. Here, we will rely on a claim that we have not proved yet:
+    <blockquote>
+    <p><strong>Theorem 6.17.</strong> If $a$ and $b$ are relatively prime and $a$ and $c$ are relatively prime, then $a$ and $bc$ are relatively prime.
+    </blockquote>
+    <p>From this, we have that $m_i$ is relatively prime to $n_i$.
+
+    <p>First, we will consider a solution $x_i$ to the simultaneous congruences
+    \begin{align*}
+    x_i & \equiv 0 & \pmod{m_1} \\
+    x_i & \equiv 0 & \pmod{m_2} \\
+     & \vdots \\
+    x_i & \equiv 0 & \pmod{m_{i-1}} \\
+    x_i & \equiv 1 & \pmod{m_i} \\
+    x_i & \equiv 0 & \pmod{m_{i+1}} \\
+     & \vdots \\
+    x_i & \equiv 0 & \pmod{m_k}
+    \end{align*}
+    In other words, we set $a_i = 1$ and $a_j = 0$ for $j \neq i$. 
+    
+    <p>Let $b = n_i^{-1} \pmod{m_i}$. Since $n_i$ and $m_i$ are relatively prime, this inverse must exist. Now, consider $x_i = b \cdot n_i$. We claim $x_i$ is a solution to this simultaneous congruence.
+    
+    <p>Observe that $x_i = b \cdot n_i = n_i^{-1} \cdot n_i = 1 \pmod{m_i}$. Then, we recall that $m_j \mid n_i$ for $i \neq j$. Therefore, we have $m_j \mid b \cdot n_i = x_i$. In other words, $x_i = 0 \bmod m_j$.
+
+    <p>To solve the original simultaneous congruences, we take each of the $x_i$'s and let $x = a_1 \cdot x_1 + \cdots + a_k \cdot x_k$. Then $x$ is a solution to the simultaneous congruence. To verify this we observe that for each $m_i$, we have
+    \begin{align*}
+    x &= a_1 \cdot x_1 + \cdots + a_k \cdot x_k & \pmod{m_i} \\
+    &= a_1 \cdot 0 + \cdots + a_{i-1} \cdot 0 + a_i \cdot 1 + a_{i+1} \cdot 0 + \cdots + a+k \cdot 0 & \pmod{m_i} \\
+    &= a_i & \pmod{m_i}
+    \end{align*}
+
+    <p>To see that our solution is unique, suppose we have two solutions $x_1$ and $x_2$. Then $x_1 - x_2 = 0 \pmod{m_i}$ for every $i$. We must have $m_i \mid (x_1 - x_2)$ for each $i$. Here, we will rely on another claim we have not proved yet:
+    <blockquote>
+    <p><strong>Theorem 6.18.</strong> If $a$ and $b$ are relatively prime, and $a \mid n$ and $b \mid n$, then $ab \mid n$.
+    </blockquote>
+    <p>Since all of our $m_i$ are pairwise relatively prime, $n = m_1 \cdots m_k$ also divides $x_1 - x_2$. Therefore, we have $x_1 = x_2 \pmod n$.
+    $\tag*{$\Box$}$
+
+    <p><strong>Example 6.16.</strong> Here is the problem of Sunzi stated again.
+    \begin{align*}
+    x &\equiv 2 &\pmod 3 \\
+    x &\equiv 3 &\pmod 5 \\
+    x &\equiv 2 &\pmod 7
+    \end{align*}
+
+    <p>To solve this, we follow the proof of the Chinese Remainder Theorem and begin by computing each $n_i = \frac{m_i}{n}$. We have
+    $$n_1 = 5 \cdot 7 = 35, \quad n_2 = 3 \cdot 7 = 21, \quad n_3 = 3 \cdot 5 = 15.$$
+    Next, we compute the inverses of the $n_i$'s. We have
+    $$35^{-1} = 2^{-1} = 2 \pmod 3, \quad 21^{-1} = 1^{-1} = 1 \pmod 5, \quad 15^{-1} = 1^{-1} = 1 \pmod 7.$$
+
+    <p>Finally, we compute $x = a_1 x_1 + a_2 x_2 + a_3 x_3 \pmod{105}$:
+    \begin{align*}
+    x &= 2 \cdot 70 + 3 \cdot 21 + 2 \cdot 15 &\pmod{105} \\
+    &= 140 + 63 + 30 &\pmod{105} \\
+    &= 233 & \pmod{105}\\
+    &= 23 & \pmod{105}
+    \end{align*}
+
+    <p>We made two unproven claims about relative primitivity in the proof of the Chinese Remainder Theorem. Both make use of the GCD characterization given by Bézout. We will prove them now.
+
+    <p><strong>Theorem 6.17.</strong> If $a$ and $b$ are relatively prime and $a$ and $c$ are relatively prime, then $a$ and $bc$ are relatively prime.
+
+    <p><em>Proof.</em> Let $d = \gcd(a,bc)$. Since $a$ and $b$ are relatively prime and $a$ and $c$ are relatively prime, we have
+    \begin{align*}
+    1 &= am_1 + bn_1 \\
+    1 &= am_2 + cn_2
+    \end{align*}
+    for some integers $m_1, m_2, n_1, n_2$ by Bézout's lemma. Multiplying the two equations, we get
+    \begin{align*}
+    1 &= a^2 m_1 m_2 + a c m_1 n_2 + a b m_2 n_1 + bcn_1 n_2 \\
+    &= a(a m_1 m_2 + c m_1 n_2 + b m_2 n_1) + bc (n_1 n_2).
+    \end{align*}
+    Let $m = a m_1 m_2 + c m_1 n_2 + b m_2 n_1$ and $n = n_1 n_2$, both of which are integers. Since $d = \gcd(a,b)$, we have that $d \mid (am + bcn)$. But this means that $d \mid 1$, so $\gcd(a,bc) = 1$.
+    $\tag*{$\Box$}$
+
+    <p><strong>Theorem 6.18.</strong> If $a$ and $b$ are relatively prime, and $a \mid n$ and $b \mid n$, then $ab \mid n$.
+
+    <p><em>Proof.</em> Since $a \mid n$, there exists an integer $s$ such that $as = n$. Similarly, there exists an integer $t$ such that $bt = n$. Since $\gcd(a,b) = 1$, there exist integers $x,y$ such that $ax + by = 1$. We can write
+    \begin{align*}
+    n &= axn + byn \\
+    &= axbt + byas \\
+    &= ab(xt + ys)
+    \end{align*}
+    and therefore $ab \mid n$.
+    $\tag*{$\Box$}$
+
+
+
+
+
+    <h2>Prime numbers</h2>
+    <p>We've already seen some examples of prime numbers behaving much nicer than ordinary numbers. For instance, recall that if we have $\mathbb Z_m$ and $m$ is prime, then every non-zero element in $\mathbb Z_m$ is guaranteed to have mulitiplicative inverses. This is because primes happen to be the building blocks for the integers. Mathematicians are particularly interested in objects that are atomic or can't be broken down any further or are minimal. The idea is that understanding the most basic, constituent objects gives us an understanding of the more complex structures they build. So the notion of primality is something that shows up in many more places than just number theory. We've already seen an example of this: atomic versus compound propositions in propositional logic.
+
+    <p>In light of this, the following result is an extremely important one that we'll be working towards proving.
+
+    <p><strong>Theorem 7.1 (Fundamental Theorem of Arithmetic).</strong> Every natural number $n \gt 1$ can be written uniquely as a product of primes.
+    
+    <p>Before proving this, there is a lot of legwork we need to do. For instance, how do we prove something about <em>all</em> (or almost all) natural numbers? To do this, we need to make use of a new proof technique that exploits the structure of the natural numbers.
+
+    <h3>Induction</h3>
+
+    <p><strong>Definition 7.2.</strong> Let $\varphi(n)$ be a statement that depends on $n \in \mathbb N$. If
+    <ol>
+    <li>$\varphi(0)$, and
+    <li>for all $k \in \mathbb N$, if $\varphi(k)$, then $\varphi(k+1)$,
+    </ol>
+    are both true, then the following is true:
+    <ol start="3">
+    <li>for all $n \in \mathbb N$, $\varphi(n)$.
+    </ol>
+    <p>This is called the <strong>principle of mathematical induction</strong>.
+
+    <p>How and when do we make use of this? Mathematical induction is a property of the natural numbers. What this means is that if there is some property that we want to prove about <em>all</em> natural numbers, all we need to do is prove that the property holds for the number 0 and that for any other natural number $k$, if it's true for $k$, then we can show that it's true for the next natural number, $k+1$.
+
+    <p>More formally, to prove that for all $n \in \mathbb N$ that $\varphi(n)$ holds,
+    <ol>
+    <li>first, prove that $\varphi(0)$ holds, then,
+    <li>prove that for $k \in \mathbb N$, if $\varphi(k)$ holds, then $\varphi(k+1)$ also holds.
+    </ol>
+
+    <p>So why does this even work? Basically, what we're really proving is a very large, infinite chain of implications,
+    \begin{align*}
+    \varphi(0)&, \\
+    \varphi(0) &\rightarrow \varphi(1), \\
+    \varphi(1) &\rightarrow \varphi(2), \\
+    \varphi(2) &\rightarrow \varphi(3), \\
+    & \vdots
+    \end{align*}
+    The usual analogy for this is a chain of dominoes: we set up our argument so that any one domino is guaranteed to knock over the next domino ($\varphi(k) \rightarrow \varphi(k+1)$ for any $k$). Once we've set this up, all we need to do is knock over the first domino (showing $\varphi(0)$) to set off the chain reaction.
+
+    <p>This leads us to what a proof by induction actually <em>looks</em> like.
+    <ol>
+    <li><strong>Statement.</strong> Clearly state the statement $\varphi$ that you want to prove and what you'll be performing induction on.
+    <li><strong>Base case.</strong> Prove $\varphi(0)$.
+    <li><strong>Inductive case.</strong> Let $k$ be an arbitrary natural number and state the <em>inductive hypothesis</em> $\varphi(k)$ and the statement $\varphi(k+1)$ to be proven. Then, using the assumption $\varphi(k)$, prove $\varphi(k+1)$. Clearly indicate when the inductive hypothesis is used.
+    </ol>
+
+
+    <p><strong>Definition 7.3.</strong> For integers $n$ and $m$, we define the sum of $x_i$ for $i$ from $m$ to $n$ by
+    $$\sum_{i = m}^n x_i = x_m + x_{m+1} + \cdots + x_{n-1} + x_n.$$
+
+    <p><strong>Theorem 7.4.</strong> For every $n \in \mathbb N$,
+    $$\sum_{i=0}^n i = \frac{n(n+1)}2.$$
+
+    <p>If you've been taught this formula before, then you've probably been told the story of Gauss solving this problem when he was 7. However, his teachers, in assigning $n = 100$, gave him an easy out since he only needed to consider one instance of the problem, so his solution does not use induction. We don't have that luxury, since we want to prove that this formula holds for all $n$. 
+
+    <p><em>Proof.</em> We will prove this by induction on $n$.
+
+    <p><strong>Base case.</strong> $n = 0$. Then 
+    $$\sum_{i = 0}^0 i = 0 \quad \text{and} \quad \frac{0 \cdot (0+1)}2 = 0,$$
+    so clearly $\sum_{i=0}^n i = \frac{n(n+1)}2$ holds for $n=0$.
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary and assume that $\sum_{i=0}^k i = \frac{k(k+1)}2$. We will show that $\sum_{i=0}^{k+1} i = \frac{k+1(k+2)}2$. We have
+    \begin{align*}
+    \sum_{i=0}^{k+1} i &= \sum_{i=0}^k i + (k+1) \\
+    &= \frac{k(k+1)}2 + (k+1) & \text{by ind. hyp.} \\
+    &= (k+1) \cdot \left(\frac k 2 + 1 \right) \\
+    &= (k+1) \cdot \left(\frac k 2 + \frac 2 2 \right) \\
+    &= \frac{(k+1)(k+2)}2
+    \end{align*}
+    Thus, we have shown that $\sum_{i=0}^n i = \frac{n(n+1)}2$ holds for $n=k+1$. Therefore, $\sum_{i=0}^n i = \frac{n(n+1)}2$ holds for all $n \in \mathbb N$.
+    $\tag*{$\Box$}$
+
+    <p>Recall the following theorem:
+    <blockquote>
+    <p><strong>Theorem 2.16.</strong> If $A$ is a finite set, then $|\mathcal P(A)| = 2^{|A|}$.
+    </blockquote>
+
+    <p>Now, using induction, we can prove this.
+
+    <p><em>Proof.</em> We will prove this by induction on the size of $A$, $n = |A|$.
+
+    <p><strong>Base case.</strong> We have $|A| = 0$ and therefore, $A = \emptyset$. Then $\mathcal P(A) = \{\emptyset\}$. Observe that $|P(\emptyset)| = |\{\emptyset\}| = 1 = 2^0$.
+
+    <p><strong>Inductive case.</strong> Let $n = k$ and assume that if there is a set $|B|$ with $|B| = k$, then $|\mathcal P(B)| = 2^k$. Let $|A| = k+1$ and we will show that $|\mathcal P(A)| = 2^{k+1}$.
+
+    <p>Choose an element $a \in A$. We define the set $A' = \{x \in A \mid x \neq a\}$ containing all elements of $A$ except $a$. Then $|A'| = |A| - 1$, since we removed $a$. Then $|A'| = k$ and by our inductive hypothesis, $|\mathcal P(A')| = 2^k$.
+
+    <p>Now, consider a subset of $A'$, $X \in \mathcal P(A')$. For each subset $X \subseteq A'$, we can obtain two subsets of $A$, $X$ and $X \cup \{a\}$. Therefore, we have $2 \cdot 2^k = 2^{k+1}$ subsets of $A$.
+    $\tag*{$\Box$}$
+
+    <p>Now, let's prove something about primes. First, we need the following very useful theorem, a result from Euclid's Elements.
+
+    <p><strong>Theorem 7.5 (Euclid's lemma).</strong> If $p$ is prime, and $a,b$ are integers such that $p \mid a \cdot b$, then $p \mid a$ or $p \mid b$.
+
+    <p><em>Proof.</em> Without loss of generality, suppose $p \not \mid a$. Then $\gcd(p,a) = 1$ and there exist integers $x$ and $y$ such that $xa + yp = 1$. Then multiplying both sides by $b$, we have
+    $$b = xab + ypb.$$
+    Since $p \mid ab$, let $n$ be an integer such that $ab = pn$. Then we have 
+    $$b = xab + ypb = xpn + ypb = p \cdot (xn+yb).$$
+    Therefore, by definition of divisibility, $p \mid b$.
+    $$\tag*{$\Box$}$$
+
+    <p>Notice that this proof makes use of Bézout's lemma. Since Bézout's lemma appears about 2000 years after Euclid, it is safe to say that this is not the proof that appears in the Elements.
+
+    <p>Now, we will prove the following lemma, which we make use of later on.
+
+    <p><strong>Lemma 7.6.</strong> If $p, p_1, \dots, p_k$ are prime and $p \mid p_1 \cdots p_k$, then $p = p_i$ for some $i$.
+
+    <p><em>Proof.</em> We will prove this by induction on $k$, the number of primes.
+
+    <p><strong>Base case.</strong> In this case, $p \mid p_1$. Since $p$ and $p_1$ are both prime, it must be the case that $p = p_1$.
+
+    <p><strong>Inductive case.</strong> Suppose our lemma is true for $k$ and consider $p \mid p_1 \cdots p_k \cdot p_{k+1}$. By Theorem 7.5, if $p \mid a \cdot b$, then $p \mid a$ or $p \mid b$. Let $a = p_1 \cdots p_k$ and $p_{k+1} = b$. If $p \mid a$, then $p = p_i$ for some $i$ with $1 \leq i \leq k$ by our inductive hypothesis and our result holds. If $p \mid b$, then $p = p_{k+1}$ and our result holds.
+    $$\tag*{$\Box$}$$
+    

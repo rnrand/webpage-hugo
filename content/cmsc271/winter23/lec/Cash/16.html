@@ -1,0 +1,328 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 16</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 16</h1>
+
+<h2>Combinatorial Proofs</h2>
+
+Consider the following theorem.
+
+		<p><strong>Theorem 16.1.</strong> For all positive integers $n$,
+    $$\sum_{i=0}^n \binom n i = 2^n.$$
+
+    <p>In some sense, this is a very complex statement; One is summing up 
+binomial coefficients, which individually have a complicated formula.
+For $n=3$, it is asserting that
+$$
+\frac{3!}{3!\cdot 0!} +
+\frac{3!}{2!\cdot 1!} +
+\frac{3!}{1!\cdot 2!} +
+\frac{3!}{0!\cdot 3!} 
+= 2^3.
+$$
+<p>The fact that terms with lots of factorials always collapses is remarkable.
+On the other hand, the formula has a very simple explanation: The right-hand
+side is counting the number of subsets of a set of size $n$. It turns out
+that the left-hand is also counting the same sets! It's counting the
+$\binom{n}{0}$ sets of size zero, the $\binom{n}{1}$ sets of size one,
+and so on up to the maximum size. 
+
+<p>This type of reasoning, where one avoids algebra and/or induction and
+just proves an identity via counting, is called a <em>combinatorial proof</em>
+(The BH textbook calls these "story proofs.) They are completely rigorous
+and acceptable, and often preferred to algebraic proofs because they usually
+come with a built-in explanation for why the identity is true. Here is
+an example of how to write up the above reasoning:
+
+    <p><em>Proof.</em> The right-hand side counts the number of sets of any set
+    of size $n$ (for concreteness, let's fix a set $X$ of size $n$). Now
+    consider the left-hand size. For each $0\leq i \leq n$, $\binom{n}{i}$ is
+    the number of subsets of size $i$ in $X$. But every subset $A \subset X$
+    has size $0\leq |A| \leq n$, so the left-hand side is counting these
+    sets as well.
+    $\tag*{$\Box$}$
+
+    <p>There are other proofs, say by induction. We'll do a different proof
+    below using something called the Binomial Theorem.
+
+    <p>Here is another simple example of a combinatorial proof.
+
+    <p><strong>Theorem 16.2.</strong> For all integers $n\geq 0$ and $0 \leq k
+    \leq n$,
+    $$
+    \binom{n}{k} = \binom{n}{n-k}.
+    $$
+    <p><em>Proof.</em> You can prove this instantly by algebra. A combinatorial
+    proof just observes that the left-hand side counts the number of subsets
+    of size $k$. The right-hand is doing the same thing, following this
+    decision process:
+    <ol>
+      <li>Pick $n-k$ elements ($\binom{n}{n-k}$ choices).</li>
+      <li>Toss out the chosen elements and keep the remaining $k$. (1 choice)</li>
+    </ol>
+    $\tag*{$\Box$}$
+
+
+
+    <p>There are a lot of other neat results that are provable with
+    combinatorial proofs. Perhaps the most famous one is due to Blaise Pascal in
+    the 1600s.
+
+    <p><strong>Theorem 16.3 (Pascal's Identity).</strong> For all integers
+    numbers $n \gt k \gt 0$,
+    $$\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}.$$
+
+    <p><em>Proof.</em> There is a straightforward algebraic proof of this fact,
+    but let's do a combinatorial proof. 
+    
+    <p>Let $A$ be a set of $n \geq 2$ elements. Left-hand side count the
+    number of subsets of $A$ of size $k$, which is $\binom{n}{k}$. We must
+    show that right-hand side also counts these sets.
+
+    <p>Since $A$ is non-empty, we can fix an arbitrary element of $A$, say $a$.
+    Let $r$ be the number of subsets of $A$ that contain $a$, and $s$ be
+    the number of subsets that don't. Then
+    $$
+    \binom{n}{k} = r + s
+    $$
+    because every subset either contains $a$ or doesn't.
+
+    <p>We claim that $r=\binom{n-1}{k-1}$. Here is a decision process
+    for counting sets that contain $a$:
+    <ol>
+      <li>Put $a$ in the set (1 choice).</li>
+      <li>Pick $k-1$ elements from the remaining $n-1$, and put them in
+        the set ($\binom{n-1}{k-1}$ choices).</li>
+    </ol>
+    <p>We next claim that $s=\binom{n-1}{k}$. This has a one-step decision
+    process: Just pick $k$ elements from the $n-1$ elements of $A$ that are
+    not $a$. This completes the proof.
+    $\tag*{$\Box$}$
+
+    <p>This identity leads us to the famous Pascal's Triangle, where we
+    start by arranging the nontrivial binomial coefficients in the
+    following infinite
+    pattern:
+    $$
+    \begin{matrix}
+    &&&&&& \binom 0 0 &&&&&&  \\
+    &&&&& \binom 1 0 && \binom 1 1 &&&&&  \\
+    &&&& \binom 2 0  && \binom 2 1  && \binom 2 2  &&&&  \\
+    &&& \binom 3 0  && \binom 3 1  && \binom 3 2  && \binom 3 3  &&&  \\
+    && \binom 4 0  && \binom 4 1  && \binom 4 2  && \binom 4 3  && \binom 4 4  &&  \\
+    & \binom 5 0  && \binom 5 1  && \binom 5 2  && \binom 5 3 && \binom 5 4  && \binom 5 5  &  \\
+    \binom 6 0  && \binom 6 1  && \binom 6 2  && \binom 6 3  && \binom 6 4  && \binom 6 5  && \binom 6 6 
+    \end{matrix}
+    $$
+    Filling in the values for the coefficients, the triangle looks like this:
+    $$
+    \begin{matrix}
+    &&&&&& 1 &&&&&&  \\
+    &&&&& 1 && 1 &&&&&  \\
+    &&&& 1 && 2 && 1 &&&&  \\
+    &&& 1 && 3 && 3 && 1 &&&  \\
+    && 1 && 4 && 6 && 4 && 1 &&  \\
+    & 1 && 5 && 10 && 10 && 5 && 1 &  \\
+    1 && 6 && 15 && 20 && 15 && 6 && 1
+    \end{matrix}
+    $$
+    When viewed like this, it's easy to see how Pascal's identity is used to
+    construct the following row: We just add the two adjacent entries and put
+    the sum in the next row between them (and put $1$'s on the ends).
+
+    <p>This arrangement leads us to even more interesting identities or
+    interpretations of identities with respect to the triangle. For example,
+    Theorem 16.1 is just the sum of the $n$th row of the triangle. 
+
+    <p>The following identity is due to Alexandre-Théophile Vandermonde from the
+    late 1700s.
+
+    <p><strong>Theorem 16.4 (Vandermonde's Identity).</strong> For all $n,m \geq
+    k \gt 0$, 
+    $$ \binom{m+n}{k} = \sum_{i=0}^k \binom{m}{i} \binom{n}{k-i}.$$
+
+    <p><em>Proof.</em> If we have disjoint sets $A$ and $B$ with $|A| = m$ and
+    $|B| = n$, then $\binom{m+n}{k}$ is the number of subsets of $A \cup B$ of
+    size $k$. 
+
+    
+    <p>We can consider this decision process choosing an $k$-element subset of
+    $A \cup B$.  Beware that this decision process gives a tree that is
+    not "regular", meaning that we cannot directly use the Multiplication Rule.
+    <ol>
+      <li>Pick a number $i \in \{0,\ldots,k\}$ .</li>
+      <li>Pick $i$ elements from $A$. ($\binom{m}{i}$ choices)</li>
+      <li>Pick $k-i$ elements from $B$. ($\binom{n}{k-i}$ choices)</li>
+
+    </ol>
+    <p>To see that this process counts every outcome exactly once, observe that
+    any subset of $k$ elements from $A\cup B$ has $i$ elements from $A$ and
+    $k-i$ elements from $B$ for some $i$.
+
+    <p>Note that our decision in the first stage affects the number
+    of options in the later stages, so we need to be careful. After
+    we select $i$ however, the rest is regular: There are
+    $\binom{m}{i}\binom{n}{k-i}$ leaves under this part of our tree.
+    Now we apply the Addition Rule, and add up these counts as
+    $i$ ranges from $0$ to $k$ to get the theorem.
+    $\tag*{$\Box$}$
+
+    <p>The following interesting fact follows from Vandermonde's identity.
+
+    <p><strong>Corollary 16.5.</strong> For all $n \gt 0$,
+    $$\binom{2n}{n} = \sum_{k=0}^n \binom n k ^2.$$
+
+    <p><em>Proof.</em> Using Vandermonde's identity, we set $m = k = n$ to get
+    $$\binom{2n}{n} = \sum_{i=0}^n \binom{n}{n-k} \binom n k.$$
+    Then we observe that $\binom{n}{n-k} = \binom n k$.
+    $\tag*{$\Box$}$
+
+
+
+    <!-- <p><em>Proof.</em> We can get this just by iterating Pascal's identity above:
+		$$\binom{n+1}{k+1} = \binom{n}{k} + \binom{n}{k+1} = \binom{n}{k} + \binom{n-1}{k} + \binom{n-1}{k+1} = \binom{n}{k} + \binom{n-1}{k} + \binom{n-2}{k} + \binom{n-2}{k+1} = \dots $$
+		until we get to $\binom{k+1}{k+1} = \binom{k}{k} = 1$. This makes for a nice inductive proof as well.
+    $\tag*{$\Box$}$ -->
+
+  
+
+<h2>The Binomial Theorem</h2>
+
+    <p>Binomial coefficients arise in a completely different, but familiar
+    setting. Consider multiplying out an expression like $(x+y)^2$:
+    $$(x+y)^2 = x^2 + xy + xy + y^2 = x^2 + 2xy + y^2.$$
+    Of course, we can do the same thing with higher degrees, like
+    \begin{align*}
+    (x+y)^3 &= (x+y)^2 (x+y) \\
+    &= (x^2 + 2xy + y^2)(x+y) \\
+    &= x^3 + 2x^2y + xy^2 + x^2y + 2xy^2 + y^3 \\
+    &= x^3 + 3x^2y + 3xy^2 + y^3
+    \end{align*}
+
+    <p>Now, this process is straightforward but a bit tedious. Perhaps there is an alternative way to think about the resulting coefficients. This becomes a bit more clear if we step away from our algebraic impulses a bit. We can write
+    \begin{align*}
+    (x+y)^4 &= (x+y)(x+y)(x+y)(x+y) \\
+    &= xxxx + xxxy + xxyx + xxyy + xyxx + xyxy + xyyx + xyyy + \\
+    &\quad\: yxxx + yxxy + yxyx + yxyy + yyxx + yyxy + yyyx + yyyy
+    \end{align*}
+    When written in this way, each term looks much more like the kinds of
+    objects that we've been working with over the past week. That is, we can
+    think of each term as a <em>combination</em> of the terms from each
+    binomial. In other words, how many terms of the form $x^3y$ are there?
+    Exactly as many strings that contain three $x$'s and one $y$, which is
+    $\binom{4}{1}$. This leads us to the following result.
+
+    <p><strong>Theorem 16.6 (Binomial Theorem).</strong> 
+    For all positive integers $n$,
+    $$(x+y)^n = \sum^n_{j=0} \binom n j x^{n-j} y^j.$$
+
+    <p><em>Proof.</em> One can prove this via induction and it makes a nice exercise. We will prove this via a combinatorial argument similar to the above. Each term of our polynomial is of the form $x^{n-j}y^j$. Then the coefficients are exactly the number of ways to choose $j$ $y$'s from each binomial which is $\binom n j$. 
+    $\tag*{$\Box$}$
+
+    <p><strong>Example.</strong> Suppose you have to prove the inductive case in
+    some proof and you're faced with expanding $(k+1)^5$. Luckily, you don't
+    need to futz around with expanding this polynomial and can directly apply
+    the binomial theorem:
+    \begin{align*}
+    (k+1)^5 &= \binom 5 0 k^5 1^0 + \binom 5 1 k^4 1^1 + \binom 5 2 k^3 1^2 + \binom 5 3 k^2 1^3 + \binom 5 4 k 1^4 + \binom 5 5 k^0 1^5 \\
+    &= k^5 + 5k^4 + 10k^3 + 10k^2 + 5^k + 1
+    \end{align*}
+
+    <p>This example suggests the following result, which follows from the Binomial Theorem by setting $y = 1$.
+
+    <p><strong>Theorem 16.7.</strong> For all positive integers $n$,
+    $$(x+1)^n = \sum_{i=0}^n \binom n i x^i.$$
+
+    <p>We also get another proof of Theorem 16.1 instantly.
+
+    <p><em>Second Proof of Theorem 16.1.</em> We have $$2^n = (1+1)^n =
+    \sum_{i=0}^n \binom n i 1^{n-i} 1^i = \sum_{i=0}^n \binom n i.$$
+    $\tag*{$\Box$}$
+
+    <p>The next few examples have relatively simple proofs from the
+    Binomial Theorem.
+
+    <p><strong>Theorem 16.8.</strong> For all $n \gt 0$,
+    $$\sum_{i=0}^n (-1)^i \binom n i = 0.$$
+
+    <p><em>Proof.</em> We take $x = 1$ and $y = -1$ to get $(1-1)^n$. This is
+    obviously 0, and we get the equality when we apply the Binomial theorem to
+    get $$0 = (1-1)^n = \sum_{i=0}^n \binom{n}{i} 1^{n-i}(-1)^i = \sum_{i=0}^n
+    (-1)^i \binom n i.$$
+    $\tag*{$\Box$}$
+
+    <p>Looking back at Pascal's Triangle, this seems relatively natural for odd
+    $n$, and even without the triangle, what we argue that the terms $\binom n
+    k$ cancel out with the corresponding $\binom n {n-k}$. But for even $n$,
+    this is not as obvious, although the triangle gives us some hints as to why
+    this might work out.
+
+    <p>We can say something about the sum of a particular column too.
+
+    <p><strong>Theorem 16.9.</strong> For $n \geq k \gt 0$, we have
+    $$\binom{n+1}{k+1} = \sum_{i=k}^n \binom i k.$$
+
+    <p><em>Proof.</em> I don't have an intuitive counting proof for this one, so
+    lets use induction. Fixing $k > 0$, we want to prove that $$\forall n, n
+    \geq k \to \binom{n+1}{k+1} = \sum_{i=k}^n \binom i k.$$ We'll do induction
+    on $n$.
+		
+  <p>Base case: $n = k$. (This is a reasonable base case since $n$ can't be
+  smaller than $k$).
+		$$\binom{k+1}{k+1} = 1 = \binom k k = \sum_{i=k}^k \binom k k.$$
+
+	<p>Inductive case: Assume, for some particular $n\geq k$, that
+		$$\binom{n+1}{k+1} = 
+    \sum_{i=k}^n \binom i k.$$
+	We want to prove that 
+		$$\binom{n+2}{k+1} = \sum_{i=k}^{n+1} \binom i k.$$
+
+   We have		
+	\begin{align*}
+	\binom{n+2}{k+1} &= \binom{n+1}{k} + \binom{n+1}{k+1} 
+            & \text{ by Pascal's Identity}  \\
+      &= \binom{n+1}{k} + \sum_{i=k}^n \binom i k 
+             & \text{ by inductive assumption}\\
+      &= \sum_{i=k}^{n+1} \binom i k  
+	\end{align*}
+	
+Hence this is true for all $n$. $\tag*{$\Box$}$ 
+
+    <!-- <p><em>Proof.</em> We can get this just by iterating Pascal's identity above:
+		$$\binom{n+1}{k+1} = \binom{n}{k} + \binom{n}{k+1} = \binom{n}{k} + \binom{n-1}{k} + \binom{n-1}{k+1} = \binom{n}{k} + \binom{n-1}{k} + \binom{n-2}{k} + \binom{n-2}{k+1} = \dots $$
+		until we get to $\binom{k+1}{k+1} = \binom{k}{k} = 1$. This makes for a nice inductive proof as well.
+    $\tag*{$\Box$}$ -->
+
+    
+	    <h3>Recommend Exercises</h3> 
+
+	<p>
+	<a
+    href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Blitzstein
+    and Hwang</a>, Section 1.9, Problems 18-20. Problems 21 and 22 are also
+  good but challenging.
+
+	<p>Rosen, Section 6.4, has a lot of good problems related to this lecture.
+  The first several problems are simple applications of the Binomial Theorem
+  and are worth doing to help memorize the formula. Problems 23-36 will give
+  you a lot of practice with combinatorial proofs.
+

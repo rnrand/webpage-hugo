@@ -1,0 +1,291 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 26</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 26</h1>
+	
+
+	<h2>Matchings in Bipartite Graphs</h2>
+
+	<p>This lecture introduces the notion of a <em>matching</em> in a graph.
+	We then prove Hall's Marriage Theorem, which tells us when a bipartite
+	graph has a matching that is as large as possible. Finally, time
+	permitting, we sketch how one can find a matching in a bipartite
+	graph efficiently.
+
+	<h3> Matchings </h3>
+
+	<p>Consider a large-scale system that has some set of compute jobs
+	to assign to a set of servers, and suppose that each job can only be
+	run on some particular subset of servers, and each server can only run
+	one job. We can model these constraints
+	as a bipartite graph, where the jobs and servers form the two parts
+	of the bipartition, and there is edge from a job to a server if that
+	server is appropriate for the job. 
+
+	<p>An efficient system would like to assign as many jobs as possible to
+	servers. This is equivalent to choosing a set of edges as large as possible
+	such that each job and server have degree one or zero; The chosen edges
+	indicate the job-server assignments that are taken.
+
+	<p>This type of problem is extremely common in computer science, and in
+	this lecture we study it abstractly. The next definition captures formally
+	what we want to find.
+
+	<p><strong>Definition 26.1.</strong> A <strong>matching</strong> in a graph
+	$G = (V,E)$ is a subset of edges $M \subseteq E$ such that no two edges in
+	$E$ are incident at a vertex. A vertex that is incident to an edge in a
+	matching $M$ is <strong>matched</strong> in $M$; otherwise, it is
+	<strong>unmatched</strong>. For a subset $U\subseteq V$, we say that
+	<strong>$U$ is matched</strong> in $M$ if every vertex in $U$ is matched
+	in $M$.
+
+	<p>A <strong>maximal matching</strong> is a matching
+	that cannot be made larger; in other words, every edge in $E \setminus M$ is
+	incident to a vertex matched in $M$. A <strong>maximum matching</strong> is a
+	matching with the maximum number of edges. 
+
+	<p>A matching $M$ in a bipartite graph $G = (V,E)$ with bipartition $(A, B)$
+	is a <strong>complete matching</strong> if $A$ is matched in $M$. 
+
+    <p>The above definitions distinguish between maximal and maximum matchings. Just because you have a matching that can't be expanded doesn't mean that you necessarily have the largest possible matching!
+
+		<p><strong>Example.</strong> Consider the following graph,
+		which is presented twice. In each diagram, a matching is highlighted
+		in red. 
+
+    <img src="26-1.png" class="center" width="50%">
+
+		<p>On the left, we have a maximal matching, since no edges can be added to
+		the matching without violating the matching condition. However, this graph
+		can exhibit a larger matching, which we have on the right. Since every
+		vertex on the bottom is matched, this is a complete matching, and
+		therefore, it is also a maximum matching. However, other maximum matchings
+		exist for this graph.
+
+		<h3>Hall's Marriage Theorem</h3>
+
+		<p>The following result gives us a necessary and sufficient condition for a
+		bipartite graph to have a complete matching and is due to Philip Hall, who
+		was a British group theorist and worked at Bletchley Park during the Second
+		World War.
+
+		<p><strong>Theorem 26.2 (Hall's Marriage Theorem).</strong> Let $G =
+		(V,E)$ be a bipartite graph with bipartition $(A,B)$. Then $G$ contains a
+		matching of $A$ if and only if $|N(S)| \geq |S|$ for
+		all subsets $S \subseteq A$.
+
+		<p>This theorem is our second example of a result showing that "the obvious
+		necessary condition is also sufficient". In this case, the necessary
+		condition is "$|N(S)| \geq |S|$ for all subsets $S \subseteq A$", which is
+		also called the <em>marriage condition</em>. As we will see, it is not hard
+		to show that this condition is necessary for a matching of $A$ to exist. But
+		it turns out that, with some more work, you can show it is also sufficient,
+		meaning that when the marriage condition holds, then a matching of $A$ must
+		exist.
+
+		<p>The proof that follows is a nice (and famous) example of strong
+		induction, and exhibits some common techniques in graph theory proofs.
+		It is also somewhat difficult compared to many of the proofs we've
+		done.
+
+		<p>In the proof, we use the notation $N_G(S)$ to mean the set of neighbors
+		of $S$ in the graph $G$. We'll need this notation when go changing the
+		original graph $G$ to produce new graphs $G_1,G_2$, and then consider how
+		the set of neighbors $N_{G_1}(S)$, $N_{G_2}(S)$ relates to the original
+		set $N_G(S)$.
+
+		<p><em>Proof.</em> First, consider the only if ($\Rightarrow$) direction.
+		If the graph has no vertices then the theorem is trivial, so assume that
+		the graph has at least one vertex.  Suppose there exists a matching $M$ of
+		$A$, and let $S\subseteq A$; we must show that $|N_G(S)| \geq |S|$.  Since
+		$M$ is a matching of $A$, we know that there is at least one edge (the one
+		in $M$) for each vertex $v \in S$. This means there is at least one
+		distinct neighbor in $B$ for each vertex $v \in A$.  Therefore, $|N_G(S)|
+		\geq |S|$.
+
+    <p>The if ($\Leftarrow$) direction is proved by strong induction on $|A|$. 
+		The inductive statement (which depends on a positive integer $k$) is:
+
+		<blockquote>
+			If $G$ is a bipartite graph with bipartition $(A,B)$, $|A|\lt k$,
+			and $|N_G(S)| \geq |S|$ for all subsets $S \subseteq A$, then $G$
+			contains a matching of $A$.
+		</blockquote>
+
+		<p><strong>Base case.</strong> We have $|A| = 1$. Taking $S=A$ in
+		the marriage condition, we have
+		$|N_G(A)| \geq |A|=1$, so there exists an edge $e$ from the lone
+		vertex in $A$ to some vertex in $B$. Thus $M=\{e\}$ is a matching
+		of $A$ in $G$, as desired.
+
+		<p><strong>Inductive step.</strong> Let $k \gt 1$, and assume the inductive
+		statement is true for $1,\ldots,k-1$ (this is strong induction); We must
+		prove the statement for $k$.  Let $G$ be a graph with bipartition $(A,B)$
+		such that $|A| = k$, and assume $G$ satisfies the marriage condition. We
+		must find a matching of $A$.
+
+		<p>From here, we will consider two possible cases for $G$, and
+		prove them separately. The cases are:
+		<ul>
+			<li><em>Case I</em>: For all $S \subseteq A$ such that $S\neq \emptyset$ or $A$,
+				we have $|N_G(S)|>|S|$</li>
+			<li><em>Case II</em>: There exists $S \subseteq A$ such that $S\neq \emptyset$ or
+				$A$ and $|N_G(S)|=|S|$</li>
+		</ul>
+
+		<p>Intuitively, in the first case the marriage condition is
+		"super-satisfied", since it says that $|N(S)|$ is <em>strictly</em> larger
+		than $|S|$. The second case is where the marriage condition is
+		just barely satisfied for some $S$. Note that we had to carefully exclude
+		$S=\emptyset$ or $S=A$ to avoid trivialities.
+
+		<p><em>Proof of Case I</em>: By the condition in Case I, we know that
+		for all $S\subseteq A$, $S\neq \emptyset$ or $A$, $|N_G(S)| \geq |S|+1$.
+		In particular, we know that $G$ has at least one edge $e=uv$. Consider the
+		graph $G'$ obtained by deleting $u,v$ along with all edges incident to
+		them (including $e$). Then $G'$ is still bipartite, with bipartition
+		$(A',B')=(A\setminus\{u\},B\setminus\{v\})$.
+		We claim that $G'$ still satisfies the marriage
+		condition. Indeed, if $S\subset A'$ is a non-empty, then 
+		$$
+		|N_{G'}(S)| \geq |N_{G}(S)| - 1,
+		$$
+		since the set $S$ loses at most one neighbor ($v$) when we created
+		$G'$. Since we assumed Case I, $G$ super-satisfies the marriage condition, 
+		and $|N_{G}(S)| \geq |S| + 1$. Thus we get
+		$$
+		|N_{G'}(S)| \geq |S| +1- 1 = |S|.
+		$$
+		We have shown that $G'$ satisfies the marriage condition. Moreover,
+		it has $|A'| = k-1$, so we can apply the inductive assumption to
+		$G'$ to obtain a matching $M'$ of $A'$ in $G'$. We finally take
+		$M= M' \cup \{e\}$ to obtain a matching of $A$ in $G$, completing
+		the inductive step for Case I.
+
+	<p><em>Proof of Case II</em>: By the condition in Case II, we can fix
+	some $A'\subseteq A$, $A'\neq \emptyset$ or $A$ such that $|N_G(A')|=|A'|$.
+	Let $B'=N_G(A')$. Define two graphs $G_1,G_2$ as follows:
+	<ul>
+		<li>$G_1$ is the graph with bipartition $(A',B')$ induced by these
+		sets in $G$ (i.e. take all edges between $A'$ and $B'$).</li>
+
+		<li>$G_2$ is the graph with bipartition $(A\setminus A',B\setminus B')$
+			induced by these sets in $G$ (i.e. take all edges between $A\setminus A'$
+			and $B\setminus B'$).</li>
+	</ul>
+	<p>Note that there are some edges of $G$ that may not appear in either
+	$G_1$ or $G_2$: These are the edges from $A\setminus A'$ to $B'$. It turns
+	out we won't need them.
+
+	<p>Our plan is to find a matching $M_1$ of $A'$ in $G_1$, and a matching
+	$M_2$ of $A \setminus A'$ in $G_2$. We can then take $M=M_1\cup M_2$
+	to get a matching of $A$ in $G$, as desired. 
+
+	<p>First consider $G_1$. Because $A'$ is a proper subset, $|A'| \lt k$.
+	Moreover, $G_1$ satisfies the marriage condition easily, since
+	$N_{G_1}(S)=N_G(S)$ for every $S\subseteq A'$. Thus, by strong induction,
+	$G_1$ contains a matching $M_1$ of $A'$.
+
+	<p>Now consider $G_2$. Once again, $|A\setminus A'| \lt k$.  We now show that
+	$G_2$ satisfies the marriage condition (this is trickier than in $G_1$ we
+	because omitted some edges from $A\setminus A'$ when we formed $G_2$).
+	Suppose for contradiction that there exists $S\subseteq (A\setminus A')$ such
+	that $|N_{G_2}(S)| \lt |S|$. Observe that
+	$$
+	N_G(S\cup A') = N_{G_2}(S) \cup N_G(A')
+	$$
+	because every neighbor of $S \cup A'$ in $G$ is either adjacent to a vertex
+	in $A'$ (and possibly also one in $S'$) and thus in $N_G(A')$, or adjacent
+	to $S$ and not $A'$ and thus in $N_{G_2}(S)$.
+
+	<p>We then have
+	\begin{align*}
+	|N_G(S\cup A')| & \leq |N_{G_2}(S)| + |N_G(A')| &\\
+	& = |N_{G_2}(S)| + |A'|  & \text{(by choice of $A'$)} \\
+			& \lt |S| + |A'|  & \text{(by choice of $S$)}\\
+			& = |S \cup A'| & \text{(because $S$ and $A'$ are disjoint)}.
+	\end{align*}
+	But this shows that $S\cup A'$ contradicts the marriage condition in
+	$G$. This completes the proof of Case II.
+
+	<p>The theorem is proved by taking $M=M_1\cup M_2$ to create a matching
+	of $A$ in $G$.
+    $\tag*{$\Box$}$
+
+		<h3>Finding Matchings in Bipartite Graphs</h3>
+
+		<p>Obviously, not every bipartite graph will contain a complete matching.
+		However, perhaps we would like to try to find a maximum matching. But if we
+		just go and choose edges greedily (while avoiding having common endpoints, but otherwise employing no strategy), we may end up with a <em>maximal</em> matching that is not a <em>maximum</em> matching, meaning a matching that is not as
+		large as possible but yet cannot be extended with more edges (to improve
+		the matching one would need to backtrack).
+
+		<p>How can we detect if we have reached a maximum matching and not just a
+		maximal matching?  The following result, proved by Claude Berge in 1957,
+		gives us a way to do so.
+
+		<p><strong>Definition 26.3.</strong> Let $G$ be a graph with a matching
+		$M$. An <strong>augmenting path for $M$</strong> is a path on
+		$v_0,v_1,\ldots, v_k$ such that $v_0$ and $v_k$ are unmatched in $M$ (i.e.
+		$v_0, v_k$ do not belong to any matched edges) and the edges of the path
+		alternate between edges in $M$ and edges not in $M$.
+
+		<p><strong>Theorem 26.4 (Berge's Lemma).</strong> Let $G = (V,E)$ be a
+		graph with a matching $M$. Then $M$ is a maximum matching if and only if
+		there is no $M$-augmenting path.
+
+		<p>This result characterizes maximum matchings in terms of augmenting
+		paths. An interesting feature of this result is that it doesn't depend on
+		the whether $G$ is bipartite. In fact, if we look carefully at the
+		definition of matchings, you'll notice that we never mentioned that the
+		graph has to be bipartite!
+
+		<p>The idea behind Berge's lemma is that if our graph and matching gives us
+		an augmenting path, then we can take this path and flip the edges to get a
+		larger matching.
+    
+    <p><strong>Example.</strong> Consider again this example:
+
+    <img src="26-1.png" class="center" width="50%">
+
+    <p>We can see on the left, where we have a maximal but not maximum matching, there are many augmenting paths, while there are no such paths on the right. In fact, we can choose an augmenting path in the left-hand matching to flip to get the right-hand matching.
+
+     <p>We get an obvious algorithm from this: start with an unmatched vertex and construct a matching iteratively by finding augmenting paths and flipping them. However, there is one possible complication with this approach. Consider the following graph and matching.
+
+     <img src="26-2.png" class="center" width="50%">
+
+		<p>Observe that if we attempt to find our augmenting path by starting from
+		the leftmost vertex, we could end up getting stuck, depending on which way
+		we travel on the cycle. This is only a problem because the cycle has odd
+		length. Luckily, this is not a problem for bipartite graphs, as we
+		proved last time!.
+
+		<p>This all begs the question of about we find an augmenting path.  It is
+		not terribly complicated, but unfortunately, we are out of time this
+		quarter. I hope you've enjoyed your time in CMSC 27100, and I wish you the
+		best in your CS education!
+
+
+	    <h3>Recommend Exercises</h3> 
+
+
+	<p>A final (ungraded) problem set will be released shortly.

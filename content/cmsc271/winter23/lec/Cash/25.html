@@ -1,0 +1,324 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 25</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 25</h1>
+	
+
+	<h2>Connectivity and Bipartite Graphs</h2>
+
+	<h3>Connectivity, Paths, and Walks</h3>
+
+	<p>A natural impulse when presented with a bunch of circles joined by lines
+	is to see if we can get from one circle to another by following the lines.
+	More formally, when we do this, what we're doing is checking if an object is
+	connected to another object. It's not surprising to learn that this is a
+	fundamental property of graphs that we'd like to work with.
+
+	<p><strong>Definition 25.1.</strong> A graph $G=(V,E)$ is
+	<strong>connected</strong> if for every $u,v\in V$, $G$ contains a
+	path from $u$ to $v$.
+
+	<p>The graphs that we've seen so far have all been connected. However, we're
+	not guaranteed to work with connected graphs, especially in real-world
+	applications. In fact, we may want to test the connectedness of a graph. For
+	that, we'll need to talk about the parts of a graph that are connected.
+
+	<p><strong>Definition 25.2.</strong> A <strong>connected component</strong>
+	of a graph $G = (V,E)$ is a connected subgraph $G'$ of $G$ that is not
+	contained in a larger connected subgraph of $G$.
+
+	<p><strong>Example 25.3.</strong> Consider the following graph.
+
+    <img src="25-1.png" class="center" width="30%">
+
+		<p>This graph has two connected components, the subgraphs induced by
+		$a_0,\dots, a_5$ and $a_6,\dots,a_9$. No other can be considered a
+		connected component since they would either be not connected or a proper
+		subgraph of one of the two connected components we identified.
+
+
+		<p>Below it will be useful to consider a more permissive type of
+		"path" in a graph that allows for repeats. Recall that we defined a
+		path to be a graph, and by definition this doesn't allow repeated edges
+		(let alone in a given order). The definition we need is given next.
+
+		<p><strong>Definition 25.4.</strong> A <strong>walk</strong> in a graph $G
+		= (V,E)$ is a sequence of edges from $E$ of the form
+			$v_0v_1,v_1v_2,\ldots,v_{\ell-1}v_\ell$. The <strong>length</strong> of a
+			walk is $\ell$, the number of edges in the sequence (counting
+				repetitions), and the <strong>end points</strong> of the walk are $v_0$
+				and $v_\ell$. A walk is <strong>closed</strong> if it starts and ends
+				at the same vertex.
+
+		<p>Technically, walks and paths are very different objects: While paths
+		are graphs (i.e. pairs of the form $(V,E)$), walks are sequences of edges.
+		But we will frequently mix them when convenient and confusion is unlikely.
+		For instance, we will say that a graph "contains a walk from $v_0$ to
+		$v_\ell$" if there exists a walk with those endpoints.
+
+		<p>We first observe, without a detailed proof, that a walk without
+		any repeated vertices immediately gives a path in an obvious way: Take
+		the involved vertices along with the edges of the walk.
+
+		<p>We will be interested in the relationship between walks and paths.
+		Walks have some nice properties, such as the following.
+
+		<p><strong>Lemma 25.5.</strong> Let $G$ be a graph and let $s,m,t$ be
+		vertices in $G$. If $G$ contains a walk from $s$ to $m$ of length
+		$\ell_1$, and a walk from $m$ to $t$ of length $\ell_2$, then it contains
+		a walk from $s$ to $t$ of length $\ell_1+\ell_2$.
+
+		<p>The proof of this lemma is the obvious approach: Just concatenate the
+		walks and check that you get a valid walk. We bother to state this lemma
+    because
+		it is <em>not</em> true for paths. The reason is that the paths might
+		coincide at some vertices other than the endpoints, and taking their union
+		(which is the closest we can do to concatenating them) may not result in a
+		path at all (we might get cycles in the result, for instance).
+
+		<p>Fortunately we can get the best of worlds (i.e. simplicity of combining
+		walks along with the intuitively simple nature of paths) by doing a little
+		technical work in the remainder of this section.
+
+		<p><strong>Lemma 25.6.</strong> 
+		Let $s$ and $t$ be distinct vertices in a graph $G$, and 
+		let $W$ be a walk in $G$ from $s$ to $t$.
+		If $W$ has the shortest length amongst all walks from $s$
+		to $t$, then the edges of $W$ (along with the obvious vertices) form a path
+		from $s$ to $t$.
+    <p><em>Proof.</em> 
+		By our observation above, we only need to show that $W$ does not repeat any
+		vertices. 
+    Let $W=v_0v_1,v_1v_2,\ldots,v_{\ell-1}v_\ell$ be a walk from
+		$v_0=s$ to $v_\ell=t$ of minimal length, and assume for contradiction that
+		there is a repeated vertex, i.e. that there exist $0\leq i\lt j \leq\ell$
+		such that $v_i = v_j$. 
+    We use this to find a shorter walk from $s$ to $t$ and reach a
+    contradiction.
+    Consider the walk
+		$$
+		W' =v_0v_1,\ \ldots,\ v_{i-1}v_i,\  v_jv_{j+1},\ \ldots,\ v_{\ell-1}v_\ell.
+		$$
+    (If $i=0$ then this notation means we remove an initial segment of the
+    walk up to $v_j$; If $j=\ell$ then we truncate a final segment of the walk
+    after $v_i$.)
+		This is a valid walk because $v_i=v_j$. It is also shorter than $W$
+		because it omits at least one edge. Moreover, it is still a walk from
+		$s$ to $t$ (even when we remove the initial or final segment).
+		This contradicts the assumed minimality of $W$.
+    $\tag*{$\Box$}$
+
+		<p><strong>Corollary 25.7.</strong> A graph $G$ contains a path between
+		distinct vertices $s,t$ if and only if it contains a walk from $s$ to
+		$t$.
+		<p><em>Proof.</em> Given a path, we can form a walk in the obvious way.
+		Given that a walk exists, there must exist a shortest walk, and the
+		previous lemma guarantees that it gives a path.
+    $\tag*{$\Box$}$
+
+		<p>This next corollary makes precise that we can treat paths like
+		walks, when it come to connecting them. (But note that the proof is
+		not simply concatenating the paths!)
+
+		<p><strong>Corollary 25.8.</strong> If $G$ contains a path between
+		$u$ and $v$, and also a contains a path from $v$ to $w$, then it
+		contains a path from $u$ to $w$.
+		<p><em>Proof.</em> If the $u,v,w$ are not all distinct, then this is easy,
+		so assume they are distinct. Then by the previous corollary $G$ contains
+		walks from $u$ to $v$ and $v$ to $w$, so by Lemma 25.5 it contains a walk
+		from $u$ to $w$. By the previous corollary again, $G$ contains a path from
+		$u$ to $w$.
+    $\tag*{$\Box$}$
+
+		<p>In case that seemed fussy, it's important to realize here (and elsewhere
+		in graph theory) that intuition is useful but sometimes leads to
+		over-claiming. Corollary 25.8 <em>should</em> be true, but if you think
+		about it, it is more complicated that it might seem (in contrast to walks,
+		where Lemma 25.5 was indeed obvious and easy). What Corollary 25.8 is
+		really saying is that, given paths that may be very complicated and
+		intertwined and meet at a common end, we can also sort them out and find a
+		direct path between their other endpoints.
+
+	<h3>Bipartite Graphs</h3>
+
+  <p>A common class of graphs involve two different types of objects that
+  may be related to each other. For example, consider the graph with
+  vertices consisting of students and universities, and edges representing
+  if a student was admitted to that university. Visually, this type of
+  graph is relatively simple: You can imagine the students on the left,
+  the schools on the right, and the edges crossing the middle.
+
+  <p>These types of graphs are called <em>bipartite</em> and form an
+  important and useful class of graphs.
+    
+		<p><strong>Definition 25.9.</strong> A graph $G = (V,E)$ is
+		<strong>bipartite</strong> if there exist disjoint sets $A,B$ such that
+		$V=A\cup B$ and there are no edges within $A$ or $B$ (more formally, this
+		means for every $uv\in E$, it is never the case that $u,v\in A$ or $u,v\in
+		B$.) We say that $(A, B)$ is a <strong>bipartition</strong> of $V$.
+
+		<p>Whether or not a graph is bipartite is isomorphism invariant (exercise).
+		Similar to the idea of complete graphs, we can define complete bipartite
+		graphs.
+
+    <p><strong>Definition 25.10.</strong> The <strong>complete bipartite graph on $m$ and $n$ vertices</strong> is the graph $K_{m,n} = (V,E)$, where $(V_m,V_n)$ is a bipartition of $V$ with $|V_m| = m$ and $|V_n| = n$, and
+    $$E = \{(u,v) \mid u \in V_m, v \in V_n \}.$$ 
+
+		<p>Bipartite graphs come up naturally in a lot of applications because a
+		bipartite graph models relationships between two groups of things: job
+		applicants and potential employers, PhD students and PhD advisors,
+    compute jobs to be scheduled and available servers, etc. In many of these applications, we would like to
+		assign or match an object from the first set with an object from the
+		second. We will return to this type of "matching" problem in the
+		next lecture.
+
+		<p>A natural way to think of a bipartition is as a <em>coloring</em> of the
+		vertices of a graph. Given a bipartition $(A,B)$, let's say that the
+		vertices in $A$ are colored red, and those in $B$ are colored blue. The
+		bipartite condition is that no red vertices are adjacent, and no blue
+		vertices are adjacent.
+
+		<p>With this view, we can get intuition for our main theorem of the
+		lecture, which is as follows.
+
+		<p><strong>Theorem 25.11.</strong> A graph $G$ is bipartite if and only if
+		$G$ does not contain a cycle of odd length.
+    
+    <p>This theorem is interesting because it gives us a characterization
+    of being bipartite that is arguably simpler.
+
+		<p>One direction of this theorem is easier to prove: If $G$ contains an
+		odd cycle then it can't be bipartite. To see why intuitively, fix some
+		odd cycle and a potential bipartition. Using coloring point of view,
+		suppose we start at a vertex on the cycle that is red, and we proceed
+		around the cycle. The vertices must alternate colors if this is a valid
+		bipartition. But since the cycle has odd length, it will imply that the
+		first vertex must also be blue, a contradiction.
+
+		<p>The reverse direction (if there is no odd cycle then $G$ is bipartite)
+		takes a little more creativity. And because the first direction is
+		relatively easy, this type of theorem is sometimes said to show that "the
+		obvious <em>necessary</em> condition (i.e. no odd cycles) is also
+		<em>sufficient</em> (i.e.  implies bipartite)". Many famous graph theory
+		theorems have this form, and we'll see another in the next lecture.
+
+		<p>We proceed with the proof of Theorem 25.11.
+
+
+		<p><em>Proof of Theorem 25.11.</em> First, we show the "only if" direction,
+		following the sketch above. Assume $v_0v_1, \ \ldots,\ v_{\ell-1} v_0$ form
+		a cycle in $G$ of odd length, and consider a bipartition $(A,B)$.  WLOG,
+		assume that $v_0\in A$. We claim that, for $j=0,\ldots,\ell-1$, if $j$ is
+		even then $v_j\in A$, and if $j$ is odd then $v_j\in B$.  You can prove
+		this by induction (exercise). Since the cycle has odd length, $\ell-1$ is
+		even and $v_{\ell-1}\in A$. But we also have $v_0\in A$ and an edge between
+		$v_{\ell-1}$ and $v_0$, which contradicts the choice of $(A,B)$ as a valid
+		bipartition.
+
+		<p>For the "if" direction, we need to show that if $G$ has no odd cycles
+		then we can find a valid bipartition of its vertices. This will take more
+		work, and we start with two technical claims.  We then finish the proof of
+		Theorem 25.11 and return to the claims afterwards.
+
+		<p><em>Claim 1.</em> If $G$ contains a closed walk of odd length,
+		then it contains a cycle
+		of odd length.
+
+		<p><em>Claim 2.</em> If $G$ contains an odd-length path from $u$
+		to $v$ and also an even-length path from $u$ to $v$, then $G$ contains
+		an odd-length cycle.
+
+		<p>We can now give the bipartition. Assume WLOG that $G$ is connected,
+		since $G$ is bipartite if and only if all of its connected components
+		are bipartite (exercise). Thus $G$ contains a path between every pair of vertices.
+    If $G$ is empty (no vertices) then it is clearly bipartite, so assume
+    it has some vertex $v_0$ (chosen arbitrarily).
+		We define
+		the bipartition by
+		$$
+		A = \{u\in V\ :\ \text{$\exists$ an even-length path from  $v_0$ to $u$}\}
+		$$
+		and
+		$$
+		B = \{u\in V\ :\ \text{$\exists$ an odd-length path from  $v_0$ to $u$}\}
+		$$
+    We have that $A\cup B = V$ because we assumed $G$ is connected. We have that
+    $A$ and $B$ are disjoint by Claim 2.
+
+		<p>It remains to show that there are no edges within $A$ and $B$.
+		Consider $A$ first ($B$ is similar). If there is an edge between
+		two vertices $u,v$ in $A$, then this means there is an even-length
+		path $P_1$ from $v_0$ to $u$, and an even-length path $P_2$ from
+		$v_0$ to $v$. From these we can form an odd-length closed walk from
+		that begins and ends at $v_0$: Take the edges of $P_1$, followed by
+		$uv$, followed by the edges of $P_1$. This closed walk has
+		odd length (since $P_1$ and $P_2$ have even length and we added one
+		edge). By Claim 1, this walk contains an odd cycle, contradicting
+		our assumption. Therefore there are no edges within $A$ (or $B$),
+		and our bipartition is valid. This completes the proof.
+		$\tag*{$\Box$}$
+
+    <p>We now prove the two claims.
+
+
+		<p><em>Claim 1.</em> If $G$ contains a closed walk of odd length,
+		then it contains a cycle of odd length.
+		<p><em>Proof.</em> Suppose $G$ contains a closed walk of odd
+		length. Then it contains such a walk of minimum length, say $W= v_0v_1,\
+		\ldots,\ v_{\ell-1}v_0$.  We claim that no vertex (other than $v_0$ at the
+    ends) is
+		repeated in this walk, and thus these edges (along with the
+		obvious vertices) form a cycle of odd length.
+
+
+		<p>Suppose for contradiction that for some $0 \leq i \lt j \leq \ell-1$,
+		$v_i = v_j$. Consider the walks
+		$$
+		W_1 =v_0v_1,\ \ldots,\ v_{i-1}v_i, \ v_j v_{j+1},\  \ldots, \ v_{\ell-1} v_0$$
+		and
+		$$
+		W_2 = v_{i}v_{i+1}, \ \ldots, \  v_{j-1} v_{j}.
+		$$
+    (If $i=0$, these walks are $W_1 = v_j v_{j+1},\ldots v_{\ell-1}v_0$
+    and $W_2 =v_0v_1,\ \ldots,\ v_{j-1}v_j$.) 
+		Both of these walks are valid, closed, and shorter than $W$. Moreover, their
+		lengths sum to the length of $W$, which is odd, so one of them must be odd
+		length.  This contradicts our choice of $W$ as the shortest odd-length
+		closed walk, and completes the proof.
+		$\tag*{$\Box$}$
+
+		<p><em>Claim 2.</em> If $G$ contains an odd-length path from $u$
+		to $v$ and also an even-length path from $u$ to $v$, then $G$ contains
+		an odd length cycle.
+		<p><em>Proof.</em> This is a corollary of Claim 1. Form a closed walk
+		from $u$ to itself by taking the edges of the paths, one after the other.
+		This is closed a walk of odd length, so by Claim 1, $G$ must contain a
+		cycle of odd length.
+		$\tag*{$\Box$}$
+
+
+
+    <h3>Recommend Exercises</h3> 
+
+		<p>The three exercises mentioned in passing in these notes are worth doing.
+
+	<p>Rosen, Section 10.4.6, Problems  3-11, 19-23.

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 22</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 22</h1>
+
+	<h2>The Law of Large Numbers</h2>
+
+	<p>We concluded last lecture with Chebyshev's Inequality, which we were easily able to prove using Markov's Inequality.
+		
+    <p><strong>Theorem 21.8 (Chebyshev's Inequality).</strong> Let $X$ be a random variable. For all $a \gt 0$,
+    $$\Pr(|X - E(X)| \geq a) \leq \frac{V(X)}{a^2}.$$
+
+    <p><em>Proof.</em> Let $Y = (X - E(X))^2$ be a random variable. Then $E(Y) = V(X)$ by definition. We can apply Markov's inequality, since $Y$ is non-negative, to get
+    $$\Pr(Y \geq a^2) \leq \frac{E(Y)}{a^2}.$$
+    Since $Y = (X-E(X))^2$, consider $(X-E(X))^2 \geq a^2$. We have $(X-E(X))^2 \geq a^2$ if and only if $|X - E(X)| \geq a$. Then, together with $E(Y) = V(X)$, we substitute into the above to get
+    $$\Pr(|X-E(X)| \geq a) \leq \frac{V(X)}{a^2}.$$
+    $\tag*{$\Box$}$
+
+    <p><strong>Example 22.1.</strong> Let $X$ be the random variable for the number of heads when a fair coin is tossed $n$ times. Recall that this is just the number of successful outcomes for $n$ independent Bernoulli trials with $p = \frac 1 2$. One can calculate that $E(X) = \frac n 2$ and from the previous example, we have that $V(X) = \frac n 4$ (since $p = (1-p) = \frac 1 2$). Now, we apply Chebyshev's inequality, using $a = \sqrt n$ to get
+    $$\Pr\left( \left|X - \frac n 2 \right| \geq \sqrt n \right) \leq \frac{V(X)}{\sqrt n^2} = \frac n 4 \cdot \frac 1 n = \frac 1 4.$$
+
+    <p>What this says is there is at most a $\frac 1 4$ probability that the number of heads that we get differs from the expected number ($\frac 1 2)$ by more than $\sqrt n$. So, if we make 100 rolls, then we have
+    $$\Pr(|X - 50| \geq 10) \leq \frac 1 4.$$
+    In other words, the probability that we get more than 60 heads or less than 40 heads is at most $\frac 1 4$.
+	
+	<p><strong>Example 22.2.</strong> Since that was a pretty cool result, let's generalize it! Let $\overline{X_n}$ be the average of $n$ independent and identically distributed (i.i.d.) events $\frac{1}{n}(X_1 + X_2 + \dots + X_n)$. Let $\mu = E(X_i)$ and $\sigma^2 = V(X_i)$. Note that the expectation of $\overline{X_n}$ is $n(\frac{1}{n}\mu) = \mu$. However, 
+		$$
+		V(\overline{X_n}) = \sum_{i=1}^n E((\frac{1}{n}X_i)^2) - E((\frac{1}{n}X_i))^2
+		                = \frac{1}{n^2}\sum_{i=1}^n E((X_i)^2) - E((X_i))^2
+						= \frac{1}{n^2}\sum_{i=1}^n \sigma^2
+						= \frac{1}{n}\sigma^2
+		$$
+
+		<p>Now, let's plug these numbers into Chebyshev's inequality, letting $a$ be some small $\varepsilon$:
+			$$\Pr(|\overline{X_n} - \mu| \geq \varepsilon) \leq \frac{\sigma^2}{n\varepsilon^2}$$
+			or equivalently
+			$$\Pr(|\overline{X_n} - \mu| \lt \varepsilon) \geq 1 - \frac{\sigma^2}{n\varepsilon^2}$$
+		
+		<p>Regardless of the value of $\sigma^2$ and $\varepsilon$, for a large enough $n$ the right hand side approaches $1$. That is to say, with enough trials, $\overline{X_n}$ converges towards its expected value. This is called the <strong>weak law of large numbers</strong>.
+
+		<h2>Probability Theory in Action</h2>
+
+		<p>During our last class, a friend texted me a New York Times article titled <a href="https://www.nytimes.com/2021/11/15/opinion/risk-investing-market-hedge.html">The Risk-Return Trade-Off Is Phony</a>. The title itself, contradicting established financial wisdom, should cause you to raise an eyebrow. The fact that it begins with an anecdote about a random hedge-fund that beat the market despite employing a low-risk strategy should raise another eyebrow (this is an example of survivorship bias). The fact that the author doesn't know how the hedge fund operates should cause you to grow a third eyebrow just so you can raise it. But let's focus on the math of the article.
+			
+<blockquote cite="https://www.nytimes.com/2021/11/15/opinion/risk-investing-market-hedge.html">
+The math is interesting. Consider the difference between 300 people each rolling a six-sided die once and one person rolling the die 300 times in a row. Modern Portfolio Theory implicitly assumes that the outcome would be the same, but it’s not, as Spitznagel describes with examples.		
+</blockquote>
+
+<p>Presumably Modern Portfolio Theory does not assume this because it's false. Assuming i.i.d. variables, $E(X_1+X_2+\dots + X_n) = nE(X_1)$ by linearity of expectation, whereas $E(X_1\cdot X_2 \cdot \dots \cdot X_n) = E(X_1)^n$ as we showed in last class. (The assumption, as we will see, is that one person keeps betting her full pot.)
+	
+<blockquote cite="https://www.nytimes.com/2021/11/15/opinion/risk-investing-market-hedge.html">	
+	Let’s say the payoff from rolling a one is minus 50 percent, the payoff from rolling a six is plus 50 percent, and the payoff from the other four sides is plus 5 percent. The average return for the 300 people who roll once each would be 3.3 percent — not bad for a moment’s work. Things are likely to turn out far worse for the poor person who rolls 300 times. Now those ones with their negative payoffs are like land mines. The compound growth rate here will be around negative 1.5 percent, and after 300 rolls the starting stake of $1 will most likely be down to a mere penny. A person who played that game and by chance never rolled a one would make a killing, but it’s probably not going to be you.
+</blockquote>
+
+Okay!
+
+$$D_1(i) = \begin{cases}
+			0.5 \qquad \text{ if i=1} \\
+			1.5 \qquad \text{ if i=6} \\
+			1.05 \qquad \text{otherwise}
+			\end{cases}$$
+			
+<p>Then $E(D_1) = \frac{1}{6}0.5 + \frac{4}{6}1.05 + \frac{1}{6}1.5 = \frac{31}{30} = 1.0333\dots$. So far, so good. In fact, let's calculate the variance. $E(D_1^2) = \frac{1}{6}0.25 + \frac{4}{6}1.1025 + \frac{1}{6}2.25 \approx 1.15$ and $E(D_1)^2 \approx 1.067$ so the variance is roughly $0.083$. Multiplying these by $300$, we get $E(D)=310$ and $V(D)=25$. Plugging these into Chebyshev's Inequality
+    $$\Pr(|D - 310| \geq 25) \leq \frac{25}{25^2}$$
+	so the total is very likely to come out in the $[285,335]$ range.
+			
+<p>We've been discussing expectation, so it makes sense to interpret this as $E(D)= E(D_1\cdot D_2 \cdot \dots \cdot D_n) = 0.01$. (You can ignore the $-1.5%$, it's derived from the 0.01.) But this is impossible. Since the $D_i$s are i.i.d. $E(D)=E(D_1)^{300} \approx 18,712$. That's a pretty big gap. Instead, it looks like the author has shifted to using the median. The median should roughly look like $50$ ones, $50$ sixes, and $200$ others, which gets us $1.5^{50}*0.5^{50}*1.05^{200} \approx 0.0098$ dollars. (But my Python simulation repeatedly says $0.010077164738461$ so who am I to argue? It's using the law of large numbers! The argument above was slightly loose anyhow.)
+
+<p>Why the discrepancy between mean and median? This game has tremendous variance – just try calculating $E((D_1\cdot D_2 \cdot \dots \cdot D_n)^2)$. Its close relative is 300 rounds of double-or-nothing: You have a $\frac{1}{2^{300}} \approx \frac{1}{10^{100}}$ of multiplying your initial bet by $2^{300} \approx 10^{100}$ (yes, a googol), but in all the other cases you lose. The expectation, of course, is $1^{300} = 1$. And hence the variance is easy to calculate: It's $\frac{1}{20^{300}}(20^{300})^2 - 1 \approx 10^{100}$. This isn't a game you want to play.
+	
+<p>What's the lesson here? I guess it's partly that you shouldn't read financial advice column without knowing probability theory (and ideally comfort doing a few simulation in the programming language of your choice). But it's also that the techniques we covered over the past week will serve you well.
+			

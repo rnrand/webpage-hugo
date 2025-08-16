@@ -1,0 +1,78 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb, amsmath, graphicx, subfigure}
+\usepackage{hyperref}
+
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\heading}[6]{
+  \renewcommand{\thepage}{#1-\arabic{page}}
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { \textbf{#2} \hfill #3 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #6  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { \textit{Instructor: #4 \hfill #5} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\newenvironment{proof}{\noindent{\bf Proof:} \hspace*{1mm}}{
+	\hspace*{\fill} $\Box$ }
+\newenvironment{proof_of}[1]{\noindent {\bf Proof of #1:}
+	\hspace*{1mm}}{\hspace*{\fill} $\Box$ }
+\newenvironment{proof_claim}{\begin{quotation} \noindent}{
+	\hspace*{\fill} $\diamond$ \end{quotation}}
+
+\newcommand{\problemset}[3]{\heading{#1}{CMSC 27100-3}{#2}{Robert Rand}{#3}{Problem Set #1}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PLEASE MODIFY THESE FIELDS AS APPROPRIATE
+\newcommand{\problemsetnum}{6}          % problem set number
+\newcommand{\duedate}{Due: Sunday, November 12, 2021}  % problem set deadline
+\newcommand{\studentname}{}    % full name of student (i.e., you)
+% PUT HERE ANY PACKAGES, MACROS, etc., ADDED BY YOU
+% ...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\problemset{\problemsetnum}{\duedate}{\studentname}
+
+\section{Combinatorics 2}
+
+For each of the problems below, please explain your solution. Simplify where possible, but don't multiply out large factorials.\\[10pt] 
+
+\noindent{\bf{Problem 1:}} The CVS at Kimbark and 53rd Street sells 13 kinds of Halloween candy, one of which comes in a bag of 50 and the others of which come in bags of 10. How many ways are there for you to buy 80 candies, without buying more than one bag containing the same kind of candy? \\[10pt]
+
+\noindent{\bf{Problem 2:}} On your way out of CVS, you notice that they have 7 bottles of Advil (Ibuprofen), 5 bottles of Motrin (Ibuprofen), 8 bottles of CVS-brand Advil (Ibuprofen) and 10 bottles of CVS-brand Motrin (Ibuprofen)? How many (seemingly) distinct arrangements of the Ibuprofens can you make? \\[10pt]
+
+\noindent{\bf{Problem 3:}} Suppose you had a problem set with $4$ problems, each of which had to be worth a multiple of $5$ ($0$ inclusive) points and the sum of the points had to total $100$. How many ways are there to assign point values to problems $1$ through $4$?\\[10pt]
+
+\noindent{\bf{Problem 4:}} The first row of a chess board consists of $8$ squares, half black and half white. In Fischer Random Chess, the first player's $1$ king, $1$ queen, $2$ rooks, $2$ bishops, and $2$ knights are placed randomly in the first row, subject to the following constraint: The two bishops may not occupy squares of the same color. (There's a second restriction but we'll ignore it.) How many legal permutations of the first row are there?
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

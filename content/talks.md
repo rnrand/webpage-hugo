@@ -1,6 +1,14 @@
 ## Recent and Upcoming Talks
 
-- [Writing and Verifying a Quantum Optimizing Compiler](https://conf.researchr.org/details/CC-2022/CC-2022-research-papers/1/Writing-and-Verifying-a-Quantum-Optimizing-Compiler), keynote at  Compiler Construction, 2022.
+- Writing and Compiling High-Level Quantum Programs. QSI Seminar, University of Technology Sydney, 2025.
+- Compiling High- and Low-Level Quantum Languages. Workshop on Quantum Software and Theory, Academia Sinica, 2025.
+- [Verifying Quantum Graphical Calculi](http://dimacs.rutgers.edu/events/details?eID=3274). DIMACS Workshop on Quantum Software Systems and Theory, Rutgers University, 2025. 
+- Verifying Graphical Calculi, Quantum and Classical. MadPL Seminar, University of Wisconsin--Madison, 2025. 
+- [Verifying Graphical Quantum Calculi in a Proof Assistant](https://www.birs.ca/events/2024/5-day-workshops/24w5307/videos/watch/202406051030-Rand.html). Quantum Circuit Design Automation, Banff International Research Station, 2024.
+- [Verifying the ZX-calculus and its Friends](https://nyuad.nyu.edu/en/events/2024/april/homotopy-type-theory-and-computing.html). Running HoTT, NYU Abu Dhabi, 2024.
+- [Quantum Computing from a PL Perspective](https://purduepl.github.io/seminars/2023/2023-9-21-seminar). Purdue Programming Languages Colloquium, Purdue University, 2023.
+- [Verifying Quantum Programs: From Deutsch's Algorithm to Shor's](https://www.bu.edu/cs/research/popv/seminar/#2022-may-03), Boston Principles of Programming and Verification Seminar, 2022.
+- [Writing and Verifying a Quantum Optimizing Compiler](https://conf.researchr.org/details/CC-2022/CC-2022-research-papers/1/Writing-and-Verifying-a-Quantum-Optimizing-Compiler). Keynote at  Compiler Construction, 2022.
 - Quantum Programming Languages: What they are and what they could be. Towards 400 Qubits: Compilers and Programming Quantum Applications, [The Quantum Computing Center](https://quantummeetups.org/), 2022.
 - [Ask Me Anything: Quantum Programming and Verification](https://2021.splashcon.org/details/splash-2021-ask-me-anything--ama-/3/Invited-Speaker). SPLASH 2021.
 - Quantum Computing from a Programmer’s Perspective. UChicago Quantum Computing Seminar, 2021.
@@ -8,10 +16,9 @@
 - Quantum Programming Languages, Verification, and Testing. EPiQC Seminar, UChicago, 2020.
 - Towards a Verified Quantum Stack. American University Computer Science Colloquium, 2019.
 - Verified Quantum Programs for the NISQ Era. MURI Review, University of Maryland, 2019.
-- Formally Verifying Quantum Protocols. Workshop on Higher Category Approach to Certifiably Correct Quantum Information Processing Systems, 2018.
+- [Formally Verifying Quantum Protocols](https://quantum.utk.edu/workshop/). Workshop on Higher Category Approach to Certifiably Correct Quantum Information Processing Systems, 2018.
 - Verified Quantum Programming in QWIRE: Optimization and Error Correction. Dagstuhl Seminar on Quantum Programming Languages, 2018.
 - Formally Verified Quantum Computing. Yeshiva University Physics Colloquium, 2018.
 - Provably Correct Quantum Programming. Hofstra University Mathematics Seminar, 2018.
 - Verified Quantum Programming in QWIRE. MURI Review, UC Berkeley, 2017.
 - Formally Verifying Your Quantum Programs. New Jersey Programming Languages and Systems, 2017.
- 

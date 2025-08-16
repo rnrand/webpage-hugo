@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 1</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 1</h1>
+
+		This course beings with <em>logic</em>. For our purposes, logic is a sort
+		of model for "truth" analogous to how equations can model the flights of
+		objects in physics. Practically speaking, a brief encounter with logic will
+		give you a foundation for parsing, understanding, and finally proving
+		mathematical statements.
+
+    <h3>Propositions</h3>
+
+		<p>We will begin with <em>propositional logic</em> and expand from there
+		later on.  The basic element of propositional logic is the
+		<em>proposition</em>. Propositions simply model statements that either
+		be true or false.</p>
+
+		<p><strong>Definition 1.1.</strong> A <strong>proposition</strong> is a
+		statement that is either true or false.</p>
+
+		<p><strong>Example.</strong> The following sentences are propositions:
+		<em>
+		<ul>
+			<li> Chicago is capitol of Illinois. </li>
+			<li> Springfield is the capitol of Illinois.</li>
+			<li> Chicago or Springfield is the capital of Illinois.</li>
+			<li> Paul Alivisatos is the president of UChicago and Ka Yee C. Lee
+				is the provost of UChicago.</li>
+			<li> Milkshakes at the Reynolds Club cost $1 on Wednesdays.</li>
+			<li> If Chicago is the capitol of Illinois, then milkshakes
+				are free.</li>
+		</ul>
+		</em>
+
+		The following are not propositions:
+		<em>
+		<ul>
+			<li>Chicago.</li>
+			<li>Is it going to snow on Halloween again?</li>
+			<li>Please get a milkshake for me.</li>
+		</ul>
+		</em>
+		
+		The upshot is that we'll be very permissive about what counts as a
+		proposition. As long as we can reasonably interpret a statement as
+		an assertion about something that can be true or false, it's a proposition.
+		&#x220E;
+		</p>
+
+		<p> If propositional logic stopped there, it wouldn't be very interesting.
+		But we can already notice that simply modeling statements as true and false
+		suggests some intuitive relationships. For instance, we don't expect that
+		the first two examples can both be true (since Illinois only has one
+		capitol), and the third example is clearly related somehow to the first
+		two.  </p>
+
+		<p>To begin unraveling these relationships and refining our model for
+		truth, we can classify propositions into two broad types.</p>
+
+		<p><strong>Definition 1.2.</strong> An <strong>atomic</strong> proposition
+		is one that cannot be broken down into smaller propositions. A
+		<strong>compound</strong> proposition is one that can.</p>
+
+		<p><strong>Example.</strong> In the first example, arguably the following
+		are atomic propositions:
+		<ul><em>
+			<li> Chicago is capitol of Illinois. </li>
+			<li> Springfield is the capitol of Illinois.</li>
+			<li> Milkshakes at the Reynolds Club cost $1 on Wednesdays.</li>
+			</em>
+		</ul>
+		while these are compound propositions:
+		<ul>
+			<em>
+			<li> Chicago or Springfield is the capital of Illinois.</li>
+			<li> Paul Alivisatos is the president of UChicago and Ka Yee C. Lee
+				is the provost of UChicago.</li>
+			</em>
+		</ul>
+		But this depends on our goals in applying logic. Generally speaking, if you
+		notice logical words connecting different assertions, then we'll usually
+			want to break down the proposition further. So, for example, the
+			assertion that <em>Paul Alivisatos is the president of UChicago and Ka
+				Yee C. Lee is the provost of UChicago.</em> can be broken down into two
+			propositions:
+		<ul>
+			<li> <em>Paul Alivisatos is the president of UChicago</em> </li>
+			<li> <em>Ka Yee C. Lee is the provost of UChicago.</em></li>
+		</ul>
+		The proposition
+			<em> Chicago or Springfield is the capital of Illinois.</em>
+			can possibly be broken down into
+			<ul>
+				<li><em> Chicago is the capital of Illinois.</em></li>
+				<li><em> Springfield is the capital of Illinois.</em></li>
+			</ul>
+			which are connected by "or".	
+			
+			Finally, the proposition <em> If Chicago is the capitol of Illinois, then
+				milkshakes are free.</em> appears to be a compound proposition, but in
+			a funny way. We'll come back to it later.  &#x220E;</p>
+		
+
+    
+		<p>In propositional logic, we represent propositions symbolically by
+		<em>formulas</em>. Formulas are made up of propositional variables,
+		parentheses, and connectives. Propositional variables, usually lowercase
+		roman letters like $p,q,r,\dots$, represent atomic propositions and
+		connectives allow us to build compound propositions by joining one or more
+		propositions together. Parentheses are used to denote the ordering that we
+		should interpret the connectives in. Hypothetically, we would be able to
+		express every proposition that shows up in this course symbolically, but we
+		won't go that far. 
+
+    <h3>Basic Logical Connectives</h3>
+
+		<p>There are four basic logical connectives, called <em>Boolean
+			connectives</em>, after George Boole who defined them in 1854. We will
+		define and consider each one.
+
+    <p><strong>Definition 1.3.</strong> $\neg p$ is called <strong>negation</strong> and is pronounced "not $p$". $\neg p$ is true if and only if $p$ is false.
+    
+    <p>For instance, $\neg q$ is the proposition "I cannot take two weeks off". Note that negation is a <em>unary</em> connective, in that it only applies to one formula, while all the other connectives are <em>binary</em>. Observe that because of this, we tend to express atomic propositions positively.
+
+    <p>The unary connective $\neg$ is defined for a propositional formula $p$ by
+    <table>
+        <tr> <th>$p$ <th>$(\neg p)$
+        <tr> <td>$T$ <td>$F$
+        <tr> <td>$F$ <td>$T$
+    </table>
+
+		This is our first example of a <b>truth table</b>. To construct it, we
+		listed the possible truth values for $p$, and then for each of those
+		we listed $(\neg p)$ in the corresponding row.
+
+		<p><strong>Definition 1.4.</strong> $p \wedge q$ is called
+		<strong>conjunction</strong>, and is pronounced "$p$ and $q$". $p \wedge q$
+		is true if and only if both $p$ and $q$ are true.
+    
+		<p>This connective expresses the idea that both $p$ and $q$ are true. For
+		instance, $q \wedge r$ is the proposition "I can take two weeks off and I
+		can fly to Tokyo".
+
+		<p>$p \vee q$ is called <strong>disjunction</strong> and is pronounced "$p$
+		or $q$". $p \vee q$ is true if and only if $p$ is true or $q$ is true or
+		both.
+    
+		<p>For example, $q \vee r$ is the proposition "I can take two weeks off or
+		I can fly to Tokyo". One tricky thing to note with English is that many
+		times we use "or" to mean "exclusive or". For instance, when you are asked
+		whether you prefer beef or chicken, the expectation is that you may only
+		choose one and not both. This logical connective allows for both $p$ and
+		$q$ to be true, which corresponds to something like "and/or" in English.
+
+    <p>The binary connectives $\wedge$ and $\vee$ are defined for propositional formulas $p$ and $q$ by
+    <table>
+        <tr> <th>$p$ <th>$q$ <th>$\quad$ <th>$p \wedge q$ <th>$p \vee q$ 
+        <tr> <td>$T$ <td>$T$ <td> <td>$T$ <td>$T$
+        <tr> <td>$T$ <td>$F$ <td> <td>$F$ <td>$T$
+        <tr> <td>$F$ <td>$T$ <td> <td>$F$ <td>$T$
+        <tr> <td>$F$ <td>$F$ <td> <td>$F$ <td>$F$ 
+    </table>
+
+		We have again used truth table. Notice that this table has four rows,
+		because have to list the four possible truth values for $p$ and $q$.
+
+
+    <h3>The Conditional Connective</h3>
+
+    <p>
+    So far the connectives have been mostly natural, up to some quibbling
+    over the meaning of "or". But propositional logic really springs to
+    life we speak of assertions <em>implying</em> each other. Essentially
+    every mathematical statement asserts that, under some conditions, one
+    can draw certain conclusions. This motivates the following definition.
+		</p>
+
+		<p><strong>Definition 1.5.</strong> $p \rightarrow q$ is called
+		<strong>implication</strong> and is pronounced "if $p$, then $q$".     
+		We call $p$ the <strong>hypothesis</strong> and $q$ the 
+		<strong>conclusion</strong>.
+		</p>
+
+		<p>That definition leaves much to be desired. How exactly can we construct
+		a truth table for the $\rightarrow$ connective? Some rows of the table
+		are relatively easy:
+    <table>
+        <tr> <th>$p$ <th>$q$ <th>$\quad$ <th>$p \rightarrow q$
+        <tr> <td>$T$ <td>$T$ <td> <td>$T$ 
+        <tr> <td>$T$ <td>$F$ <td> <td>$F$
+        <tr> <td>$F$ <td>$T$ <td> <td>?
+        <tr> <td>$F$ <td>$F$ <td> <td>?
+		</table></p>
+
+		<p>
+		Even those rows could be debated, but we're ultimately building up to the
+		language that mathematicians use, so that will be our guide. And in their
+		usage, $p\rightarrow q$ does not mean "$p$ causes $q$ to be true", in the
+		way that sunshine and rain cause grass to grow. The meaning of
+		$p\rightarrow q$ is closer to "based solely on the truth values of $p$ and
+		$q$, it can't be ruled out that $p$ causes $q$". So if $p$ is true and $q$
+		is true, then $p\rightarrow q$ is declared to be true. Similarly, if $p$
+		is true but $q$ is false, then $p\rightarrow q$ is false.
+		</p>
+
+		<p>
+		But what about the remaining rows? If $p$ is false, then it's a funny
+		question. In fact, we saw an example of this situation above: <em>
+			If Chicago is the capitol of Illinois, then milkshakes are free.</em>
+		(Chicago is not the capitol of Illinois!) But the previous paragraph
+		guides us towards the answer: If $p$ is false, then we can never get
+		evidence that $p$ is not causing $q$. So both of those rows should
+		be filled with $T$, giving the truth table:
+    <table>
+        <tr> <th>$p$ <th>$q$ <th>$\quad$ <th>$p \rightarrow q$
+        <tr> <td>$T$ <td>$T$ <td> <td>$T$ 
+        <tr> <td>$T$ <td>$F$ <td> <td>$F$
+        <tr> <td>$F$ <td>$T$ <td> <td>$T$
+        <tr> <td>$F$ <td>$F$ <td> <td>$T$
+		</table></p>
+
+    <p>
+		One could fairly object to this, but we'll see in a few lectures that
+		mathematical statements are ultimately a lot more natural if we use
+		this definition.
+    </p>
+
+
+    

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 20</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 20</h1>
+
+    <h3>Random variables and Bernoulli trials</h3>
+    <p>Recall at the beginning of the course, when we were first discussing logic, that we could define propositional statements, but at some point we hit a wall in terms of being able to express properties of objects. At that point, we had to introduce predicates into our language to do be able to express such notions.
+
+    <p>We have a very similar problem at this point, where we have been discussing and defining events explicitly whenever we want to discuss some particular set of outcomes. What would be nice is if there were a way to take some events from our sample space and assign it some value based on the properties of the event. Of course, this describes what a function would do, and so, we will introduce a particular kind of function for this purpose.
+
+    <p><strong>Definition 20.1.</strong> A <strong>random variable</strong> is a function $f : \Omega \to \mathbb R$ where $\Omega$ is the sample space of a probability space.
+
+    <p>Note that the choice of co-domain $\mathbb R$ is more permissive than prescriptive. A lot of the time, we'll be mapping objects to a particular subset of $\mathbb R$, like $\mathbb N$ or even $\{0,1\}$. And while the standard definition of a random variable is for $\mathbb R$, this can be extended to more exotic co-domains than just $\mathbb R$. In our case, since we're primarily concerned with discrete sample spaces, we are likely to consider random variables that map to discrete spaces.
+
+    <p>Now, you may have noticed from our discussion that random variables are not random and are not variables (a random variable is a function, as we can see from the definition above). This naming is due to Francesco Cantelli, from the early 1900s.
+
+    <p>Having set up this mechanism, we can define the probability of a particular outcome of a random variable.
+
+    <p><strong>Definition 20.2.</strong> If $X$ is a random variable, we define $\Pr(X = r) = \Pr(\{\omega \in \Omega \mid X(\omega) = r\})$.
+
+    <p><strong>Example 20.3.</strong> Suppose we flip a coin three times. Let $X(\omega)$ be the random variable that equals the number of heads that appear when $\omega$ is the outcome. So we have 
+    \begin{align*}
+    X(HHH) &= 3, \\
+    X(HHT) = X(HTH) = X(THH) &= 2, \\
+    X(TTH) = X(THT) = X(HHT) &= 1, \\
+    X(TTT) &= 0.
+    \end{align*}
+    Now, suppose that the coin is fair. Since we assume that each of the coin flips is mutually independent, this gives us a probability of $\frac 1 2 \frac 1 2 \frac 1 2 = \frac 1 8$ for any one of the above outcomes. Now, let's consider $\Pr(X = k)$:
+    <table>
+    <tr><th>$k$ <th>$\{\omega \in \Omega \mid X(\omega) = k\}$ <th>$\Pr(X = k)$
+    <tr><td>3 <td>$\{HHH\}$ <td>$\frac 1 8$
+    <tr><td>2 <td>$\{HHT,HTH,THH\}$ <td>$\frac 3 8$
+    <tr><td>1 <td>$\{TTH,THT,HTT\}$ <td>$\frac 3 8$
+    <tr><td>0 <td>$\{TTT\}$ <td>$\frac 1 8$
+    </table>
+
+    <p>This looks suspiciously like something we've seen before. Here, we'll introduce the notion of Bernoulli trials.
+
+    <p><strong>Definition 20.4.</strong> A <strong>Bernoulli Trial</strong> is a random variable $B$ whose image is $\{0,1\}$, where the event $\{\omega \in \Omega \mid B(\omega) = 1\}$ is the <strong>success</strong> event, and $\{\omega \in \Omega \mid B(\omega) = 0\}$ is the <strong>failure</strong> event.
+
+    <p>Bernoulli trials are named after Jacob Bernoulli who is also sometimes referred to as James Bernoulli in the late 1600s. There are lots of other mathematicians in the Bernoulli family but the lion's share of mathematical results named after Bernoulli are really named after this particular Bernoulli.
+
+    <p>Repeated Bernoulli trials are a repetition of $n$ mutually independent events. How should we interpret this in our probability framework? In other words, what do the sample space and the probability distribution look like?
+
+    <p>If we have a probability space $(\Omega,\Pr)$ and we want to conduct $n$ independent trials, then what we really want is to take the product of a bunch of these outcomes. So we define the space $(\Omega^n, \Pr_n)$, where $\Omega^n$ is the set of $n$-tuples $(a_1, a_2, \dots, a_n)$ with $a_i \in \Omega$ and 
+    $$\Pr_n((a_1, a_2, \dots, a_n)) = \Pr(a_1) \Pr(a_2) \cdots \Pr(a_n).$$
+    Here, each position $i$ corresponds to one of our trials and we can define the corresponding Bernoulli trial by $X_i((a_1, \dots, a_n)) = X(a_i)$. Since we're taking the product, none of the trials in our tuple depend on each other, so they're independent. We can use this idea to prove the following.
+
+    <p><strong>Theorem 20.5.</strong> The probability of $k$ successes in $n$ independent Bernoulli trials with probability of success $p$ and probability of failure $q = 1-p$ is
+    $$\binom n k p^k q^{n-k} = \binom n k p^k (1-p)^{n-k}.$$
+
+    <p><em>Proof.</em> For each $n$-tuple $A = (a_1, \dots, a_n)$ of trials with Bernoulli random variable $X$, we can construct a string $w_A = b_1 b_2 \cdots b_n$ over the alphabet $\{S,F\}$ by 
+    $$b_i = \begin{cases} S & \text{if $X(a_i) = 1$,} \\ F & \text{otherwise.} \end{cases}$$
+    Then the number of $n$-tuples with $k$ successes is the same as the number of binary strings of length $n$ with $k$ $S$'s. Recall that there are exactly $\binom n k$ of these.
+
+    <p>Then for each $n$-tuple with $k$ successes, we have $\Pr_n(A) = p^k (1-p)^{n-k}$. Putting this together, the probability of $k$ successes is
+    $$\binom n k p^k (1-p)^{n-k}.$$
+    $\tag*{$\Box$}$
+
+    <p>This is called the <em>binomial distribution</em>, for the reason that this is what you'd get if you plugged in the $x = p$ and $y = (1-p)$ into the Binomial Theorem. It is from this that we get the definition
+    $$b(k;n,p) = \binom n k p^k (1-p)^{n-k}.$$
+    We can then reinterpret our results from the coin-flipping example as a Bernoulli trial. Since the probability for a fair coin flip to land on heads is $p = \frac 1 2$, we have
+
+    <table>
+    <tr><th>$k$ <th>$b(k;n,p)$ <th>
+    <tr><td>3 <td>$$\binom 3 3 \left( \frac 1 2 \right)^3 \left( \frac 1 2 \right)^0$$ <td>$$\frac 1 8$$
+    <tr><td>2 <td>$$\binom 3 2 \left( \frac 1 2 \right)^2 \left( \frac 1 2 \right)^1$$ <td>$$\frac 3 8$$
+    <tr><td>1 <td>$$\binom 3 1 \left( \frac 1 2 \right)^1 \left( \frac 1 2 \right)^2$$ <td>$$\frac 3 8$$
+    <tr><td>0 <td>$$\binom 3 0 \left( \frac 1 2 \right)^0 \left( \frac 1 2 \right)^3$$ <td>$$\frac 1 8$$
+    </table>
+
+    <h2>Expectation</h2>
+    <p>We have moved from talking about the probability of events to thinking about the probability of a property of events, in the form of random variables. Now, if we know these probabilities, we can talk about the average values of the random variables. 
+
+    <p><strong>Definition 20.6.</strong> Let $(\Omega,\Pr)$ be a probability space and let $X$ be a random variable. The expected value of $X$ is
+    $$E(X) = \sum_{\omega \in \Omega} X(\omega) \Pr(\omega).$$
+    
+    <p>Roughly speaking, the expectation of a random variable is the (weighted) average value for the random variable.
+
+    <p><strong>Example 20.7.</strong> Consider a fair 6-sided die and let $X$ be the random variable for the number that was rolled. We have
+    $$E(X) = 1 \cdot \frac 1 6 + 2 \cdot \frac 1 6 + 3 \cdot \frac 1 6 + 4 \cdot \frac 1 6 + 5 \cdot \frac 1 6 + 6 \cdot \frac 1 6 = \frac{21}{6} = 3.5.$$
+    Now, consider a biased 6-sided die with
+    $$\Pr(\omega) = \begin{cases} \frac 3 4 & \text{if $\omega = 1$,} \\ \frac{1}{20} & \text{otherwise}. \end{cases}$$
+    Let $Y$ be the random variable for the number that was rolled with our biased die. Then we get
+    $$E(Y) = 1 \cdot \frac 3 4 + 2 \cdot \frac{1}{20} + 3 \cdot \frac{1}{20} + 4 \cdot \frac{1}{20} + 5 \cdot \frac{1}{20} + 6 \cdot \frac{1}{20} = \frac 3 4 + \frac{20}{20} = 1.75.$$
+    This indicates to us that the biased die will give us a 1 more often and therefore the average value that we should expect from a roll is much closer to 1.
+
+    <p>Recall that the motivation for defining random variables was so we could get away from considering the probabilities of elementary events. The definition of expectation is not very helpful in this regard. Luckily, it is not too difficult to reformulate expectation in terms of the values that the random variable takes on.
+
+    <p><strong>Proposition 20.8.</strong> Let $\Pr(X = r) = \Pr(\{\omega \mid X(\omega) = r\})$ and let $\{r_1, \dots, r_k\} = \operatorname{image}(X)$. Then
+    $$E(X) = \sum_{i=1}^k r_i \cdot \Pr(X = r_i).$$
+
+    <p><em>Proof.</em> Recall that the image of a function $X$ is all of the possible values that $X(\omega)$ can take over every $\omega \in \Omega$. Then we have
+    \begin{align*}
+    \sum_{i=1}^k r_i \cdot \Pr(X = r_i) &= \sum_{i=1}^k r_i \cdot \Pr(\{\omega \in \Omega \mid X(\omega) = r_i\}) \\
+    &= \sum_{i=1}^k r_i \cdot \sum_{\omega \in \Omega, X(\omega) = r_i} \Pr(\omega) \\
+    &= \sum_{i=1}^k \sum_{\omega \in \Omega, X(\omega) = r_i} X(\omega) \Pr(\omega) \\
+    &= \sum_{\omega \in \Omega} X(\omega) \Pr(\omega) \\
+    &= E(X)
+    \end{align*}
+    $\tag*{$\Box$}$
+
+    <p>Sometimes, we will need to deal with more than one random variable. For instance, suppose we want to consider the expected value of a roll of three dice. We would like to be able to use the expected value for a single die roll, which we already worked out above. The following result gives us a way to do this.
+
+    <p><strong>Theorem 20.9 (Linearity of Expectation).</strong> Let $(\Omega, \Pr)$ be a probability space, $c_1, c_2, \dots, c_n$ be real numbers, and $X_1, X_2, \dots, X_n$ be random variables over $\Omega$. Then
+    $$E\left( \sum_{i=1}^n c_i X_i \right) = \sum_{i=1}^n c_i E(X_i).$$
+
+    <p><em>Proof.</em>
+    \begin{align*}
+    E\left( \sum_{i=1}^n c_i X_i \right) &= \sum_{\omega \in \Omega} \left( \sum_{i=1}^n c_i X_i(\omega) \right) \Pr(\omega) \\
+    &= \sum_{\omega \in \Omega} \sum_{i=1}^n c_i X_i(\omega) \Pr(\omega) \\
+    &= \sum_{i=1}^n \sum_{\omega \in \Omega} c_i X_i(\omega) \Pr(\omega) \\
+    &= \sum_{i=1}^n c_i \left(\sum_{\omega \in \Omega} X_i(\omega) \Pr(\omega)\right) \\
+    &= \sum_{i=1}^n c_i E(X_i)
+    \end{align*}
+    $$\tag*{$\Box$}$$
+
+    <p><strong>Example 20.10.</strong> Suppose we have three of our biased dice from the previous example, each with $\Pr(1) = \frac 3 4$ and probability $\frac{1}{20}$ for the other outcomes. What is the expected value of a roll of these three dice? Without the linearity property, we would need to consider the expected value for every 3-tuple of rolls $(\omega_1, \omega_2, \omega_3)$. However, we can apply the previous theorem to get a more direct answer. Let $X_1, X_2, X_3$ be random variables for the roll of each die. Then we have
+    $$E(X_1 + X_2 + X_3) = E(X_1) + E(X_2) + E(X_3) = 1.75 + 1.75 + 1.75 = 5.25.$$
+
+    <p>Something you may have noticed is that from our previous discussions, in a roll of three dice, the roll of each die is independent from the others. In fact, we can define independence for random variables similarly.
+
+    <p><strong>Definition 20.11.</strong> We say the random variables $X$ and $Y$ are <strong>independent</strong> if for all $r,s \in \mathbb R$, $\Pr(X = r \wedge Y = s) = \Pr(X = r) \cdot \Pr(Y = s)$.
+
+    <p>It is important to note that although we have a very similar notion of independence for random variables, none of our results so far have involved independence. That is, the linearity of expectation does not depend on the independence of the random variables involved.
+
+    <p><strong>Example 20.12.</strong> If you go to Japan, something you may experience is it starts raining and you duck inside the nearest convenience store to pick up an umbrella and then come back outside to find that the rain has stopped. You will probably have gotten one of those very cheap and ubiquitous 500 yen clear plastic umbrellas. Now, if you go inside to a restaurant or a shop, you will need to leave your umbrella at the front in a bin full of umbrellas. Since cheap umbrellas are so common, people just end up taking a random umbrella when they leave. Suppose $n$ people go inside a shop and leave their umbrellas at the front, and when they exit the shop, they randomly take an umbrella. What is the expected number of people who take the umbrella they had before entering the shop?
+
+    <p>Let $X$ be the random variable that denotes the number of people who take their own umbrella when they leave. We can then define random variables $X_i$ corresponding to each person by
+    $$X_i = \begin{cases} 1 & \text{if person $i$ takes their own umbrella when they leave,} \\ 0 & \text{otherwise.} \end{cases}$$
+    Then we have $X = X_1 + \cdots + X_n$. Since each person randomly chooses an umbrella, we have $E(X_i) = \frac 1 n$. Then we have
+    $$E(X) = E(X_1 + \cdots + X_n) = E(X_1) + \cdots + E(X_n) = \overbrace{\frac 1 n + \cdots + \frac 1 n}^{\text{$n$ times}} = 1.$$
+
+    <p><strong>Example 20.13.</strong> Consider a random permutation $\pi$ of $\{1, 2, \dots, n\}$. A pair $(i,j)$ is an <em>inversion</em> in $\pi$ if $i \lt j$ and $j$ precedes, or appears before, $i$ in $\pi$. What is the expected number of inversions in $\pi$?
+
+    <p>Let $I_{i,j}$ be the random variable with $I_{i,j} = 1$ if $i \lt j$ and $(i,j)$ is an inversion and $I_{i,j} = 0$ otherwise. Let $X$ be the random variable for the number of inversions in a permutation. Then
+    $$X = \sum_{1 \leq i \lt j \leq n} I_{i,j}.$$
+    Then we have
+    $$E(X) = \sum_{1 \leq i \lt j \leq n} E(I_{i,j}).$$
+    So, what is $E(I_{i,j})$? If we consider all permutations, then half of them will have $i \lt j$ and the other half will have $j \lt i$. This gives us $E(I_{i,j}) = \frac 1 2$. Then, we count the number of pairs $(i,j)$ with $i \lt j$ to get the number of terms in our summation. There are $\binom n 2$ such pairs, since we pick any pair of numbers and there's only one possible order we care about. This gives us
+    $$E(X) = \sum_{1 \leq i \lt j \leq n} E(I_{i,j}) = \binom n 2 \frac 1 2 = \frac{n(n-1)}2 \frac 1 2 = \frac{n(n-1)}4.$$
+
+    <p>This leads us to a nice average-case analysis of bubble sort. As you may recall, bubble sort involves <a href="https://www.youtube.com/watch?v=lyZQPjUT5B4">going through an array and checking if each pair of adjacent elements is in the right order and swaps them if they're not</a>. The worst-case analysis comes when we have an array that's totally in reverse, and we're forced to make $n$ passes through the array making $O(n)$ swaps, giving us a running time of $O(n^2)$.
+
+    <p>Of course, a common criticism of worst-case analysis is that it's possible that typical cases aren't that bad. So for this case, we can ask ourselves, if we have a random array, how many swaps would we <em>expect</em> to make? This happens to be asking how many pairs of numbers we should expect to be out of order in a random permutation, which we've just figured out is $\frac{n(n-1)}4$. And so it turns out, in the average case, we're still looking at a running time of $O(n^2)$.

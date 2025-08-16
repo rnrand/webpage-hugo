@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 10</title>
+	<link rel="stylesheet" href="../style.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 10</h1>
+
+    <h3>The Frobenius problem</h3>
+
+    <p>The following is an instance of the <em>Frobenius problem</em>, due to Ferdinand Frobenius in the late 1800s. In general, the Frobenius problem asks, given positive relatively prime integers $x_1, x_2, \dots, x_n$, what is the largest integer not representable as a non-negative integer linear combination of the $x_i$.
+
+    <p>We can think of this as a currency denomination problem. In the US, pennies are still in use, so every integer is representable, since we can just fill in the gaps with the 1 cent coins. However, in Canada, the penny was eliminated in 2012 and the smallest coin that is still minted is the nickel, which is 5 cents. Combined with the fact that the other coin denominations are 10 and 25 cents, this means that no integer number of cents that is not divisble by 5 can be represented (which is why we have the gcd restriction).
+
+    <p><strong>Theorem 10.1.</strong> Every natural number $n \geq 12$ can be written as $n = 4a + 5b$ for $a,b \in \mathbb N$.
+
+    <p><em>Proof.</em> We will prove this by induction on $n$.
+
+    <p><strong>Base case.</strong> For $n = 12$, we observe that $12 = 4 \cdot 3$.
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary with $k \geq 12$ and assume $k = 4a + 5b$ for $a,b \in \mathbb N$. Consider $n = k+1$. There are two cases to consider.
+    <ul>
+    <li>Suppose that $a \geq 1$. Then $k+1 = 4(a-1) + 5(b+1)$.
+    <li>Suppose that $a = 0$. In other words, $k = 5b$. Since $k \geq 12$, we have $b \geq 3$. Then $k+1 = 4 \cdot 4 + 5(b-3)$.
+    </ul>
+    $\tag*{$\Box$}$
+
+    <p>We can also prove this via strong induction. Recall that strong induction says that for a statement $\varphi(n)$, if
+    <ol>
+    <li>$\varphi(0)$, and
+    <li>for all $k \in \mathbb N$, if $\varphi(j)$ for all $j \leq k$, then $\varphi(k+1)$
+    </ol>
+    <p> are both true, then the following is true:
+    <ol start="3">
+    <li>for all $n \in \mathbb N$, $\varphi(n)$ holds.
+    </ol>
+    
+    <p><em>Proof.</em> We will prove this by strong induction on $n$.
+
+    <p><strong>Base case.</strong> We will show that this is true for $n = 12, 13, 14, 15$. We have
+    \begin{align*}
+    12 &= 4 \cdot 3 + 5 \cdot 0, \\
+    13 &= 4 \cdot 2 + 5 \cdot 1, \\
+    14 &= 4 \cdot 1 + 5 \cdot 2, \\
+    15 &= 4 \cdot 0 + 5 \cdot 3.
+    \end{align*}
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary with $k \geq 15$ and assume for all $12 \leq j \leq k$ that $j = 4a + 5b$ for some $a,b \in \mathbb N$. Consider $n = k+1$. Since $k \geq 15$, we have that $k - 3 \geq 12$ and $k-3 = 4a + 5b$ with $a,b \in \mathbb N$. Then $k+1 = 4(a+1) + 5b$.
+    $\tag*{$\Box$}$
+
+    <p>You can find the proof of this in the Rosen textbook, where the question is formulated in terms of stamps and stamp denominations. This is not a perfect analogy like the coin formulation of the problem because an envelope has a finite amount of space for you to place stamps. This leads to a variant of the problem, where you also limit the number of stamps you can use.
+
+    <p>Another instance of the Frobenius problem was formulated as a question not about coins, but about boxes of McNuggets. At the time the problem was posed, McNuggets came in boxes of 6, 9, and 20 in the UK, which is where Picciotto, who posed the problem, was from. So if you wanted to, say, split a bunch of nuggets evenly between seven people, you had to get at least 35 nuggets because there would be no way to get 7, 14, 21, or 28. It turns out that 43 is the smallest non-representable number.
+
+    <p><strong>Theorem 10.2.</strong> Every natural number $n \geq 44$ can be written as $n = 20a + 9b + 6c$ for some $a,b,c \in \mathbb N$.
+
+    <p><em>Proof.</em> We will prove this by strong induction on $n$.
+
+    <p><strong>Base case.</strong> We will show that this is true for $n = 44, 45, 46, 47, 48, 49$. We have
+    \begin{align*}
+    44 &= 20 \cdot 1 + 9 \cdot 0 + 6 \cdot 4 \\
+    45 &= 20 \cdot 0 + 9 \cdot 3 + 6 \cdot 3 \\
+    46 &= 20 \cdot 2 + 9 \cdot 0 + 6 \cdot 1 \\
+    47 &= 20 \cdot 1 + 9 \cdot 3 + 6 \cdot 0 \\
+    48 &= 20 \cdot 0 + 9 \cdot 0 + 6 \cdot 8 \\
+    49 &= 20 \cdot 2 + 9 \cdot 1 + 6 \cdot 0 \\
+    \end{align*}
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary with $k \geq 50$ and assume for all $44 \leq j \leq k$ that $j = 20a + 9b + 6c$ for some $a,b,c \in \mathbb N$. Consider $n = k+1$. Since $k \geq 50$, we have that $k - 6 \geq 44$ and therefore $k-6 = 20a + 9b + 6c$ with $a,b,c \in \mathbb N$. Then $k+1 = 20a + 9b + 6(c+1)$.
+    $\tag*{$\Box$}$
+
+    <p>Nowadays, nuggets don't come in odd-numbered denominations, at least not in the US or Canada.
+
+    <h3>Fibonacci numbers</h3>
+
+    <p>Where induction really shines is when we work with recursively defined objects. We saw an example of this with factorials, where we split up our definition into a base case and an inductive case. For instance, consider the Fibonacci numbers.
+
+    <p><strong>Definition 10.3.</strong> The <strong>Fibonacci numbers</strong> are defined by
+    <ol>
+    <li>$f_0 = 0$, $f_1 = 1$, and
+    <li>$f_n = f_{n-1} + f_{n-2}$ for $n \geq 2$.
+    </ol>
+
+    <p>In this form, the Fibonacci numbers lend themselves to inductive proofs quite naturally. However, just like with sums, sometimes we just want a nice neat formula to compute one term. We'll be doing this much later in the course, when we talk about recurrences. For now, we'll just say that one can get an exact formula for $f_n$ in terms of the solutions to $x^2 - x - 1 = 0$. These are $\varphi = \frac{1 + \sqrt 5}{2}$, the Golden Ratio, and its conjugate root, $\widetilde \varphi = 1 - \varphi = \frac{1-\sqrt 5}{2}$. What we get is
+    $$f_n = \frac{\varphi^n - \widetilde \varphi^n}{\sqrt 5}.$$
+    This is now known as Binet's formula, although it seems like it was known by a bunch of mathematicians like Euler, Bernoulli, and de Moivre over a century earlier.
+
+    <p><strong>Theorem 10.4.</strong> For all $n \in \mathbb N$,
+    $$f_n = \frac{\varphi^n - \widetilde \varphi^n}{\sqrt 5}.$$
+
+    <p><em>Proof.</em> We will show this by strong induction on $n$.
+
+    <p><strong>Base case.</strong> For $n = 0$, we have $f_0 = 0 = \frac{\varphi^0 - \widetilde \varphi^0}{\sqrt 5}$. For $n = 1$, we have 
+    \begin{align*}
+    \frac{\varphi - \widetilde \varphi}{\sqrt 5} &= \frac{\frac{1+\sqrt 5}{2} - \frac{1-\sqrt 5}{2}}{\sqrt 5} \\
+    &= \frac{\frac{2\sqrt 5}{2}}{\sqrt 5} \\
+    &= \frac{\sqrt 5}{\sqrt 5} \\
+    &= 1
+    \end{align*}
+
+    <p><strong>Inductive case.</strong> Suppose that $f_j = \frac{\varphi^j - \widetilde \varphi^j}{\sqrt 5}$ for all $j$ with $j \leq k$. Consider $f_{k+1}$.
+    \begin{align*}
+    f_{k+1} &= f_k + f_{k-1} \\
+    &= \frac{\varphi^k - \widetilde \varphi^k}{\sqrt 5} + \frac{\varphi^{k-1} - \widetilde \varphi^{k-1}}{\sqrt 5} &\text{by ind. hyp.} \\
+    &= \frac{\varphi^k + \varphi^{k-1} - (\widetilde \varphi^k + \widetilde \varphi^{k-1})}{\sqrt 5} \\
+    &= \frac{(1 + \varphi) \varphi^{k-1} - (1 + \widetilde \varphi) \widetilde \varphi^{k-1}}{\sqrt 5} \\
+    &= \frac{\varphi^2 \varphi^{k-1} - \widetilde \varphi^2 \widetilde \varphi^{k-1}}{\sqrt 5} &\text{since $\varphi^2 = \varphi + 1$ and $\widetilde \varphi^2 = \widetilde \varphi+1$}\\
+    &= \frac{\varphi^{k+1} - \widetilde \varphi^{k+1}}{\sqrt 5}
+    \end{align*}
+    $\tag*{$\Box$}$
+
+    <p>Using this property of the Fibonacci numbers, we can prove something interesting about the Euclidean algorithm. The following is a result attributed to Gabriel Lamé in 1844, which makes it likely the earliest example of both <a href="https://www.sciencedirect.com/science/article/pii/S0315086084710317">analysis of an algorithm</a> and an application of the Fibonacci numbers.
+
+    <p><strong>Theorem 10.5 (Lamé's Theorem).</strong> Suppose $a_n \gt a_{n-1} \gt \cdots \gt a_1 \gt a_0 = 0$ is the sequence of numbers obtained from Euclid's algorithm. Then $a_i \geq f_i$ for all $i \leq n$.
+
+    <p><em>Proof.</em> We will prove this by (strong) induction on $n$.
+
+    <p><strong>Base case.</strong> From the statement, we have $a_0 = f_0$ and $0 \lt a_1$ and $f_1 = 1 \leq a_1$.
+
+    <p><strong>Inductive case.</strong> Assume that $a_j \geq f_j$ for all $j \lt n$. By the Division Theorem, there exists an integer $q$ such that $a_n = q \cdot a_{n-1} + a_{n-2}$ and that $a_{n-2} \lt a_{n-1}$. Then $q \geq 1$ and
+    \begin{align*}
+    a_n &= q \cdot a_{n-1} + a_{n-2} \\
+    & \geq a_{n-1} + a_{n-2} \\
+    & \geq f_{n-1} + f_{n-2} & \text{by ind. hyp.} \\
+    & = f_n
+    \end{align*}
+    $\tag*{$\Box$}$
+
+    <p>Recall that when analyzing algorithms, we are concerned with the number of elementary operations that are performed in proportion to the size of the input and we are concerned with the growth of this function. Here, we consider the number of divisions to be our elementary operation, since that's the most important and costly operation we execute.
+
+    <p><strong>Corollary 10.6.</strong> Let $a \gt b \geq 0$ be natural numbers such that the representation of $a$ requires $d$ decimal digits and the calculation of $\gcd(a,b)$ via Euclid's algorithm requires $k$ division steps. Then $k \leq 5 \cdot d$.
+
+    <p><em>Proof.</em> Since the decimal representation of $a$ requires $d$ digits, we have $a \lt 10^d$. If the computation of $\gcd(a,b)$ by Euclid's algorithm requires $k$ steps, by Lamé's Theorem, we have $a \geq f_k$. Then we have
+    \begin{align*}
+    f_k &\lt 10^d \\
+    \frac{\varphi^k}{\sqrt 5} &\leq 10^d \\
+    k \log \varphi - \frac{\log 5}{2} &\leq d \log 10 \\
+    k &\leq \frac{d \log 10}{\log \varphi} - \frac{\log 5}{2 \log \varphi} \\
+    k &\leq 4.789d + 1.673
+    \end{align*}
+    That this implies $k \leq 5d$ is clear for large $d$. For small $d$, we can check the values by hand.
+    $\tag*{$\Box$}$
+
+    <p>This is a neat result that goes back to our brief discussion about the efficiency of trying to find a gcd. What Lamé's theorem tells us is that Euclid's algorithm executes operations roughly linearly to the number of digits of the largest number $a$. The number of digits of a number turns out to be about $\log a$, so Euclid's algorithm scales roughly logarithmically with $a$.
+
+    <p>If we compare this to the computing all the divisors method, we would be executing approximately as many operations as there are numbers from 1 to $n$. This means that our naive algorithm scales roughly linearly with $a$. Comparing the two algorithms, we have an approximately exponential difference between the two.

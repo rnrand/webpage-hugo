@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 21</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 21</h1>
+
+    <h2>Variance</h2>
+
+    <p>Once we have the notions of random variables and their expectations, what the probability that a random variable takes on a value that is far from the expected value? Intuitively, this shouldn't happen very often. The following result gives us some idea of this probability by providing a bound on the probability that a random variable takes on a value of at least some constant $a$.
+
+    <p><strong>Theorem 19.9 (Markov's Inequality).</strong> If $X$ is everywhere nonnegative, then $\forall a \gt 0$,
+    $$\Pr(X \geq a) \leq \frac{E(X)}{a}.$$
+
+    <p><em>Proof.</em>
+    \begin{align*}
+    E(X) &= \sum_{\omega \in \Omega} X(\omega) \Pr(\omega) \\
+    &\geq \sum_{\omega \in \Omega, X(\omega) \geq a} X(\omega) \Pr(\omega) \\
+    &\geq \sum_{\omega \in \Omega, X(\omega) \geq a} a \cdot \Pr(\omega) \\
+    &= a \cdot \sum_{\omega \in \Omega, X(\omega) \geq a} \Pr(\omega) \\
+    &= a \cdot \Pr(X \geq a).
+    \end{align*}
+
+    <p>This gives us $\Pr(X \geq a) \leq \frac{E(X)}{a}$.
+    $$\tag*{$\Box$}$$
+
+    <p>Markov's inequality is named for Andrey Markov, a Russian mathematician from the turn of the 20th century who is the same Markov responsible for things like Markov chains. Interestingly enough, this inequality appeared earlier in work by Pafnuty Chebyshev, who was Markov's doctoral advisor. However, Chebyshev has his own other inequality which we'll get to soon. 
+
+    <h2>Variance</h2>
+    <p>The question of how near or far values of $X$ can be from the expectation leads us to the following notion.
+
+    <p><strong>Definition 21.1.</strong> Let $X$ be a random variable on the probability space $(\Omega,\Pr)$. The <strong>variance</strong> of $X$ is
+    $$V(X) = \sum_{\omega \in \Omega} (X(\omega) - E(X))^2 \cdot \Pr(\omega).$$
+    The <strong>standard deviation</strong> of $X$ is $\sigma(X) = \sqrt{V(X)}$. Because of this, variance is sometimes denoted by $\sigma^2(X)$.
+
+    <p>Again, the definition of variance is in terms of the probability of events from $\Omega$, which is not ideal. Luckily, we can reformulate variance in terms of the expectation of $X$ only.
+
+    <p><strong>Theorem 21.2.</strong> If $X$ is a random variable, then $V(X) = E(X^2) - E(X)^2$.
+
+    <p><em>Proof.</em>
+    \begin{align*}
+    V(X) &= \sum_{\omega \in \Omega} (X(\omega) - E(X))^2 \cdot \Pr(\omega) \\
+    &= \sum_{\omega \in \Omega} (X(\omega)^2 - 2X(\omega)E(X) + E(X)^2) \cdot \Pr(\omega) \\
+    &= \sum_{\omega \in \Omega} X(\omega)^2 \cdot \Pr(\omega) - 2 E(X) \sum_{\omega \in \Omega} X(\omega) \cdot \Pr(\omega) + E(X)^2 \sum_{\omega \in \Omega} \Pr(\omega) \\
+    &= E(X^2) - 2E(X)E(X) + E(X)^2 \cdot 1 \\
+    &= E(X^2) - E(X)^2
+    \end{align*}
+    $\tag*{$\Box$}$
+
+	<p>You will frequently see $\mu$ used for $E(X)$. We'll use $\mu = E(X)$ here, mostly to make the following proof readable.
+
+    <!-- <p><strong>Corollary 21.3.</strong> $V(X) = E((X - E(X))^2)$.
+
+    <p><em>Proof.</em>
+    \begin{align*}
+    E((X - E(X))^2) &= E(X^2 - 2 X E(X) + E(X)^2) \\
+    &= E(X^2) - E(2XE(X)) + E(E(X)^2) \\
+    &= E(X^2) - 2E(X)^2 + E(X)^2 \\
+    &= E(X^2) - E(X)^2 \\
+    &= V(X)
+    \end{align*}
+    $\tag*{$\Box$}$ -->
+
+    <p><strong>Corollary 21.3.</strong> $V(X) = E((X - \mu)^2)$.
+
+    <p><em>Proof.</em>
+    \begin{align*}
+    E((X - \mu)^2) &= E(X^2 -2 \mu X + \mu^2) \\
+	&= E(X^2) - E(2 \mu X) + E(\mu^2)  \\
+	&= E(X^2) - 2\mu E(X) + \mu^2 \\
+	&= E(X^2) - 2\mu^2 + \mu^2 \\
+	&= E(X^2) - \mu^2 \\
+    &= V(X)
+    \end{align*}
+    $\tag*{$\Box$}$
+
+
+    <p><strong>Example 21.4.</strong> Recall the roll of a fair 6-sided die and that $E(X) = 3.5$. To compute the variance, we need $E(X^2)$. For $i = 1, 2, \dots, 6$, $X^2 = i^2$ with probability $\frac 1 6$. Then
+    $$E(X^2) = \sum_{i=1}^6 \frac{i^2}{6} = \frac{91}6.$$
+    Then we can calculate $V(X)$ by
+    $$V(X) = E(X^2) - E(X)^2 = \frac{91}{6} - \left( \frac 7 2 \right)^2 = \frac{35}{12} \approx 2.92.$$
+    From this, we can also get the standard deviation, $\sqrt{V(X)} \approx 1.71$. 
+
+    <p>Now, what if we wanted to consider the roll of more than one die? Recall that the result of mulitple die rolls is independent and so their corresponding random variables are independent. We can make use of this property via Bienaymé's formula. Irénée-Jules Bienaymé was a French mathematician at around the same time as Markov and Chebyshev and was friends and collaborators with Chebyshev.
+
+    <p><strong>Theorem 21.5 (Bienaymé's Formula).</strong> If $X$ and $Y$ are independent random variables drawn from the same sample space $\Omega$, then $V(X+Y) = V(X) + V(Y)$.
+
+    <p><em>Proof.</em> We will make use of the claim that if $X$ and $Y$ are independent, then $E(XY) = E(X)E(Y)$ (which we'll leave as an exercise).
+    \begin{align*}
+    V(X+Y) &= E((X+Y)^2) - E(X+Y)^2 \\
+    &= E(X^2) + 2E(XY) + E(Y^2) - E(X)^2 - 2E(X)E(Y) - E(Y)^2 \\
+    &= E(X^2) - E(X)^2 + E(Y^2) - E(Y)^2 + 2E(XY) - 2E(X)E(Y) \\
+    &= E(X^2) - E(X)^2 + E(Y^2) - E(Y)^2 \\
+    &= V(X) + V(Y)
+    \end{align*}
+    $\tag*{$\Box$}$
+
+    <p><strong>Example 21.6.</strong> Recall that the variance of a single die roll is $V(X) = \frac{35}{12}$. Then the variance of two die rolls is $V(X) + V(X) = \frac{35}{6} \approx 5.833$ and the standard deviation is about $2.42$.
+
+    <p><strong>Example 21.7.</strong> Consider a series of $n$ independent Bernoulli trials with probability of success $p$. What is the variance of the number of successes?
+
+    <p>If we have a series of trials $(a_1, a_2, \dots, a_n)$, then we define the random variable $X_i$ to be 1 if $a_i$ is a success and 0 otherwise. Then we define $X = X_1 + \cdots + X_n$, so that $X$ counts the number of successes in the $n$ trials. Then the variance is simply $V(X) = V(X_1) + \cdots + V(X_n)$. 
+
+    <p>To compute this, we need to compute the variance of a single Bernoulli trial. If $X_i$ is our random variable for the Bernoulli, trial, we have that $X_i$ takes on a value of either 0 or 1. Therefore, we have $X_i^2 = X_i$ and $E(X_i) = 1 \cdot p + 0 \cdot (1-p) = p$. Then 
+    $$V(X_i) = E(X_i^2) - E(X_i)^2 = p - p^2 = p \cdot (1-p).$$
+    
+	Using Bienaymé's Formula, we get that $$V(\sum_{i=1}^n X_i) = n \cdot p(1-p)$$
+
+    <p>Now, we will revisit the question of how likely it is that a random variables takes a value that strays far from its expectation. Much like Markov's inequality, the following result will give us a bound on how much a random variable differs from its expected value. Chebyshev's inequality is named for Pafnuty Chebyshev, who we've already mentioned before.
+
+    <p><strong>Theorem 21.8 (Chebyshev's Inequality).</strong> Let $X$ be a random variable. For all $a \gt 0$,
+    $$\Pr(|X - E(X)| \geq a) \leq \frac{V(X)}{a^2}.$$
+
+    <p><em>Proof.</em> Let $Y = (X - E(X))^2$ be a random variable. Then $E(Y) = V(X)$ by definition. We can apply Markov's inequality, since $Y$ is non-negative, to get
+    $$\Pr(Y \geq a^2) \leq \frac{E(Y)}{a^2}.$$
+    Since $Y = (X-E(X))^2$, consider $(X-E(X))^2 \geq a^2$. We have $(X-E(X))^2 \geq a^2$ if and only if $|X - E(X)| \geq a$. Then, together with $E(Y) = V(X)$, we substitute into the above to get
+    $$\Pr(|X-E(X)| \geq a) \leq \frac{V(X)}{a^2}.$$
+    $\tag*{$\Box$}$
+
+    <p><strong>Example 21.9.</strong> Let $X$ be the random variable for the number of heads when a fair coin is tossed $n$ times. Recall that this is just the number of successful outcomes for $n$ independent Bernoulli trials with $p = \frac 1 2$. One can calculate that $E(X) = \frac n 2$ and from the previous example, we have that $V(X) = \frac n 4$ (since $p = (1-p) = \frac 1 2$). Now, we apply Chebyshev's inequality, using $a = \sqrt n$ to get
+    $$\Pr\left( \left|X - \frac n 2 \right| \geq \sqrt n \right) \leq \frac{V(X)}{\sqrt n^2} = \frac n 4 \cdot \frac 1 n = \frac 1 4.$$
+
+    <p>What this says is there is at most a $\frac 1 4$ probability that the number of heads that we get differs from the expected number ($\frac 1 2)$ by more than $\sqrt n$. So, if we make 100 rolls, then we have
+    $$\Pr(|X - 50| \geq 10) \leq \frac 1 4.$$
+    In other words, the probability that we get more than 60 heads or less than 40 heads is at most $\frac 1 4$.
+	
+	<p><strong>Example 21.10.</strong> On the other hand, suppose I set $a$ to $\varepsilon n$ for some small $\varepsilon$. Now I get
+        $$\Pr\left( \left|X - \frac n 2 \right| \geq \varepsilon n \right) \leq \frac{V(X)}{(\varepsilon n)^2} = \frac n 4 \cdot \frac{1}{\varepsilon^2 n^2} = \frac{1}{{4\varepsilon^2 n}}$$
+		or equivalently
+	    $$\Pr\left( \left|\frac{X}{n} - \frac 1 2 \right| \lt \varepsilon \right) \geq 1 - \frac{1}{4\varepsilon^2 n}$$
+
+		<p>Note that for any positive $\varepsilon$ and $\varepsilon'$, there is some $n$ such that $\frac{1}{4\varepsilon^2 n} \lt \varepsilon'$. That is to say as $n$ grows, the average of our Bernoulli trials converges towards $\frac 1 2$ with the probability approaching $1$. This is known as the <strong>weak law of large numbers</strong> (specialized to fair Bernoulli trials).
+	
+	<!-- <p>It gets more interesting if we consider the random variable $X = \frac{1}{n} \sum_{i=1}^n X_i$ where each $X_i$ is a Bernoulli trial with probability $p$. The expected value here is $\frac 1 n \cdot n E(X) = E(X) = p$. The variance, however, is
+		$$V(\frac{1}{n}\sum_{i=1}^n X_i) = \frac{1}{n^2}(n \cdot p(1-p)) = \frac{p(1-p)}{n}$$
+
+
+		 Using Chebyshev's Inequality with some small $\varepsilon$ we get:
+    $$\Pr\left( \left|X - p \right| \geq \varepsilon \right) \leq \frac{p(1-p)}{\varepsilon^2 n}$$
+	or equivalently
+    $$\Pr\left( \left|X - p \right| \lt \varepsilon \right) \geq 1 - \frac{p(1-p)}{\varepsilon^2 n}$$
+
+	<p>Note that for any positive $\varepsilon$ and $\varepsilon'$, there is some $n$ such that $\frac{p(1-p)}{\varepsilon^2 n} \lt \varepsilon'$. That is to say as $n$ grows, the average of our Bernoulli trials converges towards $p$. This is known as the <strong>weak law of large numbers</strong> (specialized to Bernoulli trials). -->
+		

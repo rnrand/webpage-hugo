@@ -1,0 +1,93 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb, amsmath, graphicx, subfigure}
+
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\heading}[6]{
+  \renewcommand{\thepage}{#1-\arabic{page}}
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { \textbf{#2} \hfill #3 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #6  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { \textit{Instructor: #4 \hfill #5} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\newenvironment{proof}{\noindent{\bf Proof:} \hspace*{1mm}}{
+	\hspace*{\fill} $\Box$ }
+\newenvironment{proof_of}[1]{\noindent {\bf Proof of #1:}
+	\hspace*{1mm}}{\hspace*{\fill} $\Box$ }
+\newenvironment{proof_claim}{\begin{quotation} \noindent}{
+	\hspace*{\fill} $\diamond$ \end{quotation}}
+
+\newcommand{\problemset}[3]{\heading{#1}{CMSC 27100-3}{#2}{Robert Rand}{#3}{Problem Set #1}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PLEASE MODIFY THESE FIELDS AS APPROPRIATE
+\newcommand{\problemsetnum}{1}          % problem set number
+\newcommand{\duedate}{Due: Friday, October 8, 2021}  % problem set deadline
+\newcommand{\studentname}{}    % full name of student (i.e., you)
+% PUT HERE ANY PACKAGES, MACROS, etc., ADDED BY YOU
+% ...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\problemset{\problemsetnum}{\duedate}{\studentname}
+
+
+
+\section{Propositional logic}
+
+{\bf{Problem 1:}} Augustus De Morgan has two laws named after him. The first says that the following two propositions are equivalent:
+\begin{enumerate}
+    \item It is not the case that both $P$ and $Q$ are true
+    \item $P$ is not true or $Q$ is not true
+\end{enumerate} 
+Use a truth table to prove this.
+~\\
+
+\noindent{\bf{Problem 2:}} De Morgan's second law says that if it's not the case that $P$ or $Q$ is true, then $P$ is not true and $Q$ is not true. Prove this using natural deduction.
+
+~\\
+\noindent{\bf{Problem 3:}} De Morgan's second law also goes in the reverse direction. Prove this via natural deduction or the Incredible Proof Machine (your choice). (You can screenshot or draw the output of the proof machine.)
+
+\section{Predicate Calculus I}
+
+{\bf{Problem 4:}} State the following claims as predicate calculus formulas. Define your predicates and named variables (e.g. ``B x y = x is bigger than y'', ``e = Ernie'')
+\begin{enumerate}
+    \item All dogs go to heaven.
+    \item Every natural number is either even or not even.
+    \item Elizabeth is the queen of some country.
+    \item Nobody is the queen of everything.
+    \item Ra illuminates everything that does not illuminate itself.
+\end{enumerate} 
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

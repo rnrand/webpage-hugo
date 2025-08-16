@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 9</title>
+	<link rel="stylesheet" href="../style.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 9</h1>
+
+    <p><strong>Theorem 8.6 (Fermat's Little Theorem).</strong> For all prime numbers $p$ and integers $a$ such that $\gcd(a,p) = 1$, $a^{p-1} \equiv 1 \pmod p$.
+
+    <p><em>Proof.</em> Consider $n = (a \cdot 1) \cdot (a \cdot 2) \cdot \cdots \cdot (a \cdot (p-1)) \pmod p$. We can view this product in two ways.
+
+    <p>First, we claim that 
+    $$\{[a]_p, [2a]_p, \dots, [(p-1)a]_p\} = \{[1]_p,[2]_p,\dots,[p-1]_p\}.$$
+    There are two things we must verify. First, we must verify that there is no $i$ with $1 \leq i \leq p-1$ such that $a \cdot i = 0 \pmod p$. Secondly, we must verify that for $1 \leq i \lt j \leq p-1$, $a \cdot i \neq a \cdot j$. 
+
+    <p>Suppose that there is $i$ such that $a \cdot i = 0 \pmod p$ and $1 \leq i \leq p-1$ is in the set above. Since $\gcd(a,p) = 1$, there is a multiplicative inverse for $a$ in $\mathbb Z_p$. Then we have
+    \begin{align*}
+    a \cdot i &= 0 &\pmod p \\
+    a^{-1} \cdot (a \cdot i) &= a^{-1} \cdot 0 &\pmod p \\
+    1 \cdot i &= 1 \cdot 0 &\pmod p \\
+    i &= 0 &\pmod p 
+    \end{align*}
+    contradicting $1 \leq i \leq p-1$.
+
+    <p>Next, we verify that the elements in the set are distinct and suppose that there are two elements $a \cdot i = a \cdot j \pmod p$ with $1 \leq i \lt j \leq p-1$. Then we have
+    \begin{align*}
+    a \cdot i &= a \cdot j &\pmod p \\
+    a^{-1} \cdot (a \cdot i) &= a^{-1} \cdot (a \cdot j) &\pmod p \\
+    1 \cdot i &= 1 \cdot j &\pmod p \\
+    i &= j &\pmod p 
+    \end{align*}
+    which contradicts $i \neq j$.
+
+    Therefore, we can conclude
+    $$n = (a \cdot 1) \cdot (a \cdot 2) \cdot \cdots \cdot (a \cdot (p-1)) = (p-1)! = -1 \pmod p$$
+    by Wilson's Theorem.
+
+    <p>Next, we can rearrange the terms of the product to give us $n = a^{p-1} \cdot (p-1)! \pmod p$. By Wilson's Theorem, we have $n = a^{p-1} \cdot (-1) \pmod p$.
+
+    <p>Together, we get that $n = a^{p-1} \cdot (-1) = -1 \pmod p$. Therefore, $a^{p-1} = 1 \pmod p$.
+    $$\tag*{$\Box$}$$
+
+    <p><strong>Example 8.7.</strong> Let's compute $7^{315} \bmod 11$. Instead of performing division on $7^{315}$, we manipulate the exponent. Observing that $10 = 11-1$, we see that $315 = 10 \cdot 31 + 5$ by division. This gives us
+    \begin{align*}
+    7^{315} &= 7^{31 \cdot 10 + 5} &\pmod{11} \\
+    &= (7^{10})^{31} \cdot 7^5 &\pmod{11} \\
+    &= 1^{31} \cdot 49^2 \cdot 7 &\pmod{11} \\
+    &= 5^2 \cdot 7 &\pmod{11} \\
+    &= 25 \cdot 7 &\pmod{11} \\
+    &= 3 \cdot 7 &\pmod{11} \\
+    &= 21 &\pmod{11} \\
+    &= 10 &\pmod{11} \\
+    \end{align*}
+
+    <h2>Induction</h2>
+    <p>We're going to take some time to do more proofs by induction.
+
+    <p>As a refresher, you may remember that induction proofs have a sort of template that we follow. Suppose that we want to prove that some property $\varphi$ holds for all natural numbers. 
+    <ol>
+    <li>First, we prove the basis $\varphi(0)$.
+    <li>Then, for our induction step, we consider some $k \in \mathbb N$ and assume as our inductive hypothesis that $\varphi(k)$ holds.
+    <li>Use the assumption that $\varphi(k)$ holds to show that $\varphi(k+1)$ is also true. 
+    </ol>
+
+    <p>When we first talked about induction, we went through an example. I did a different one with each section, so I'll include both here and cover whichever one you didn't get.
+
+    <p>Recall the following theorem:
+    <blockquote>
+    <p><strong>Theorem 2.16.</strong> If $A$ is a finite set, then $|\mathcal P(A)| = 2^{|A|}$.
+    </blockquote>
+
+    <p>Now, using induction, we can prove this.
+
+    <p><em>Proof.</em> We will prove this by induction on the size of $A$, $n = |A|$.
+
+    <p><strong>Base case.</strong> We have $|A| = 0$ and therefore, $A = \emptyset$. Then $\mathcal P(A) = \{\emptyset\}$. Observe that $|P(\emptyset)| = |\{\emptyset\}| = 1 = 2^0$.
+
+    <p><strong>Inductive case.</strong> Let $n = k$ and assume that if there is a set $|B|$ with $|B| = k$, then $|\mathcal P(B)| = 2^k$. Let $|A| = k+1$ and we will show that $|\mathcal P(A)| = 2^{k+1}$.
+
+    <p>Choose an element $a \in A$. We define the set $A' = \{x \in A \mid x \neq a\}$ containing all elements of $A$ except $a$. Then $|A'| = |A| - 1$, since we removed $a$. Then $|A'| = k$ and by our inductive hypothesis, $|\mathcal P(A')| = 2^k$.
+
+    <p>Now, consider a subset of $A'$, $X \in \mathcal P(A')$. For each subset $X \subseteq A'$, we can obtain two subsets of $A$, $X$ and $X \cup \{a\}$. Therefore, we have $2 \cdot 2^k = 2^{k+1}$ subsets of $A$.
+    $\tag*{$\Box$}$
+
+    <p><strong>Theorem 7.4.</strong> For every $n \in \mathbb N$,
+    $$\sum_{i=0}^n i = \frac{n(n+1)}2.$$
+
+    <p><em>Proof.</em> We will prove this by induction on $n$.
+
+    <p><strong>Base case.</strong> $n = 0$. Then 
+    $$\sum_{i = 0}^0 i = 0 \quad \text{and} \quad \frac{0 \cdot (0+1)}2 = 0,$$
+    so clearly $\sum_{i=0}^n i = \frac{n(n+1)}2$ holds for $n=0$.
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary and assume that $\sum_{i=0}^k i = \frac{k(k+1)}2$. We will show that $\sum_{i=0}^{k+1} i = \frac{k+1(k+2)}2$. We have
+    \begin{align*}
+    \sum_{i=0}^{k+1} i &= \sum_{i=0}^k i + (k+1) \\
+    &= \frac{k(k+1)}2 + (k+1) & \text{by ind. hyp.} \\
+    &= (k+1) \cdot \left(\frac k 2 + 1 \right) \\
+    &= (k+1) \cdot \left(\frac k 2 + \frac 2 2 \right) \\
+    &= \frac{(k+1)(k+2)}2
+    \end{align*}
+    Thus, we have shown that $\sum_{i=0}^n i = \frac{n(n+1)}2$ holds for $n=k+1$. Therefore, $\sum_{i=0}^n i = \frac{n(n+1)}2$ holds for all $n \in \mathbb N$.
+    $\tag*{$\Box$}$
+    
+
+    <p>An observation that you may have made is that induction is a fine way to prove that something works, but it is not necessarily a great way to discover what it is you might want to prove. Other methods are necessary to come up with a hypothesis which you can then hopefully prove via induction.
+
+    <p>Suppose we wish to determine a formula for the sum of the first $n$ consecutive odd numbers, $\sum_{i=0}^n (2i+1)$. We would have to try out a few values and see where we end up.
+    \begin{align*}
+    1 &= 1 \\
+    1 + 3 &= 4 \\
+    1 + 3 + 5 &= 9 \\
+    1 + 3 + 5 + 7 &= 16 \\
+    1 + 3 + 5 + 7 + 9 &= 25 \\
+    \end{align*}
+    So it looks like a familiar pattern has developed, so we can attempt to prove it.
+
+    <p><strong>Theorem 9.1.</strong> For all $n \in \mathbb N$, 
+    $$\sum_{i=0}^n (2i+1) = (n+1)^2.$$
+
+    <p><em>Proof.</em> We will prove this by induction on $n$.
+
+    <p><strong>Base case.</strong> Let $n = 0$. Then $\sum_{i=0}^0 (2i+1) = 1 = 1^2$.
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary and assume that $\sum_{i=0}^k (2i-1) = (k+1)^2$.  We want to show that $\sum_{i=0}^{k+1} (2i+1) = (k+2)^2$.
+    We have
+    \begin{align*}
+    \sum_{i=0}^{k+1} (2i+1) &= \sum_{i=0}^{k} (2i+1) + 2(k+1) + 1 \\
+    &= (k+1)^2 + 2(k+1) + 1 &\text{ind. hyp.} \\
+    &= k^2 + 2k + 1 + 2k + 2 + 1 \\
+    &= k^2 + 4k + 4 \\
+    &= (k+2)^2
+    \end{align*}
+    $\tag*{$\Box$}$
+
+    <p>Now here we happened to end up with a recognizable pattern. But what happens if you don't? The snide answer is to Google it and that might work if you happen to be looking for a relatively famous sequence. However, Google isn't great if you just throw a bunch of numbers at it. So you might be expecting me to build up to show you how to do this "properly" but in my opinion, that's a lot of work and a bit outside the scope of the course. 
+
+    <p>Instead, I'd like to highlight the excellent <a href="https://oeis.org">Online Encyclopedia of Integer Sequences</a>, founded by Neil Sloane. The OEIS is purpose-built to be a search engine for integer sequences and it contains more sequences than you can ever have imagined, complete with bibliographic links and other related sequences.
+
+    <p>We can also use induction to prove inequalities. Something that we do in the analysis of algorithms is compare the growth rate of functions. We can use inductive arguments to do the same, since we often use functions with the domain $\mathbb N$ when quantifying computational resources like time or space.
+
+    <p><strong>Theorem 9.2.</strong> For all $n \in \mathbb N$ and $x \geq 0$, $(1+x)^n \geq 1+nx$.
+
+    <p><em>Proof.</em> We will show this by induction on $n$.
+
+    <p><strong>Base case.</strong> Let $n = 0$. Then $(1+x)^0 = 1 \geq 1 = 1 + 0 \cdot x$.
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary and assume that $(1+x)^k \geq 1+kx$. Consider $n = k+1$.
+    \begin{align*}
+    (1+x)^{k+1} &= (1+x)^k (1+x) \\
+    &\geq (1+kx) (1+x) & \text{ind. hyp.} \\
+    &= 1 + kx + x + kx^2 \\
+    &= 1 + (k+1)x + kx^2 \\
+    &\geq 1+(k+1)x & kx^2 \geq 0
+    \end{align*}
+    $\tag*{$\Box$}$
+
+    <p>Note that in this result, our functions had two variables, $x$ and $n$. This is a great example of why what you're applying induction to needs to be carefully considered and clearly stated.
+
+    <p>If we have a result for some fixed integer, we can often generalize those arguments by using induction. For instance, in the proof of the Chinese Remainder Theorem, we relied on the claim that if $a$ and $b$ are relatively prime, and $a \mid n$ and $b \mid n$, then $ab \mid n$ to show that the product of all the moduli $m_i$ divided our solutions $x - x'$. In fact, the claim alone is insufficient to prove what we wanted to prove and we really needed to combine it with an inductive argument. For instance, consider the following generalization of De Morgan's laws.
+
+    <p><strong>Theorem 9.3.</strong> Let $p_1, p_2, \dots, p_n$ be propositional variables for $n \geq 1$. Then
+    $$\neg \left( \bigwedge_{i=1}^n p_i \right) = \bigvee_{i=1}^n \neg p_i.$$
+
+    <p>The big $\wedge$ and $\vee$ are analogs of the summation symbol $\sum$ in that we're taking the conjunction or disjunction of the indexed terms, similar to the big $\cup$ or $\cap$ which we defined earlier. 
+
+    <p><em>Proof.</em> We will prove this by induction on $n$.
+
+    <p><strong>Base case.</strong> Let $n = 1$. Then $\neg \left( \bigwedge_{i=1}^1 p_i \right) = \neg p_1 = \bigvee_{i=1}^1 \neg p_i$.
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary and assume that
+    $$\neg \left( \bigwedge_{i=1}^k p_i \right) = \bigvee_{i=1}^k \neg p_i.$$
+    Now, consider $n = k+1$. We have
+    \begin{align*}
+    \neg \left( \bigwedge_{i=1}^{k+1} p_i \right) &= \neg \left( \bigwedge_{i=1}^{k} p_i \wedge p_{k+1} \right) \\
+    &= \neg \left( \bigwedge_{i=1}^{k} p_i \right) \vee \neg p_{k+1}  &\text{De Morgan's laws} \\
+    &= \bigvee_{i=1}^{k} \neg p_i \vee \neg p_{k+1}  &\text{ind. hyp.} \\
+    &= \bigvee_{i=1}^{k+1} \neg p_i  \\
+    \end{align*}
+    $\tag*{$\Box$}$
+
+    <p>A less obvious but very neat use of induction involves a tiling problem. A <em>triomino</em> is a tile consisting of three unit squares in the shape of an L.
+
+    <p><strong>Theorem 9.4.</strong> For all $n \in \mathbb N$, all $2^n \times 2^n$ grid of squares with one square removed can be covered by triominoes.
+
+    <p>(Figures to come, hopefully soon).
+
+    <p><em>Proof.</em> We will show this by induction on $n$.
+
+    <p><strong>Base case.</strong> Let $n = 0$. Then our board is $1 \times 1$, which is our "removed" square and so our tiling consists of 0 triominoes.
+
+    <p>For the purposes of proof, this is perfectly fine. However, some people may not be convinced by this. Let's look at $n = 1$. Then our board is $2 \times 2$. We can remove any square and rotate a single triomino to tile what's left.
+
+    <p><strong>Inductive case.</strong> Assume that for $k \in \mathbb N$, the $2^k \times 2^k$ with one square removed can be tiled by triominoes. Now, consider an arbitrary grid of size $2^{k+1} \times 2^{k+1}$ with one square removed.
+
+    <p>We split the grid into four $2^k \times 2^k$ grids. The square that is removed from our grid falls into one of these four subgrids. By our inductive hypothesis, each of these four grids can be tiled with triominoes with one square removed. So we have a tiling for the subgrid with our designated square removed and three other subgrids. 
+    
+    <p>We tile the remaining three grids so that their interior corners are removed. When we compose the grids, the three missing squares will form a spot for a triomino to fit in the middle, allowing us to tile the recomposed $2^{k+1} \times 2^{k+1}$ grid with only our designated tile missing.
+    $\tag*{$\Box$}$

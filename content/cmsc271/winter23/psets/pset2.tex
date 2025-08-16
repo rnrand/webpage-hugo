@@ -1,0 +1,97 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb, amsmath, graphicx, subfigure}
+\usepackage{hyperref}
+
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\heading}[6]{
+  \renewcommand{\thepage}{#1-\arabic{page}}
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { \textbf{#2} \hfill #3 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #6  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { \textit{Instructor: #4 \hfill #5} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\newenvironment{proof}{\noindent{\bf Proof:} \hspace*{1mm}}{
+	\hspace*{\fill} $\Box$ }
+\newenvironment{proof_of}[1]{\noindent {\bf Proof of #1:}
+	\hspace*{1mm}}{\hspace*{\fill} $\Box$ }
+\newenvironment{proof_claim}{\begin{quotation} \noindent}{
+	\hspace*{\fill} $\diamond$ \end{quotation}}
+
+\newcommand{\problemset}[3]{\heading{#1}{CMSC 27100-3}{#2}{Robert Rand}{#3}{Problem Set #1}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PLEASE MODIFY THESE FIELDS AS APPROPRIATE
+\newcommand{\problemsetnum}{2}          % problem set number
+\newcommand{\duedate}{Due: Friday, October 15, 2021}  % problem set deadline
+\newcommand{\studentname}{}    % full name of student (i.e., you)
+% PUT HERE ANY PACKAGES, MACROS, etc., ADDED BY YOU
+% ...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\problemset{\problemsetnum}{\duedate}{\studentname}
+
+
+
+\section{Predicate Calculus II}
+
+\noindent{\bf{Problem 1:}} Assume $\forall x, P x \wedge Q x$. Prove that $\forall x, Q x \vee P x$.\\[10pt]
+
+\noindent{\bf{Problem 2:}} Assume $\forall x, \forall y, P x \to Q y$ and $\exists z, \neg Q z$. Prove that $\exists x, \neg P x$. \\[10pt]
+
+
+\section{Functions and relations}
+
+\noindent{\bf{Problem 3}:} Write a bijection $f$ between the sets
+$$ \{ (x,y) \in \mathbb{N} \times \mathbb{N} \mid x = y + 1 \vee y = x + 1) \} $$ 
+and $\mathbb{Z}$. Also write the inverse function.\\[10pt]
+
+\noindent{\bf{Problem 4}:} Let $R$ be a relation over sets
+where $(A,B) \in R$ means ``there is a bijection from $A$ to $B$''. For each of the questions below include a proof (a proof sketch suffices for 3).
+\begin{enumerate}
+\item Is $R$ reflexive, irreflexive or neither?
+\item Is $R$ symmetric, asymmetric, antisymmetric or none?
+\item Is $R$ transitive?
+\end{enumerate}~\\[10pt]
+
+\noindent{\bf{Problem 5}:} Let $R$ be the \emph{divides} relation restricted to pair of naturals ($R \subseteq \mathbb{N} \times \mathbb{N}$). For each of the questions below include a proof.
+\begin{enumerate}
+\item Is $R$ reflexive, irreflexive or neither?
+\item Is $R$ symmetric, asymmetric, antisymmetric or none?
+\item Is $R$ transitive?
+\end{enumerate}
+
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

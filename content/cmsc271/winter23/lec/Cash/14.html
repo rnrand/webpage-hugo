@@ -1,0 +1,294 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 14</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 14</h1>
+
+	 <h2>Decision Processes and Correcting for Overcounting</h2>
+
+	 <p>This lecture covers some more techniques for counting, starting with
+	 counting "selections without order." We then generalize two techniques used
+	 there: <em>decision processes</em> and <em>correcting for overcounting</em>.
+	 Together with counting the complement (covered last time) and little
+	 ingenuity and practice, you can solve a surprisingly broad and sophisticated
+	 array of problems with these techniques.
+
+	 <h3>Counting Subsets of a Given Size</h3>
+
+   <p>We start with a simple question: How many subsets of $\{a,b,c,d\}$ are
+   there with cardinality two? You can brute-force calculate this. The
+   complete list of such sets is
+   \[
+   \{a,b\},
+   \{a,c\},
+   \{a,d\},
+   \{b,c\},
+   \{b,d\},
+   \{c,d\}.
+   \]
+   <p>The answer is therefore $6$. This technique won't generalize if
+   we consider larger numbers than two and four, however. Let's arrive
+   at this answer in a more systematic way.
+
+   <p>Consider attempting to count these subsets via our tree method from the
+   previous lecture, and specifically using sampling without replacement. (Which
+   seems more appropriate than sampling with replacement.)  We could
+   (incorrectly) try to select the first element of the set ($4$ options) and
+   the select the second element ($3$ options). The put the two elements
+   we picked into a set on the leaf of the tree. This gives $4\cdot 3 = 12$,
+   which is incorrect. 
+
+	 <p>Let's take a closer look at what happened: The same set ends up on
+	 multiple leaves. For example, we put the set $\{a,b\}$ on two leaves
+		 (namely, if picked $a$ and then $b$, and also if picked $b$ and then $a$).
+		 In fact, <em>every two-element set ended up on <strong>exactly</strong>
+			 two leaves</em>. In other words, we got exactly double the correct
+		 answer, so we should divide by two. And this indeed corrects our incorrect
+		 answer $12$ back to the correct value $6$.  </p>
+
+    <p>Now let's ask the same question, but for three-element subsets.  The
+    answer is now $4$: The sets are $\{a,b,c\},\{a,b,d\},\{a,c,d\},\{b,c,d\}$.
+    If we try sampling without replacement again, we get $4\cdot 3 \cdot 2 =
+    24$, which is even further off than before. But the same sort of organized
+    overcounting occurs again: This time, each of those sets occurs on $6$
+    leaves. This is because each set can be ordered in $3! = 6$ ways, with each of
+    these orderings corresponding to a sequence of choices in our tree.  (So for
+    example, the set $\{a,b,c\}$ appears size times corresponding to $abc, acb,
+    bac, bca, cab, cba$.) Dividing by six corrects this answer.
+
+    <p>The pattern is now emerging. Let's fix some notation for
+    the general question we want to ask. (The name "binomial coefficient"
+    will be explained in a later lecture.)
+
+   <p><strong>Definition (Binomial Coefficients).</strong> Let $n,k$ be integers
+   with $n\geq 0$.  We define the notation $\binom{n}{k}$ (pronounced "$n$
+   choose $k$") to be the number of subsets of size $k$ contained in a subset of
+   size $n$. More formally,
+   $$
+   \binom{n}{k} = \left|\{ S \subseteq \{1,\ldots,n\} \ : \ |S| = k\}\right|.
+   $$
+   These numbers are called <strong>binomial coefficients</strong>.
+
+   <p>Binomial coefficients are useful in a great many ways in combinatorics and
+   other areas of math. Observe that if $k$ is negative or greater than $n$,
+   then $\binom{n}{k}=0$ since there are never sets of those sizes. When
+   $k$ is between $0$ and $n$, we have the following formula that generalizes
+   the pattern above:
+
+   <p><strong>Theorem.</strong> Let $n,k$ be integers with $n\geq 0$ and $0 \leq
+   k \leq n$. Then
+   $$
+       \binom{n}{k} = \frac{n!}{(n-k)!\cdot k!}.
+   $$
+   (We use the convention $0!=1$ in the notation above.)
+
+	 <p><em>Proof.</em> This will be our first example of a <em>combinatorial proof</em>,
+    which is a perfectly rigorous way to establish formulas like this, but it
+    might at first feel loose and fast compared to more concrete proofs. (Indeed,
+    you can prove this via some sort of induction if you prefer.)
+
+    <p>The number $n!/(n-k)!$ counts the ways to pick $k$ elements
+    from $\{1,\ldots,n\}$ with order. Amongst these, each subset of
+    size $k$ will have its elements listed exactly $k!$ times. Therefore
+    $$
+    k!\cdot \binom{n}{k} = \frac{n!}{(n-k)!}.
+    $$
+    It's worth noticing that this arguments works when $n=0$ and/or
+    when $k=0$ or $k=n$.
+    $\tag*{$\Box$}$
+
+		<p>We have actually proved something non-obvious: For all $n$ and $k$ in
+		theorem, $n!$ is divisible by $(n-k)!\cdot k!$. <em>A priori</em> it was
+		not be clear why this should be the case.
+
+   <p><strong>Example.</strong> Suppose we want to pick the top three of <a
+     href="https://www.rollingstone.com/music/music-lists/taylor-swift-songs-ranked-rob-sheffield-201800/">Taylor
+     Swift's 229 songs</a>. If we're not ordering those songs as 1st/2nd/3rd,
+   then there are 
+   $$\binom{229}{3} = \frac{229!}{(229-3)!3!} = 
+   \frac{229\cdot 228\cdot 227}{3\cdot 2 \cdot 1} = 1975354
+   $$
+   ways to make this choice. Factorials and binomial coefficients get
+   big <em>very</em> quickly.
+
+   <p>The technique used in our small examples and in the theorem is called
+   <em>correcting for overcounting</em>, or sometimes <em>strategic
+   overcounting</em>. 
+
+	 <h3>Counting with Decision Processes</h3>
+
+   <p>When counting sampling with and without replacement, we justified
+   the formulas by appealing to the Multiplication Rule, or equivalently
+   to the fact that we could build a tree with the following properties:
+
+   <ol>
+     <li>The tree had a regular number of branches at each level.</li>
+     <li>Each outcome appeared on exactly one leave.</li>
+   </ol>
+
+   <p>We can use this trick for a lot more than just sampling with and without
+   replacement. It sometimes takes a little (or a lot) of cleverness, but one can
+   count many sets by constructing a <strong>decision process</strong> for
+   selecting an element of the set. A decision process is nothing more than a
+   sequence of decisions that leads to a particular outcome, analogous to
+   ordering a drink, and then a main course, and then a dessert at a restaurant.
+   If the decision process stages have $d_1,d_2,\ldots,d_\ell$ options at each
+   level then the tree has $d_1\cdot d_2\cdots d_\ell$ leaves, and hence so does
+   the set we're trying to count.
+
+   <p>Let's do some simple examples.
+
+   <p><strong>Example.</strong> 
+     How many "words" can we make from the letters in LALALALA?</li>
+     It has $8$ letters, but the answer is not $8!$ since some of
+     those arrangements give the same word (e.g. swapping the
+     A's around won't change the word).
+
+     <p>We can create a decision process for this problem as follows:
+     Begin with eight blanks, and then
+      <ol>
+      <li>Select four positions and put L's in them.</li>
+      <li>Put A's in the remaining positions.</li>
+      </ol>
+      <p>
+      There are $d_1 = \binom{8}{4}$ ways to the make the first choice, and $d_2
+      = 1$ way to make the second choice. The answer is thus $d_1\cdot d_2 =
+      \binom{8}{4}$.
+
+      <p>We could have selected positions from the A's first without changing
+      our answer.
+
+
+   <p><strong>Example.</strong> Let's do the same for the word
+   BANANA. The decision process begins with $6$ blanks, and is:
+      <ol>
+      <li>Select three positions and put A's in them.</li>
+      <li>Of the remaining three positions, select two and put
+        N's in them.</li>
+      <li>Put a B in the remaining position.</li>
+      </ol>
+      We have $d_1 = \binom{6}{3}$, $d_2 = \binom{3}{2}$, and $d_3 = 1$.
+      The answer is $\binom{6}{3}\binom{3}{2}$. Once again, we can
+      change the order of the decisions and get the same number.
+
+	 <h3>Strategic Overcounting with Decision Processes</h3>
+
+	 <p>The decision process approach combines well with strategic
+	 overcounting. One just needs to ensure that
+
+	 <ol>
+     <li>The tree has a regular number of branches at each level, say $d_1,\ldots,d_\ell$.</li>
+
+     <li>Each outcome appears on exactly $r$ leaves.</li>
+   </ol>
+	 <p>If you can build a tree like this, then the answer is
+	 $$
+	 \frac{d_1,\ldots,d_\ell}{r},
+	 $$
+	 based on the reasoning we used for binomial coefficients.
+
+	 <p>This approach gives us a different solution to the previous examples.
+
+	 <p><strong>Example.</strong> Let's do the LALALALA problem again.  Our
+	 decision process is now very simple: Pick an ordering for the letters. There
+	 are $d_1 = 8!$ ways to do this. But this overcounts each outcome. To see how many
+	 times, notice that there are $4!$ ways to arrange the L's without changing
+	 the word, and independently $4!$ ways to arrange the A's. Therefore each
+	 outcome is represented on $r=4!\cdot 4!$ leaves in tree. The answer is thus
+	 $d_1/r = \frac{8!}{4!\cdot 4!}$.
+
+	 <p>Similar reasoning for BANANA gives $\frac{6!}{3!\cdot 2!\cdot 1!}$.
+
+	 <p><strong>Example.</strong> How many ways are there to break a group
+	 of $4$ people into two teams of two for a basketball game? One possible
+	 decision tree is
+	 <ol>
+		 <li> Pick two of four for a team. ($d_1 = \binom{4}{2}$)
+		 <li> Put the remaining two on a team. ($d_2 = 1$)
+	 </ol>
+	 This tree has $\binom{4}{2}\cdot 1$ leaves. But it overcounts: For instance
+	 it will produce the division of teams $\{a,b\}$ and $\{c,d\}$ in two ways
+	 (by either picking $\{a,b\}$ or $\{c,d\}$ in the first step). But this
+	 overcounting covers every such division exactly twice, so we can
+	 correct it to $\binom{4}{2}/2$.
+
+	 <p><strong>Example.</strong> How many ways are there to break a group
+	 of $9$ into three groups of $3$? One decision process is
+	 <ol>
+		 <li> Pick three of nine for a team. ($d_1 = \binom{9}{3}$)
+		 <li> Pick three of the remaining six for a team. ($d_2 = \binom{6}{3}$)
+		 <li> Put the remaining three on a team. ($d_3 = 1$)
+	 </ol>
+	 This time, we're overcouting by $3!$, since an outcome can be reached
+	 by picking the three teams in any order. The answer is 
+	 $\binom{9}{3}\cdot \binom{6}{3}\cdot 1/3!$.
+
+	 <p><strong>Example.</strong> How many ways are there to break a group
+	 of $9$ into two groups with sizes $4$ and $5$? The obvious process
+	 for this one <em>does not overcount</em>, since the outcomes can't
+	 be reached in different ways. The answer here is $\binom{9}{5}\cdot 1$.
+
+	 <p><strong>Example.</strong> Suppose a group consists of five juniors and
+	 five seniors. How many ways are there the choose a committee of four people
+	 from this group, if we must select at least two seniors?
+
+	 <p>Here is a flawed decision process:
+	 <ol>
+		 <li> Pick two seniors. ($d_1 = \binom{5}{2}$)
+		 <li> Pick two of the remaining eight. ($d_2 = \binom{8}{2}$)
+	 </ol>
+	 <p>This process overcounts, and not in a nice way. Some committees
+	 will be counted exactly once (such as those consisting of exactly
+	 two seniors and two juniors) while others be will be counted more
+	 (like the committees with four seniors). For example, consider
+	 the choices
+	 <ol>
+		 <li> Pick seniors $S_1,S_2$ from $\{S_1,S_2,S_3,S_4,S_5\}$
+		 <li> Pick $S_3,S_4$ from $\{S_3,S_4,S_5,J_1,J_2,J_3,J_4,J_5,\}$
+	 </ol>
+	 and the choices
+	 <ol>
+		 <li> Pick seniors $S_3,S_4$ from $\{S_1,S_2,S_3,S_4,S_5\}$
+		 <li> Pick $S_1,S_2$ from $\{S_1,S_2,S_5,J_1,J_2,J_3,J_4,J_5,\}$
+	 </ol>
+	 <p>Both of these gives the committee $\{S_1, S_2, S_3, S_4\}$.
+
+	 <p>A correct approach is to count the complement: There are $\binom{10}{4}$
+	 committees, and we need to subtract those that have zero or one seniors.
+	 There are $\binom{5}{4}$ with zero seniors and $\binom{5}{1}\binom{5}{3}$
+	 with one senior. The answer is
+	 $$
+	 \binom{10}{4} - \binom{5}{4} - \binom{5}{1}\binom{5}{3}.
+	 $$
+	 (A good exercise is to explain the counting that was done quickly
+	 there.)
+
+	 <p>I also recommend Example 1.4.21 from <a
+		 href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">[BH]</a>.
+	 
+
+   <h3>Recommend Exercises</h3> 
+
+	<p>
+	<a href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Blitzstein and Hwang</a>, Section 1.9, Problems 1--11 
+
+	<p>Rosen, Section 6.3, has many good problems. 
+

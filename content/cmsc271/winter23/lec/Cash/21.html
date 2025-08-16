@@ -1,0 +1,200 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 21</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 21</h1>
+
+<h2>Functions of Random Variables</h2>
+
+  <p>Let $X:\Omega \to \mathbb{R}$ be a random variable and
+  $g:\mathbb{R}\to\mathbb{R}$ be a function. Then $g(X)$ is also
+  a random variable (it takes an element $\omega\in\Omega$ to
+  $X(w)$ and then to $g(X(w))$). For example, we can let $g(x) = x^2$,
+  and then $X^2$ is a random variable.
+
+  <p>We will be interested in understanding the distribution of $g(X)$
+  compared to the distribution of $X$. Our examples from the previous
+  lecture indicate we should exercise caution, and not for example
+  guess that $p_{g(X)}(x) = p_X(g(x))$ (it doesn't). Instead let's proceed
+  carefully.
+
+  <p>If $Y=g(X)$, then we want to understand the probabilities $\Pr(Y=x)$.
+  These are, by definition,
+  $$
+  \Pr(Y=x) = \Pr(g(X)=x) 
+  = \Pr(\{\omega \ : \ g(X(\omega)) = x\}).
+  $$
+  The set $\{\omega \ : \ g(X(\omega)) = x\}$ consists of $\omega\in\Omega$ such
+  that $X(\omega)$ equals some value $s$ such that $g(s) = x$. In the language
+  of sets, this is
+  $$
+  \{\omega \ : \ g(X(\omega)) = x\}
+  =
+  \bigcup_{s:g(s)=x} \{\omega \ : \ X(\omega) = s\}.
+  $$
+  These sets are disjoint (since $X(\omega)$ only takes one value for each
+  $\omega$), so the probabilities add, giving
+  $$
+  \Pr(\{\omega \ : \ g(X(\omega)) = x\})
+  =
+  \sum_{s:g(s)=x} \Pr(X = s).
+  $$
+  This is Theorem 3.7.3 of <a
+    href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">[BH]</a>.
+  At this point, we did Examples 3.7.2, 3.7.4, and 3.7.6 from that text.
+  
+
+  <h2>Independence of Random Variables</h2>
+
+  <p>The notion of independence for random variables is an intuitive adaptation
+  of the definition for events. We want to say that r.v.s $X,Y$ are independent
+  if knowing the outcome of one never affects the distribution of the other.
+  The next definition makes this precise.
+
+  <p><strong>Definition 21.1.</strong> We say that r.v.s $X,Y$ (on
+  the same sample space) are <strong>independent</strong> if for all
+  $x,y\in\mathbb{R}$,
+  $$
+  \Pr(X=x, Y=y) = \Pr(X=x)\Pr(Y=y).
+  $$
+  <p>The notation $\Pr(X=x, Y=y)$ means the probability that $X=x$ <em>and</em>
+  $Y=y$. It is less clunky than trying to use a "$\cap$" or other notation.
+  The definition for more than two random variables is a direct
+  adaptation of mutual independence for several events.
+
+  <p><strong>Example.</strong> If $X$ and $Y$ represent distinct
+  independent fair die rolls, then they are independent. For any
+  $x,y\in\{1,2,3,4,5,6\}$ we have
+  $$
+  \Pr(X=x, Y=y) = \frac{1}{36} = \frac{1}{6}\cdot\frac{1}{6}= \Pr(X=x)\Pr(Y=y). 
+  $$
+  If we let $S=X+Y$ and $D=X-Y$, we have that these r.v.s are not independent.
+  For instance, $\Pr(S=7, D=0) = 0$ since no die roll can have difference
+  zero and sum to an odd number, but $\Pr(S=7)\Pr(D=0) \gt 0$ because these
+  events individually have non-zero probability. Note that it was sufficient
+  to find one combination of $x,y$ for which these r.v.s violated Definition
+  21.1.
+
+  <p><strong>Example.</strong> Suppose we deal two cards from a standard deck,
+  and let $X$ be the number of Aces and $Y$ be the number of black cards.
+  Now it is less clear if these are independent are not. A simple calculation
+  shows that
+  $$
+  \Pr(X=2) = \frac{\binom{4}{2}}{\binom{52}{2}},
+  $$
+  $$
+  \Pr(Y=2) = \frac{\binom{26}{2}}{\binom{52}{2}},
+  $$
+  and
+  $$
+  \Pr(X=2, Y=2) = \frac{1}{\binom{52}{2}}.
+  $$
+  We have $\Pr(X=2, Y=2) \approx 0.00075$ but $\Pr(X=2)\Pr(Y=2) \approx 0.0011$.
+  Can you find an intuitive explanation? 
+
+  <h2>Expectations of Random Variables</h2>
+
+  <p>The following definition captures a notion of "weighted average" for 
+  random variables. It is extremely useful in understanding random variables,
+  especially complicated ones where just knowing a formula for their
+  distribution is not directly enlightening.
+
+  <p><strong>Definition 21.2.</strong> The <strong>expectation</strong> (or
+  <strong>expected value</strong> or <strong>mean</strong>) of a random
+  variable $X$, denoted $E(X)$, is
+  $$
+  E(X) = \sum_{x\in\mathbb{R}} x \Pr(X=x).
+  $$
+
+  <p><strong>Example.</strong> If $X$ is a fair die roll, then
+  $$
+  E(X) = 1\cdot \frac{1}{6} + 2\cdot \frac{1}{6} +3\cdot \frac{1}{6} +4\cdot
+  \frac{1}{6} +5\cdot \frac{1}{6} + 6\cdot \frac{1}{6} = 3.5.
+  $$
+
+  <p><strong>Example.</strong> If $X$ is the number of spades in a five
+  card poker hand, then
+  $$
+  E(X) = 
+  0\cdot \frac{\binom{39}{5}}{\binom{52}{5}} + 
+  1\cdot \frac{\binom{13}{1}\binom{39}{4}}{\binom{52}{5}} + 
+  2\cdot \frac{\binom{13}{2}\binom{39}{3}}{\binom{52}{5}} + 
+  3\cdot \frac{\binom{13}{3}\binom{39}{2}}{\binom{52}{5}} + 
+  4\cdot \frac{\binom{13}{4}\binom{39}{1}}{\binom{52}{5}} + 
+  5\cdot \frac{\binom{13}{5}}{\binom{52}{5}}.
+  $$
+  That looks awful, but, remarkably, it simplifies down to $5/4$. We
+  will unravel why in the next lecture.
+
+  <p><strong>Theorem 12.3.</strong> If $X\sim\mathrm{Bern}(p)$, then
+  $E(X) = p$.
+  <p><em>Proof.</em> The only values that $X$ takes with non-zero
+  probability are $0$ and $1$, so
+  $$
+  E(X) = 0\cdot\Pr(X=0) + 1\cdot\Pr(X=1) = \Pr(X=1) =p.$$
+    $\tag*{$\Box$}$
+
+
+  <p><strong>Theorem 12.4.</strong> If $X\sim\mathrm{Bin}(n,p)$, then
+  $E(X)=np$.
+  <p><em>Proof.</em>   We will give an easier proof of this next time.
+  Here is a direct proof, following standard proofs like <a
+                                        href="https://proofwiki.org/wiki/Expectation_of_Binomial_Distribution">this
+  one</a>.
+  \begin{align*}
+  E(X) &= \sum_{k=0}^n k \Pr(X=k) \\
+  &= \sum_{k=0}^n k \binom{n}{k}p^k(1-p)^{n-k} \\
+  &= \sum_{k=1}^n k \binom{n}{k}p^k(1-p)^{n-k} 
+  \end{align*}
+  The only difference in last equality is that the $k=0$ term
+  is dropped from the sum; It is zero.
+
+  <p>Now we'll use an identity which says that for all positive $k,n$
+  with $k\leq n$,
+  $$
+  k\binom{n}{k} = n \binom{n-1}{k-1}.
+  $$
+  You can prove this algebraically, or better, with a combinatorial
+  proof. Applying this we get
+  \begin{align*}
+  \sum_{k=1}^n k \binom{n}{k}p^k(1-p)^{n-k} 
+  &= \sum_{k=1}^n n \binom{n-1}{k-1}p^k(1-p)^{n-k}  \\
+  &= np \sum_{k=1}^n \binom{n-1}{k-1}p^{k-1}(1-p)^{(n-1)-(k-1)}. 
+  \end{align*}
+  Now let $m=n-1$, relabel the sum to go from $j=0$ to $m$ instead
+  of $k=1$ to $n$, and then apply the Binomial Theorem: 
+  \begin{align*}
+  np \sum_{j=0}^m \binom{m}{j}p^{j}(1-p)^{m-j} 
+  = np (p + (1-p))^m 
+  = np.
+  \end{align*}
+    $\tag*{$\Box$}$
+
+
+<h3>Recommend Exercises</h3> 
+
+  <p>
+	<a
+    href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Blitzstein
+    and Hwang</a>, Section 4.12,  Problems 2, 4, 6, 7, 8(a) and (c).
+    A few of these problems ask about variance.  You can ignore those parts
+    until we cover variance in Lecture 23.
+

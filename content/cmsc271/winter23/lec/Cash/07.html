@@ -1,0 +1,330 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 7</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 7</h1>
+
+	<h2>Greatest Common Divisors and Euclid's Algorithm</h2>
+
+	This lecture will cover greatest common divisors (GCDs) and build towards
+	one of the most famous algorithms of all time: Euclid's algorithm for
+	computing GCDs. We begin with some definitions.
+    
+		<p><strong>Definition 7.1.</strong> Let $d \gt 0$ be an integer. We
+		define the functions $n \mathop{\mathbf{div}} d = q$ and $n
+		\mathop{\mathbf{mod}} d = r$, where $q$ and $r$ are as defined by the
+		Division Theorem (6.6).
+
+		<p>For example, $17 \mathop{\mathbf{div}} 5= 3$ and 
+		$17 \mathop{\mathbf{mod}} 5= 2$.
+
+		<p>These functions are defined as in the Rosen textbook and are standard
+		definitions. We can think of $\mathbf{div}$ as the integer division
+		operation in many programming languages that just returns the quotient and
+		$\mathbf{mod}$ is the modulus operator. 
+
+		<p>Rigorously speaking, the domain of both functions is
+		$\mathbb{Z}\times\mathbb{N}$ (i.e., they take $n$ and $d$ as input).
+		Instead of writing $\mathop{\mathbf{div}}(n,d) = q$, we use the "infix"
+		notation in the definition, but it is not any less rigorous.
+
+		<p><strong>Definition 7.2.</strong> The set of divisors of $n$ is defined
+		by $\operatorname{Div}(n) = \{a : a \mid n\}$.
+
+		<p>For example, $\operatorname{Div}(10) = \{-10,-5,-2,-1,1,2,5,10\}$.
+		(Sorry for messing that up in Lecture!)
+
+		<p>This is a nice definition because it is obvious what the common divisors
+		of $m$ and $n$ are supposed to be: the intersection of
+		$\operatorname{Div}(m)$ and $\operatorname{Div}(n)$.
+
+		<p><strong>Definition 7.3.</strong> If $m$ and $n$ are integers with $m
+		\neq 0$ or $n \neq 0$, then the <strong>greatest common divisor</strong> of
+		$m$ and $n$, denoted $\gcd(m,n)$, is the largest element of
+		$\operatorname{Div}(m) \cap \operatorname{Div}(n)$.  
+
+		<p>From the way we've defined this, it's not entirely obvious that the GCD
+		should exist. <em>Without loss of generality</em>, let $m \neq 0$ (the
+		phrase "without loss of generality" means that our assumption does not
+		materially change the proof that follows; We know that $m\neq 0$ or $n\neq
+		0$, and which case holds will only affect the notation going forward.). 
+		
+		<p> Since $m\neq 0$, $\operatorname{Div}(m)$ has a largest element $|m|$
+		and a smallest element $-|m|$ (Exercise: Carefully verify this; You can
+		use the fact that if $a|b$ and $b>0$, then $a\leq b$, which will be
+		proved in the discussion sections.).  This
+		means that $\operatorname{Div}(m)$ is finite and that
+		$\operatorname{Div}(m) \cap \operatorname{Div}(n)$ is also finite.  Since 1
+		is a divisor for every integer, we know that $1 \in \operatorname{Div}(m)
+		\cap \operatorname{Div}(n)$, which means that $\operatorname{Div}(m) \cap
+		\operatorname{Div}(n)$ is non-empty. Since it's not empty and finite, the
+		set $\operatorname{Div}(m) \cap \operatorname{Div}(n)$ must contain a
+		largest element, which is defined to be the GCD.
+
+		<h3>Bézout's Identity</h3>
+
+		<p>From the Division Theorem, we get the following result about the GCD by
+		Étienne Bézout in the mid-1700s. 
+
+		<p><strong>Theorem 7.4 (Bézout's Identity).</strong> For all integers $m$
+		and $n$ where $m$ or $n$ is nonzero, there exist integers $a$ and $b$ such
+		that $\gcd(m,n) = a m + bn$.
+
+		<p>This theorem is harder to prove than our examples from last time. It
+		is also our first example of a proof that becomes much easier
+		using the <em>contrapositive</em>.
+
+		<p><em>Proof.</em> Consider the set $S = \{am + bn \mid a,b \in \mathbb
+		Z\}$. Then $S$ contains at least one positive element (say $mm + nn = m^2
+		+n^2$, which is positive because at least one of $m,n$ is non-zero).
+		Therefore $S$ contains a smallest positive element, which we can
+		denote $\min (S \cap \mathbb{N})$. We will show that this number
+		is equal to $\gcd(m,n)$.
+		
+		<p>Our proof will proceed by proving the following two lemmas. We
+		first state them and show how they imply the theorem.
+
+		<blockquote><strong>Lemma 1.</strong> For all
+		$c\in S \cap \mathbb{N}$, if $c = \min (S \cap \mathbb{N})$ then
+		$c \in \operatorname{Div}(m) \cap \operatorname{Div}(n)$.
+		</blockquote>
+
+		<blockquote><strong>Lemma 2.</strong> For all
+		$c \in \operatorname{Div}(m) \cap \operatorname{Div}(n)$,
+		$c \leq \min (S \cap \mathbb{N})$.
+		</blockquote>
+
+		Now let's assume these lemmas are true and prove the theorem.  By the first
+		lemma,  $\min (S \cap \mathbb{N})$ is a common divisor of $m$ and $n$. By
+		the second lemma, any other common divisor is less than or equal to $\min
+		(S \cap \mathbb{N})$. Thus $\min (S \cap \mathbb{N})$ is, by definition,
+		equal to $\gcd(m,n)$.
+    $$\tag*{$\Box$}$$
+
+		We declared victory using the $\Box$ symbol, but we still have to
+		prove the lemmas.
+
+		<p><em>Proof of Lemma 1.</em> We employ a new trick here: Let's
+		prove the contrapositive, which is equivalent to the lemma.
+		This means we only need to prove:
+
+		<blockquote><strong>Contrapositive of Lemma 1.</strong> For all
+		$c\in S \cap \mathbb{N}$, 
+		if $c \notin \operatorname{Div}(m) \cap \operatorname{Div}(n)$,
+		then $c \neq \min (S \cap \mathbb{N})$.
+		</blockquote>
+
+		It's a little hard to explain why this is easier to prove, but it is a
+		common phenomenon. Let's dive in: Let $c\in S \cap \mathbb{N}$, and assume
+		$c \notin \operatorname{Div}(m) \cap \operatorname{Div}(n)$.  Without loss
+		of generality, assume $c$ does not divide $m$. We must show that
+		$c \neq \min (S \cap \mathbb{N})$. We'll do this by finding a smaller
+		element of that set.
+		
+		<p>
+		Since $c\in S$, there exist $a,b\in\mathbb{Z}$ such that $c=am+bn$.	
+		By the Division Theorem,
+		there exist $q,r\in\mathbb{Z}$ such that $m = qc +r$ and $0\leq r \lt c$.
+		We know that $r\neq 0$, because otherwise $c$ would divide $m$. We
+		<em>also</em> know that $r\in S \cap \mathbb{N}$, since we can write
+		\begin{align*}
+    r &= m - qc \\
+    &= m - q(am + bn) \\
+    &= (1-qa)m + (-bq)n \in S.
+		\end{align*}
+		But $r \in S \cap \mathbb{N}$ and $r\lt c$, so
+		$c \neq \min (S \cap \mathbb{N})$, as desired.
+    $$\tag*{$\Box$}$$
+
+		Next up is the proof of the second lemma:
+
+
+		<p><em>Proof of Lemma 2.</em> We can do this one directly.
+		Let $c\in \operatorname{Div}(m) \cap \operatorname{Div}(n)$. We will
+		show that $c$ divides $\min (S \cap \mathbb{N})$. Since $\min (S \cap
+		\mathbb{N})$ is positive, this will show that $c \leq \min (S \cap
+		\mathbb{N})$, as desired.
+
+		<p>Our assumption on $c$ implies there exist $s,t\in\mathbb{Z}$ such that
+		$cs=m$ and $ct=n$. Since $\min (S \cap \mathbb{N})\in S$, there exist
+		there exist $a,b\in\mathbb{Z}$ such that $\min (S \cap \mathbb{N})=am+bn$.
+		Then we have
+    \begin{align*}
+    \min (S \cap \mathbb{N}) &= am + bn \\
+    &= acs + bct \\
+    &= c \cdot (as + bt)
+    \end{align*}
+    Therefore, $c \mid \min (S \cap \mathbb{N})$, completing the proof.
+    $$\tag*{$\Box$}$$
+
+		<h3>Euclid's Algorithm</h3>
+
+		<p>Bézout's identity is interesting in that it provides a characterization
+		for the GCD of $m$ and $n$. Suppose we have $m$, $n$, and what we think is
+		$\gcd(m,n)$. Is there a way to check that the GCD is really correct without
+		computing it? If we had the coefficients of Bézout's identity for $m$ and
+		$n$, then we could check very easily. Of course, we're getting a bit ahead
+		of ourselves, but keep this idea in mind while we tackle a more immediate
+		question: how does one compute the GCD? 
+
+		<p>The obvious way to do this is to compute the set of divisors for $m$ and
+		$n$, compute their intersection, and take the largest element in the
+		intersection. The big problem with this approach is that factoring integers
+		is a notoriously hard problem to solve efficiently. There are some
+		heuristics that we can apply and some tricks that we can pull, but in
+		general we do not have a fast algorithm for factoring numbers. This fact
+		happens to be the backbone of many public-key cryptographic systems we use
+		today.
+
+		<p>However, if all we care about is the <em>greatest</em> common divisor
+		and not any of the other divisors, then the following theorem will get us
+		there efficiently.
+
+		<p><strong>Theorem 7.5.</strong> 
+		For all positive integers $a,b$, 
+		$$
+			\gcd(a,b) = \gcd(b,a \mathop{\mathbf{mod}} b).
+		$$
+
+		This theorem is actually true for negative integers as well, but we'll
+		settle for this version.
+
+		<p><em>Proof.</em> Let $a$ and $b$ be arbitrary positive integers. Let $q$
+		be such that $a = qb + r$. (Note that we're using that $b$ is positive and
+		thus non-zero in order to apply the Division Theorem here.) Let $d =
+		\gcd(a,b)$ and $r=a \mathop{\mathbf{mod}} b$. We will show that $d =
+		\gcd(b,r)$ as well.
+		
+		<p> We first show that $d$ is a common divisor of $b$ and $r$; For this we
+		only need to show that $d|r$.  Since $d \mid q$, $d\mid qb$. We also know
+		that $d|a$, so putting these together we have that $d\mid (a-qb)$, i.e.
+		$d|r$. Thus $d$ is a common divisor of $b$ and $r$.
+
+		<p>
+		Now consider an arbitrary common divisor $c$ of $b$
+		and $r$. If we can show $c\leq d$, then we're done; We will
+		have shown that $d$ is larger than any other common divisor of $a$ and $b$.
+		
+		<p>
+		Since $c \mid b$ and $c \mid r$, we have that 
+		$c \mid (qb+r) = a$, so $c$
+		is also a common divisor for $a$. 
+		Thus $c$ is a common divisor of $a$ and $b$, and hence it must be
+		less than their greatest common divisor, which is $d$.
+		Therefore, $\gcd(b,r) = d = \gcd(a,b)$.  $$\tag*{$\Box$}$$
+
+    <p>This result gives us a way to compute the GCD:
+    $$\gcd(a,b) = \begin{cases} a & \text{if $b = 0$,} \\ \gcd(b, a \mathop{\mathbf{mod}} b) & \text{otherwise.} \end{cases}$$
+
+    <p>This algorithm is called Euclid's algorithm, named after Euclid who describes it in the Elements. Euclid is the Greek mathematician from around 300 BC who, in the Elements, describes a lot of the elementary geometry, algebra, and number theory that we learn in school.
+
+    <p><strong>Example 5.4.</strong> Suppose we want to compute the GCD of 232 and 72. We apply Euclid's algorithm as follows:
+    \begin{align*}
+    \gcd(232,72) &= \gcd(72,16) \\
+    &= \gcd(16,8) \\
+    &= \gcd(8,0) \\
+    &= 8
+    \end{align*}
+
+		<p>This leads us to the notion of the existence of an <em>Extended</em>
+		Euclidean algorithm. The EEA is an algorithm that computes the GCD of $m$
+		and $n$ <em>and</em> the coefficients $a$ and $b$ from Bézout's lemma. We
+		can treat these coefficients as a certificate or sanity test that the GCD
+		we computed was really correct without having recompute the entire thing
+		later on. The EEA gives us a way to compute the GCD so that without doing a
+		lot of extra work, $a$ and $b$ fall out almost for free.
+
+
+
+		<h3>Recommended Exercises</h3>
+
+		<p>From Rosen, 8th Edition: Section 4.3, #32, #33 for practice running
+		the Euclidean Algorithm.
+
+		<p>From Rosen, 8th Edition: See Section 1.7.6. for more discussion
+		on using the contrapositive trick. Section 1.7, #19 and #20 are good
+		practice for simple applications of this technique (we will discuss
+		the "contradiction" part of those problems later).
+
+		<p>Here are some well-known exercise for practice finding proofs. 
+		They are significantly more challenging that the previous exercises.
+		
+		<ul> 
+			
+			<li>An integer $a$ is <em>even</em> if $2\mid a$. Prove that if
+				$a$ is even, then $\gcd(a,a+2)=2$.
+
+			<li>Let $a$ be a positive integer. Find $\gcd(a,a+1)$, and prove
+				your answer is correct.
+
+			<li>Let $a,b,c$ be a positive integer. Find $\gcd(ac,bc)$ in terms of
+				$\gcd(a,b)$, and prove your answer is correct.
+			
+			<li>Prove that for all $a,b,c\in \mathbb{Z}$ with $b\neq 0$, there
+				exist $x,y\in\mathbb{Z}$ if and only if $\gcd(a,b)|c$.  (Your proof
+				will use Bézout's Identity. Remember to prove "both directions" of the
+				if-and-only-if.)
+
+			<li>Prove that for any $a,b\in\mathbb{N}$, if $\gcd(a,b)=1$ then
+				$\gcd(a,b^2)=1$.
+
+			<li>Prove that for any $a,b\in\mathbb{N}$, if $\gcd(a,b)=1$ then
+				$\gcd(a^2,b^2)=1$. (You can use the previous exercise to give short
+				proof.)
+
+		</ul>
+
+    <!--
+    <p>How does it work? For two integers $x$ and $y$, we iteratively compute the following values:
+    <ul>
+        <li>$a_i = a_{x,i} \cdot x + a_{y,i} \cdot y$,
+        <li>$b_i = b_{x,i} \cdot x + b_{y,i} \cdot y$,
+        <li>$\gcd(a_i,b_i) = \gcd(x,y)$.
+    </ul>
+    <p>using initial values
+    <ul>
+        <li>$a_0 = x, a_{x,0} = 1, a_{y,0} = 0$, and
+        <li>$b_0 = y, b_{x,0} = 0, b_{y,0} = 1$.
+    </ul>
+
+    <p>We then compute $q$ and $r$ by computing the following:
+    \begin{align*}
+    r &= a_i - q \cdot b_i \\
+    &= (a_{x,i} \cdot x + a_{y,i} \cdot y) - q \cdot (b_{x,i} \cdot x + b_{y,i} \cdot y) \\
+    &= (a_{x,i} - q \cdot b_{x,i}) + (a_{y,i} - q \cdot b_{y,i}) \cdot y.
+    \end{align*}
+    <p>Once we have these values, we can set the next iteration by
+    <ul>
+        <li>$a_{i+1} = b_i, a_{x,i+1} = b_{x,i}, a_{y,i+1} = b_{y,i}$,
+        <li>$b_{i+1} = r, b_{x,i+1} = a_{x,i} - q \cdot b_{x,i}, b_{y,i+1} = a_{y,i} - q \cdot b_{y,i}$.
+    </ul>
+
+    <p><strong>Example 4.15.</strong> Repeating our computation from above, we set $x = 232$ and $y = 72$. The EEA gives us the following.
+
+    <table>
+    <tr><th>$i$ <th>$a$ <th>$a_x$ <th>$a_y$ <th>$b$ <th>$b_x$ <th>$b_y$
+    <tr><td>1 <td>232 <td>1 <td>0 <td>72 <td>0 <td>1
+    <tr><td>2 <td>72 <td>0 <td>1 <td>16 <td>1 <td>-3
+    <tr><td>3 <td>16 <td>1 <td>-3 <td>8 <td>-4 <td>13
+    <tr><td>4 <td>8 <td>-4 <td>13 <td>0 <td>9 <td>-29
+    </table>
+    <p>From the final row of the table, we get $\gcd(232,72) = 8, a = -4, b = 13$. Put together, we check $8 = 232 \cdot (-4) + 72 \cdot 13$.
+    -->

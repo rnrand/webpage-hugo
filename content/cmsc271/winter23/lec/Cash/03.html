@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 3</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 3</h1>
+
+    <h2>Predicate logic</h2>
+
+    <p>Now, one thing you might notice is that propositions as we've defined them don't quite let us say everything we may want to. For instance, if I wanted to talk about some property about integers, I can certainly define propositions for them. However, there's no way to relate the various propositions about integers to the fact that we're talking about the same kinds of objects. For that, we need to expand our language a bit further. The extension that we'll be talking about is called <em>predicate</em> or <em>first-order</em> logic.
+
+    <p>First, we need to determine a <strong>domain</strong> of discourse, which is the set to which all of our objects belong. This can be something like the natural numbers $\mathbb N$ or the integers $\mathbb Z$ or matrices or functions or graphs and so on. There's also nothing stopping us from making our domain the set of all dogs, if what we really wanted to do was express statements about dogs, or other "real-world" types of objects. This occurs less in math but more in places like database theory. 
+    
+    <p>This brings us to an important thing to keep in mind: statements that may be true in one domain will not necessarily be true in another domain. Obviously, statements that we make about integers will not necessarily hold true for dogs, but it is important to remember that the same could be said for integers vs. natural numbers.
+
+    <p><strong>Definition 2.1.</strong> Here are some useful domains/sets:
+    <ul>
+    <li>the set of <strong>integers</strong>, $\mathbb Z = \{\dots, -3, -2, -1, 0, 1, 2, 3, \dots \}$,
+    <li>the set of <strong>natural numbers</strong>, $\mathbb N = \{1, 2, \dots\}$,
+    <li>the set of <strong>real numbers</strong>, $\mathbb R$,
+    <li>the set of <strong>rational numbers</strong>, $\mathbb Q$,
+    <li>the set of <strong>complex numbers</strong>, $\mathbb C$.
+    </ul>
+
+    <p>Note that in this course, <strong>we do not consider 0 to be a natural number</strong>. Not everyone agrees!
+
+    <p>Then, we want to express properties and relationships about the objects in our domain. For this, we need to define <strong>predicates</strong>. Predicates have an <em>arity</em> associated with them. A $k$-ary predicate is a predicate with $k$ arguments. So a unary or 1-ary predicate would be expressing some property of a particular object, while predicates with arity greater than 1 can be thought of as expressing some relationship between a number of objects.
+
+    <p><strong>Example 2.2.</strong> For example, if we define $E$ to be a unary predicate that expresses the evenness property, then we can say that $E(x)$ means "$x$ is an even number". We would then have $E(12000)$ is true while $E(765)$ is false.
+
+    <p>The less-than relation is another example of a predicate, although because it's pretty important, we've given it its own symbol and usage. We can define a predicate $L(x,y)$ to mean "$x$ is less than $y$" or "$x \lt y$". Then we can say that $L(3,30)$ is true and $L(30,3)$ is false.
+
+    <p>In the previous examples, almost instinctively, we used both concrete objects and <strong>variables</strong> with our predicates. When we use specific objects with predicates, our statements are not all that different from propositions. However, variables are considered placeholders for objects in the domain and it's the use of variables, together with <strong>quantifiers</strong>, that gives us more expressive power than propositional logic.
+
+    <p><strong>Definition 2.3.</strong> The symbol $\forall$ is called the <strong>universal quantifier</strong> and is read "for all". The symbol $\exists$ is called the <strong>existential quantifier</strong> and is read "there exists".
+
+    <p>Basically, we use $\forall$ when we want to make a statement about all objects in our domain and we use $\exists$ when we want to say that there is some object out there in our domain that has a particular property.
+
+    <p><strong>Example 2.4.</strong> We can use predicates and quantifiers together with the logical connectives we introduced with propositional logic to say things like $\forall x (E(x) \rightarrow \neg E(x+1))$. If we take our domain to be $\mathbb Z$, this says that for every integer $x$, if $x$ is even, then $x+1$ is not even.
+
+    <p><strong>Example 2.5.</strong> Let's fix our domain to be $\mathbb N$. Recalling our less than predicate $L$ from above, we can consider the following proposition:
+    $$\forall x \exists y L(x,y).$$
+    This reads "for every natural number $x$, there exists a natural number $y$ such that $x \lt y$". This statement turns out to be true: every natural number does have some other natural number that it's less than. Now, let's consider the following similar statement, where the order of the quantifiers is reversed:
+    $$\exists y \forall x L(x,y).$$
+    Here, we're saying that there is a natural number $y$ for which every other natural number $x$ is less than it. In other words, this says that there is a "biggest" natural number, which is obviously not true. As we can see, the order of the quantifiers matters.
+
+    <p><strong>Example 2.6.</strong> Remember that the domain is important. For instance, if we are working in $\mathbb N$ and we modify the above example slightly to $\forall x \exists y L(y,x)$, we have the statement that "for every natural number $x$, there is some natural number $y$ that is less than $x$". This statement is false if we consider $x = 0$. However, this statement is true if our domain is $\mathbb Z$ (for every integer $x$, there is some integer $y$ that is less than $x$).
+
+    <p>Something we have just run into is the negation of a quantified statement. We have the following logical equivalences:
+
+    <p><strong>Theorem 2.7.</strong>
+    \begin{align*}
+    \neg \forall x \varphi &\iff \exists x \neg \varphi \\
+    \neg \exists x \varphi &\iff \forall x \neg \varphi \\
+    \end{align*}
+    <p>We can consider this to be a generalized version of De Morgan's laws for quantifiers.
+
+    <p>Let's take a moment to think about what this is saying. 
+    <ul>
+        <li>If $\neg \forall x \varphi$, then this means that $\varphi$ isn't true for all $x$ in the domain and there is some element, say $a$ such that $\neg \varphi$. Thus, $\exists x \neg \varphi$.
+        <li>If $\exists x \neg \varphi$, then there is an element, say $a$ such that $\neg \varphi$ is true. Therefore, $\varphi$ isn't true for every element in the domain and we have $\neg \forall x \varphi$.
+        <li>If $\neg \exists x \varphi$, then there is no element in the domain such that $\varphi$ is true. This means that for every element in the domain, $\neg \varphi$ is true and we have $\forall x \neg \varphi$.
+        <li>If $\forall x \neg \varphi$, this means that $\varphi$ is false for every element in the domain. In other words, there is no element in the domain that makes $\varphi$ true and we have $\neg \exists x \varphi$.
+    </ul>
+
+    <p><strong>Example 2.8.</strong> Taking our example $\forall x (E(x) \rightarrow \neg E(x+1)$, we can think about what the <em>negation</em> of this statement might be. Of course, we can begin by slapping on a negation:
+    $$\neg \forall x (E(x) \rightarrow \neg E(x+1)).$$
+    Is there anything more we can do to clarify what this statement means though? We can make use of the negation of quantified statements that were just mentioned:
+    $$\exists x \neg(E(x) \rightarrow \neg E(x+1)).$$
+    From here, we can make use of the propositional equivalences we saw earlier. Applying the implication equivalence gets us
+    $$\exists x (\neg (\neg E(x) \vee \neg E(x+1))).$$
+    Now we can use De Morgan's laws together and eliminate the resultant double negations to get
+    $$\exists x (E(x) \wedge E(x+1)).$$
+    Now, this statement says that there exists an integer $x$ such that $x$ is even and $x+1$ is even.
+
+    <p>The final statement we arrived at makes it much more clear what the negation of our original statement actually meant. Obviously, since it was so simple, we could have probably guessed what it meant without going through the formal process of applying inference rules. However, if you're faced with proving some proposition, it is helpful to try to methodically translate the statement to formal logic and consider what it is saying in this way to make it more clear what it is you need to prove.
+
+    <p>Speaking of proof, we can define new inference rules for predicate logic more carefully so that, together with our rules from propositional logic, we have a proof system for predicate logic too. Then we can ask the same questions of whether our new proof system coincides with the semantic notion of truth in first-order logic. This is much less obvious than in propositional logic, where we simply needed to figure out whether a proposition was true or not. In first-order logic, we also have to think about the domain and how predicates are defined.
+
+    <p>In other words, in order for a first-order sentence to be "true", it has to be true for every single interpretation (domain, definitions of predicates, etc.). In propositional logic, each row of a truth table is considered an "interpretation" and we only had as many as $2^n$ of them for $n$ propositional variables; i.e. it was finite. For predicate logic, the number of potential interpretations is infinite. Luckily, Kurt Gödel proved in 1930 that there is a proof system that coincides with semantic truth for predicate logic. This is called the Completeness Theorem.
+
+    <p>Now, just because Gödel showed that there's a proof out there for every "true" formula doesn't mean that we necessarily have a way of finding it. This is the question that Hilbert asked in 1928: is there a way to "algorithmically" figure out whether a first-order sentence is true or not (although he wouldn't have used quite the same terminology)? If the answer is yes, this process would basically give us a proof of the validity of that sentence. But the answer is no; to prove this, Alan Turing basically invented the notion of a computer (mathematically) in 1936.
+
+    <p>You might wonder why predicate logic is called first-order logic and whether that means there is a second-order logic. First-order logic is an extension of propositional logic which does not allow for any quantification. First-order logic adds quantification over elements of the domain. Second-order logic extends first-order logic by adding quantification over predicates. And of course, you can guess that mathematicians have continued in this pattern since.
+
+
+    

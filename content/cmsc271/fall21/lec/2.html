@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 2</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+<script>
+MathJax = {
+  loader: {load: ['[tex]/bussproofs']},
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+	packages: {'[+]': ['bussproofs']}  
+  },
+  svg: {
+    fontCache: 'global'
+  }  
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 2</h1>
+
+
+	<h3>Natural Deduction</h3>
+
+    <p> As we can see, truth tables can get very large: if you have $n$ different propositional variables, you're looking at a truth table of size $2^n$. To avoid this, we use <em>inference rules</em> to allow us to deduce propositions from other propositions. In this class we will use a system called <em>natural deduction</em>, though several equivalent systems exists. In natural deduction, we write
+\begin{prooftree}
+\AxiomC{P}
+\UnaryInfC{Q}
+\end{prooftree}
+to say that we can conclude Q on the basis of P.
+
+<p>For every connective we have some number of <em>introduction</em> and <em>elimination</em> rules, which respectively allow us to derive a proposition and to use one. To illustrate this, let's start with the introduction and elimination rules for $\wedge$.
+\begin{prooftree}
+\AxiomC{$P$}
+\AxiomC{$Q$}
+\RightLabel{$\wedge$-I$\qquad$}
+\BinaryInfC{$P \wedge Q$}
+\AxiomC{$P \wedge Q$}
+\RightLabel{$\wedge$-E-L$\qquad$}
+\UnaryInfC{$P$}
+\AxiomC{$P \wedge Q$}
+\RightLabel{$\wedge$-E-R}
+\UnaryInfC{$Q$}
+\end{prooftree}
+
+<p>The introduction rule $\wedge$-I says that if we know that $P$ is true and that $Q$ is true, we can derive that $P \wedge Q$ is true. Conversely the elimination rules $\wedge$-I-L and $\wedge$-I-R say that if I know that $P \wedge Q$ is true then I may derive that $P$ is true (the "L", or left elimination rule) or that $Q$ is (the right elimination rule).
+	
+<p>For "Or" we have two introduction rules and only a single, slightly more complex, elimination rule:
+\begin{prooftree}
+\AxiomC{$P$}
+\RightLabel{$\vee$-I-L$\qquad$}
+\UnaryInfC{$P \vee Q$}
+\AxiomC{$Q$}
+\RightLabel{$\vee$-I-R$\qquad$}
+\UnaryInfC{$P \vee Q$}
+\AxiomC{$P \vee Q$}
+\AxiomC{$P \to R$}
+\AxiomC{$Q \to R$}
+\RightLabel{$\vee$-E}
+\TrinaryInfC{$R$}
+\end{prooftree}
+
+The left and right introduction rules are both straightforward: Given $P$ or $Q$, we can derive that $P \vee Q$. However, the reverse direction isn't so easy: $P \vee Q$ doesn't tell us which of $P$ and $Q$ is true. Instead, we need to know that $P$ implies $R$ and so does $Q$. Using these two additional pieces of information, we can derive that $R$ is true.
+
+<p>Finally we get to implication. The elimination rule for implication is straightforward: If we know that $P \to Q$ and also know that $P$ is true, we can derive $Q$. This is such an old and fundamental rule that it has a well-known latin name, <em>modus ponendo ponens</em>, or modus ponens for short (in English "the mode where affirming affirms"). 
+	
+<p>The introduction rule for $\to$ is slightly more complex:
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{$n$}
+\UnaryInfC{$P$}
+\UnaryInfC{$\vdots$}
+\UnaryInfC{$Q$}
+\RightLabel{$\to$-I-$n\qquad\qquad$}
+\UnaryInfC{$P \to Q$}
+\qquad
+\AxiomC{$P$}
+\LeftLabel{$\qquad\qquad$}
+\AxiomC{$P \to Q$}
+\RightLabel{$\to$-E}
+\BinaryInfC{$Q$}
+\end{prooftree}
+This says that if we assume $P$ and are eventually able to conclude $Q$, we can remove $P$ as an assumption (via the top horizonal bar) and conclude that $P \to Q$. We will annotate both the final step in our deduction and the top vertical bar with a number (here represented by $n$) so that we can tell which assumption is being discharged. 
+
+<p>Returning to our earlier theorem that $A \to (B \to A)$, we can produce the following proof:
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{$1$}
+\UnaryInfC{$A$}
+\AxiomC{}
+\RightLabel{$2$}
+\UnaryInfC{$B$}
+\RightLabel{$\wedge$-I}
+\BinaryInfC{$A \wedge B$}
+\RightLabel{$\wedge$-E-L}
+\UnaryInfC{$A$}
+\RightLabel{$\to$-I-$2$}
+\UnaryInfC{$B \to A$}
+\RightLabel{$\to$-I-$1$}
+\UnaryInfC{$A \to (B \to A)$}
+\end{prooftree}
+	
+<p>Note that we discarded $B$ fairly early in this derivation. That's fine! Unlike $A$, $B$ wasn't important to the proof, we merely needed to assume it in order to discharge it in $\to$-I$(2)$. You can think of think as a convoluted extension of the simple fact that $A \to A$. (Try proving this!)
+	
+<p>What about negation? Most deductive systems treat $\neg P$ as simple shorthand for $P \to \bot$, which we read as "P implies false". $\bot$ comes with a single elimination rule:
+\begin{prooftree}
+\AxiomC{$\bot$}
+\RightLabel{$\bot$-E}
+\UnaryInfC{$P$}
+\end{prooftree}
+<p> Note that the $P$ on the bottom can be any statement in propositional logic. Essentially, this says that if everything is a lie, then everything is true (or, as a programmer might say, "you broke the world"). This is also important enough to have earned its own Harry Potter-style incantation, <em>ex falso quodlibet</em> ("from fallacy, anything follows"), and Marvel-movie name, the "principle of explosion".
+	
+<p>The rules we have seen are powerful enough to give us <em>intuitionistic logic</em>, a system popular among type theorists that allows for the possibility that neither $P$ nor $\neg P$ holds. Here we care about <em>classical</em> logic, which believes every statement must be true or false, so we'll add the following axiom to that effect:
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{LEM}
+\UnaryInfC{$P \vee \neg P$}
+\end{prooftree}
+
+<p> We call this the "Law of the the Excluded Middle" and can freely assume it in any proof.
+
+<p> Our system is now <em>complete</em>. This means that any tautology (statement that is always true) can be drived using the inference rules above. Clearly, it is also <em>sound</em>, meaning that we can't prove any non-tautologies in the system.
+Classical propositional logic was shown to be complete by Emil Post in 1920.
+<!-- He later invented the Post correspondence problem, which followed Turing's halting problem and Hilbert's Entscheidungsproblem as an example of a puzzle that no algorithm can solve.  -->
+Post turns out to be a fairly important logician with several important contributions to computability theory later on, along with people like Turing, Gödel, and Church.
+
+<p>It's not surprising then that this line of questioning turns out to lead us directly to the notion of computability. Since proof rules are really mechanical, the idea is that if we're able to express mathematical theorems formally, we should be able to build a machine that just crunches a bunch of rules to produce a proof for us. Since proof = truth, this means we can figure out whether a given theorem is true or not by sticking it in the machine. 
+
+    <p>This sounds suspiciously like a computer and we can think of logicians of this era as basically the earliest computer scientists (like modern computer scientists, they appear keen on disrupting the mathematics industry and putting mathematicians out of jobs by replacing them with machines). But the fact that we now have both extremely powerful computers in our pockets and open problems in mathematics is a sign that this original dream may have run into some complications.
+
+    

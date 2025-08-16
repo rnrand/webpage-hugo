@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 23</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 23</h1>
+    <h2>Recurrence Relations</h2>
+
+    <p>One of the things that makes analysis of algorithms and similar kinds of counting problems tricky is when we are confronted with a recursive procedure. In this case, counting the number of steps of an algorithm or other similar objects requires describing the term of a function based on the function itself applied to previous terms. These are called recurrence relations and we will touch upon a few ways to deal with them.
+
+    <p><strong>Example 23.1.</strong> There are a few classic examples where recurrences arise. The first of these is the Tower of Hanoi, where there are a stack of discs of increasing size that you have to move between three pegs, you being one of several Tibetan monks/Hindu priests, depending on which telling of the story we're dealing with. You want to move the stack of discs to another peg with the condition that the order of the stack is preserved. Furthermore, you can only move one disc to another peg at a time and you can't place a larger disc on top of a smaller disc. Upon the placement of the final disc to complete the task, the world will end.
+
+    <p>Suppose we have $n$ discs (we have generalized the problem but the monks/priests only have to deal with 64 discs). How many times do we have to move a disc in order to move the entire stack to another peg?
+
+    <p>To count this, let's think recursively. Let $H_n$ denote the number of moves required to move the top $n$ discs from one peg onto another. In order to move the final, largest disc, we need to have moved the stack of $n-1$ discs onto another peg, so this is $H_{n-1}$ moves. Then, we move the largest disc onto the remaining open peg. Once we have done this, we move the $n-1$ discs so that they go on top of the largest disc, which is another $H_{n-1}$ moves. In total, we have made $H_n = 2H_{n-1} + 1$ moves to move $n$ discs.
+
+    <p>Now, we've developed a recurrence relation, but we want a closed form for it. This leads us to the first technique to solving recurrences: try some stuff and hope it works and if it does, use induction to cook up a formal proof. This is not too different from when we had to guess the closed form of a sum back when we were discussing induction. This involves looking at the first few terms and trying to divine something out of the sequence we get. First, we set the initial conditions by observing that $H_0 = 0$ and $H_1 = 1$. Then we have
+    \begin{align*}
+    H_0 &= 0 \\
+    H_1 &= 1 \\
+    H_2 &= 3 \\
+    H_3 &= 7 \\
+    H_4 &= 15 \\
+    H_5 &= 31 \\
+    H_6 &= 63 \\
+    \end{align*}
+    <p>Here, we notice this looks suspiciously like $2^n - 1$, so we can test this hypothesis by substituting this into the formula:
+    $$H_n = 2H_{n-1} + 1 = 2 \cdot (2^{n-1} - 1) + 1 = 2^n - 2 + 1 = 2^n - 1.$$
+    This appears to work, so if we want to go ahead and prove this formally, we have all the pieces to construct a proof by induction. This is called the <strong>substitution</strong> method.
+
+    <p>But what if we're faced with a sequence that we may not readily recognize? We can try an alternative approach that is pretty much the same as guessing, but from the other direction: expand the first few iterations of the recurrence. If we do this to our Tower of Hanoi recurrence, we get the following:
+    \begin{align*}
+    H_n &= 2H_{n-1} + 1 \\
+    &= 2(2H_{n-2} + 1) + 1 \\
+    &= 2^2 H_{n-2} + 2 + 1 \\
+    &= 2^3 H_{n-3} + 2^2 + 2 + 1 \\
+    &= 2^4 H_{n-4} + 2^3 + 2^2 + 2 + 1 \\
+    &= 2^5 H_{n-5} + 2^4 + 2^3 + 2^2 + 2 + 1
+    \end{align*}
+    and so on. Again, this involves hoping that you will be able to see some sort of pattern emerge, and if you have a keen eye, you can deduce that the last few terms of this expansion will look like
+    \begin{align*}
+    H_n &= 2H_{n-1} + 1 \\
+    &= 2(2H_{n-2} + 1) + 1 \\
+    & \vdots \\
+    &= 2^{n-1} H_1 + 2^{n-2} + \cdots + 2^2 + 2 + 1 \\
+    &= 2^{n-1} + 2^{n-2} + \cdots + 2^2 + 2 + 1 \\
+    &= 2^n - 1
+    \end{align*}
+    at which point, you can test your hypothesis further or cook up an inductive proof to prove this formally. This is called the <strong>iteration</strong> method.
+
+    <p>And how long do the monks/priests have to go at this for before the end of the world approaches? The story assumes one move of a disc to take one second, giving us 
+    $$H_{64} = 2^{64} - 1 = 18446744073709551615$$
+    seconds to complete the movement of 64 discs. That's about 585 billion years, which is about 42 times the age of the universe, 130 times the age of the sun, and about as much of Unix time we can keep track of with an unsigned 64-bit integer.
+
+    <p><strong>Example 23.2.</strong> The other classical example of recurrences is a sequence that we've seen before already: the Fibonacci numbers. Fibonacci was originally thinking about pairs of rabbits mating. Assuming it takes one week for rabbits to mate and after that they will birth (a matchable pair of) new children every week, how many rabbits will you have on week $n$ assuming you start with one pair of rabbits? This gives us the sequence
+    $$1,1,2,3,5,8,13,21,34,55,89,\dots$$
+    which we hopefully recognize as the Fibonacci numbers. At each time $n$, the number of pairs of rabbits is the number of pairs of rabbits that were alive at time $n-1$ and the number of newborn pairs. But we know that there are only as many newborn pairs as there are mated pairs, which is the number of pairs that were alive at time $n-2$. So we get
+    $$f_n = f_{n-1} + f_{n-2}.$$
+
+    <p>How do we solve this? Let's put that on hold while we take a look at another example.
+
+    <p><strong>Example 23.3.</strong> Let's think about a problem similar to the kind that I've been throwing at you: How many binary strings of length $n$ do not contain $00$ as a substring?
+
+    <p>We could attempt to use one of our previous counting techniques to solve this one, but recall that strings are also recursively defined structures. It is helpful to count such strings in terms of how they're extended. In other words, we can consider the number of strings of length $n$ that don't contain $00$ in terms of the number of such strings of length $n-1$. This is because every string of length $n$ is a string of length $n-1$, but with an additional $0$ or $1$.
+
+    <p>Let $A_n$ be the set of strings of length $n$ that avoid $00$ and let $a_n = |A_n|$. If $w = x1 \in A_n$, then $x \in A_{n-1}$. However, if $w = x0 \in A_n$, then $x$ itself cannot end in $0$. Therefore $x = y1$ where $y \in A_{n-2}$ and so $w = x10$. Putting these together, we find that $a_n = a_{n-1} + a_{n-2}$ for $n \geq 3$. Furthermore, we've seen this recurrence already. This leaves $n = 1,2$, which are easy to solve by enumeration.
+
+    <p>As promised, we'll tackle how to solve these in just a bit. What we should note is that we are lucky and the recurrence is in one of the forms that allows us to apply a theorem to mechanically solve it, rather than have to guess and hope for the best.
+
+    <h2>Linear Recurrences</h2>
+
+    <p>There are various forms of recurrences that you'll encounter that have associated theorems that tell you if you have one of these recurrences, then you have a solution that looks like that. For instance, one of the most well-known of these in undergraduate algorithms classes is the Master theorem, popularized by Cormen, Leiserson, Rivest, and Stein in their very famous algorithms textbook Introduction to Algorithms, popularly referred to as CLRS.
+
+    <p><strong>Theorem 23.4 (Master Theorem).</strong> Let $T(n)$ be the recurrence $T(n) = a T(\frac n b) + f(n)$, where $a,b \geq 1$ and $f:\mathbb N \to \mathbb N$. Then,
+    <ol>
+    <li>If $f(n) = O(n^{\log_b a - \varepsilon})$ for some $\varepsilon \gt 0$, then $T(n) = \Theta(n^{\log_b a})$.
+    <li>If $f(n) = O(n^{\log_b a})$, then $T(n) = \Theta(n^{\log_b a} \log n)$.
+    <li>If $f(n) = \Omega(n^{\log_b a + \varepsilon})$ for some $\varepsilon \gt 0$ and there exists $c \lt 1$ such that for all sufficiently large $n$, $af(\frac n b) \leq cf(n)$, then $T(n) = \Theta(f(n))$.
+    </ol>
+
+    <p>This is called the Master Theorem because the idea was that your recurrence was very likely to be in one of these forms, so you could then immediately apply the theorem to solve your recurrence.
+
+    <p>We will <em>not</em> be using the Master Theorem in this class.
+
+    <p>We will be looking at a different kind of recurrence for which we know the form of the solution.
+
+    <p><strong>Definition 23.5.</strong> A <strong>linear homogeneous recurrence of degree $k$ with constant coefficients</strong> is of the form
+    $$a_n = c_1 a_{n-1} + c_2 a_{n-2} + \cdots + c_k a_{n-k},$$
+    where $c_i \in \mathbb R$ for $1 \leq i \leq k$ and $c_k \neq 0$.
+
+    <p>So the Fibonacci recurrence ($f_n = f_{n-1} + f_{n-2}$) is linear and homogeneous and has constant coefficients, but the Tower of Hanoi recurrence $(H_n = 2H_{n-1} + 1)$ is not homogeneous, because of the constant term. Similarly, a recurrence like $a_n = a_{n-1}^2 + a_{n-2}$ would not be linear and a recurrence like $a_n = a_{n-1} + n a_{n-2}$ does not have constant coefficients.
+
+    <p>Unsurprisingly, these simple looking recurrences appear frequently in mathematics. Conveniently for us, the solution to these recurrences is of a very specific form. First, we'll need the following idea.
+
+    <p><strong>Definition 23.5.</strong> The <strong>characteristic equation</strong> for the linear homogeneous recurrence of degree $k$ with constant coefficients $a_n = c_1 a_{n-1} + c_2 a_{n-2} + \cdots + c_k a_{n-k}$ is
+    $$x^k - c_1 x^{k-1} - c_2 x^{k-2} - \cdots - c_{k-1} x - c_k = 0.$$
+
+    <p>What we'll see is that the the solution of our linear homogeneous recurrences are based on the roots of their characteristic equations.
+
+    <p><strong>Theorem 23.6.</strong> Suppose that the characteristic equation for a linear homogeneous recurrence of degree $k$ has distinct real roots $r_1, r_2, \dots, r_k$. Then the solutions to the recurrence take the form $a_n = b_1 r_1^n + b_2 r_2^n + \cdots + b_k r_k^n$ for real constants $b_1, \dots, b_k$.
+
+    <p>There is a proof of this in Rosen for $k = 2$ which is too long to cover in class. However, we can walk through the solution to gain some insight into the connection between linear recurrences and the roots of their characteristic equation.
+
+    <p><strong>Example 23.7.</strong> Consider the recurrence $a_n = 7a_{n-1} - 12a_{n-2}$, with $a_0 = 3, a_1 = 10$.
+
+    <p>Without the knowledge of the theorem that tells us the exact form of the recurrence, we would be forced to divine some sort of pattern from the first few terms of the recurrence. What we would observe is something roughly exponential, so we would guess something of the form $r^k$. Plugging this into our recurrence, we get
+    \begin{align*}
+    r^n &= 7r^{n-1} - 12r^{n-2} \\
+    r^n - 7r^{n-1} + 12r^{n-2} &= 0 \\
+    r^{n-2}(r^2 - 7r + 12) &= 0 \\
+    r^{n-2}(r-3)(r-4) &= 0 
+    \end{align*}
+    Here, we begin to see where our solution might have come from. It's not hard to see how linear recurrences like this will have exponential solutions of some sort. The rest is just working out the details: what is the exact form of the solution that will give us the right pattern with the correct initial conditions? Guessing got us on the right track, since we know our solution could involve $3^n$ and $4^n$.
+
+    <p>Now, let's apply the theorem. The characteristic equation for $a_n = 7a_{n-1} - 12a_{n-2}$ is indeed $x^2 - 7x + 12 = 0$, just as we had guessed, and it has roots $x = 3,4$. This means that our solution is a linear combination of the two exponential terms $a3^n + b4^n$. To solve for $a$ and $b$, we use our initial conditions $a_0 = 3, a_1 = 10$ to set up the equations
+    \begin{align*}
+    a3^0 + b4^0 &= 3 \\
+    a3^1 + b4^1 &= 10 \\
+    \end{align*}
+    Some easy algebra gives us $a = 2, b = 1$. Therefore, the solution to our linear recurrence is
+    $$a_n = 2 \cdot 3^n + 4^n.$$
+
+    <p><strong>Example 23.8.</strong> As promised, we can finally derive the closed form for the Fibonacci numbers. Recall that the Fibonacci numbers are described by the recurrence $f_n = f_{n-1} + f_{n-2}$, which is a linear homogeneous recurrence of degree 2. The characteristic equation of this recurrence is $x^2 - x - 1 = 0$. This equation has roots
+    $$\varphi = \frac{1 + \sqrt 5}{2} \text{ and } \widetilde \varphi = \frac{1 - \sqrt 5}{2}.$$
+    Then we know that the recurrence has solutions of the form 
+    $$a \left( \frac{1+\sqrt 5}{2} \right)^n + b \left( \frac{1-\sqrt 5}{2} \right)^n$$
+    and we need to consider the initial conditions to solve this. So we have
+    \begin{align*}
+    a \left( \frac{1+\sqrt 5}{2} \right)^0 + b \left( \frac{1-\sqrt 5}{2} \right)^0 &= 0 \\
+    a \left( \frac{1+\sqrt 5}{2} \right)^1 + b \left( \frac{1-\sqrt 5}{2} \right)^1 &= 1 
+    \end{align*}
+    which gives us $a = \frac{1}{\sqrt 5}$ and $b = - \frac{1}{\sqrt 5}$. Thus,
+    $$f_n = \frac 1 {\sqrt 5} \left( \frac{1+\sqrt 5}{2} \right)^n - \frac 1 {\sqrt 5} \left( \frac{1-\sqrt 5}{2} \right)^n = \frac{\varphi^n - \widetilde \varphi^n}{\sqrt 5}.$$
+    This is Binet's formula, which we <a href="11.html">saw earlier in the class</a>.

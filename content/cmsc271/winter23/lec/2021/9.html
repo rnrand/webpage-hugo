@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 9</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 9</h1>
+
+<p>By now we've seen the basics of number theory, including the Divison Theorem, Euclid's algorithm, modular arithmetic, and the notions of prime and relatively prime numbers. There's more to see but in order to progress any further, we're going to need another tool in our mathematical toolbox: Induction.</p>
+
+<h2>The Peano Axioms</h2>
+
+<p> In lecture 4, we defined the natural numbers as follows:
+    \begin{align*}
+    \mathbb{N} =& \emptyset & \text{(corresponding to $0$)} \\
+	\text{or } & n \cup \{n\} & \text{(corresponding to $n+1$)}
+    \end{align*}
+
+<p> In the late 1800s, Giuseppe Peano presented an even simpler definition of the natural numbers that relied on only two symbols:
+    \begin{align*}
+    \mathbb{N} =~& 0 & \\
+	\text{or } & S~n & \text{where $n$ is a number}
+    \end{align*}
+	
+<p>$S$ is just a symbol here, standing for successor. In this system, we would write $1$ as $S~n$ and $5$ as $S~(S~(S~(S~(S~n))))))$. Essentially, this is just counting with your fingers. 	
+	
+<p>There's a nice correspondence here with how you would define a list in most functional programming languages. Here's Haskell:
+
+<pre>
+<code>
+data List a = Nil 
+	    | Cons a (List a)
+</code>
+</pre>
+
+<!-- <pre>
+<code>
+Definition list =
+  []
+| a :: (l : list)
+</code>
+</pre> -->
+
+<p>Since $0$ and $S~n$ together define all the numbers, it should make sense that if a proposition $P$ is true about $0$ and adding an $S$ preserves $P$'s truth, then $P$ is always true. Formally:
+
+<p><strong>Definition 9.1. Axiom of Induction</strong>: For any proposition $P$ about a natural number if:
+<ul>
+<li>$P~0$ and</li>
+<li>$\forall n, P~n \to P~(S~n)$ then</li>
+<li>$\forall n, P~n$</li>
+</ul>
+
+<p>Let's prove something in Peano arithmetic. To begin with, here's Peano's definition of $+$.
+<ul>
+    <li>$\forall n, 0+n = n$.</li>
+    <li>$\forall n\, m, S \, n + m = S \, (n+m)$. (Note that $S$ binds more tightly than $+$).</li>
+</ul>
+
+<p>Note that the definition doesn't say that $n + 0 = n$. So let's prove it ourselves - by induction!
+
+<p><strong>Theorem 9.2. $\forall n, n+0 = n$</strong>
+<ul>
+    <li>Proof: By induction on $n$.</li>
+    <li>Base case: $n = 0$. By Peano's first addition rule $0 + 0 = 0$ so we're done with this case.</li>
+    <li>Inductive case: Suppose $k+0 = k$. We want to prove that $S~k + 0 = S~k$.</li>
+	<li>By Peano's second addition rule $S~k + 0 = S~(k+0)$ and by our assumption $k+0 = k$, so $S~(k+0) = S~k$. Hence $(S~k+0) = S~k$.</li>
+	<li>Therefore, $\forall n, n+0 = n$
+</ul>
+
+Here are the remaining Peano axioms, we'll refer back to them later:
+
+<h4>Axioms for S</h4>
+<ul>
+<li>$\forall x, S\, x \not= 0$.</li>
+<li>$\forall x\,y,\,S\,x = S\,y \to x = y$ (injectivity of $S$)
+</ul>
+
+<h4>The definition of $\times$</h4>
+<ul>
+    <li>$\forall n, 0\times n = 0$.</li>
+    <li>$\forall n\, m, S \, n \times m = m + n \times m$.</li>
+</ul>
+
+<h4>The definition of $\leq$</h4>
+
+<ul>
+<li>$\forall n\,m,\, n \leq m \iff \exists p,\, n+p = m$.</li>
+</ul>
+
+<p>Using these axioms, we can prove all of the desired properties of $+$, $\times$, and $\leq$, including commutativity, associativity and the transitivity of $\leq$. These make great exercises for practicing induction.<p>
+
+<h2>The riddle of the sharks</h2>
+
+Here's a riddle.
+
+<blockquote>There is an injured shark thrashing about in the water. Nearby there are $n$ sharks. Each would like to eat the injured shark but would become injured in the process and potential victims of the remaining sharks. Every shark is perfectly logical and values its life more than eating. What will happen?
+</blockquote>
+
+<p>Feel free to give this puzzle some thought. Assume there is always a closest shark that could, if it chose to, eat the injured shark.
+	
+<p>A good way to think about such puzzles (and math problems broadly!) is to consider small numbers. Let's do that.
+<ul>
+    <li>If there is $1$ healthy shark, it can eat the injured shark with no risk to itself.</li>
+    <li>If there are $2$ healthy sharks, neither will attack the injured shark because it will be doomed to die in turn.</li>
+    <li>If there are $3$ healthy sharks, the closest one will eat the injured shark because it knows that the two remaining sharks will be in a stalemate.</li>
+    <li>If there are $4$ healthy sharks, none will attack because they'll be eaten in turn.</li>
+</ul>
+
+<p>There's an emerging pattern here, so let's state our theorem.
+
+<p><strong>Theorem 9.3</strong>
+<ul>
+    <li>Claim: If $n$ is odd, the closest shark will eat the injured shark, otherwise nothing will happen.</li>
+    <li>Base case: $n=0$. $n$ is even and nothing can happen since there are no healthy sharks.</li>
+    <li>Inductive hypothesis: If $k$ is odd, the closest shark will eat the injured shark, otherwise nothing will happen.</li>
+    <li>Now let's consider the $k+1$ case.</li>
+    <li>If $k$ is even, our hypothesis says nothing will happen. Therefore, if I add a shark, the closest shark may feast, because it won't be eaten in turn.</li>
+    <li>If $k$ is odd, our hypothesis says the closest shark will eat the injured shark. If I add a shark, then if any shark eats the injured shark, we will find ourself in the $k$ shark case, and by our hypothesis the shark that feasted will die. Hence, no shark will attack the injured shark.</li>
+	<li>Qed.</li>
+</ul>
+
+<p>Note that we started with the $0$ case which was trivial. That doesn't matter, $0$ remains the smallest number. In this case it might feel tempting to also prove the $n=1$ case, which is fine as long as we prove the $0$ case as well. In the future we will see some proofs where it's acceptable to start with some $n>0$, because the claim starts with "if $n$ is greater than $5$ then..." But even in those cases, we can start with zero (we might just have to consider in our inductive hypothesis whether $k$ is $5$).
+
+<p>If you enjoy these kinds of problems, try the <a href="https://xkcd.com/blue_eyes.html">Blue Eyes</a> logic puzzle. (If you have brown eyes, I hope you don't find yourself on an island with 99 blue eyed people and a green eyed guru.)
+
+<h2>Set theory and more</h2>
+
+<p>Now let's jump back to set theory. In lecture four we stated the following theorem.
+
+<p><strong>Theorem 4.8.</strong> If $A$ is a finite set, then $|\mathcal P(A)| = 2^{|A|}$.
+
+    <p>Now, using induction, we can prove this.
+
+    <p><em>Proof.</em> We will prove this by induction on the size of $A$, $n = |A|$.
+
+    <p><strong>Base case.</strong> We have $|A| = 0$ and therefore, $A = \emptyset$. Then $\mathcal P(A) = \{\emptyset\}$. Observe that $|P(\emptyset)| = |\{\emptyset\}| = 1 = 2^0$.
+
+    <p><strong>Inductive case.</strong> Let $n = k$ and assume that for every set $X$ with $|X| = k$, then $|\mathcal P(X)| = 2^k$. Let $|A| = k+1$ and we will show that $|\mathcal P(A)| = 2^{k+1}$.
+
+    <p>Choose an element $a \in A$. We define the set $A' = \{x \in A \mid x \neq a\}$ containing all elements of $A$ except $a$. Then $|A'| = |A| - 1$, since we removed $a$. Then $|A'| = k$ and by our inductive hypothesis, $|\mathcal P(A')| = 2^k$.
+
+    <p>Now, consider a subset of $A'$, $B \in \mathcal P(A')$. For each subset $B \subseteq A'$, we can obtain two subsets of $A$, $B$ and $B \cup \{a\}$. Therefore, we have $2 \cdot 2^k = 2^{k+1}$ subsets of $A$.
+    $\tag*{$\Box$}$
+
+
+	
+</body>

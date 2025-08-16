@@ -1,0 +1,301 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 9</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 9</h1>
+
+	 <h2>Multiplicative Inverses and Prime Numbers</h2>
+
+	 This lecture develops a theory of how we can "divide by an integer $a$
+	 modulo $m$". Of course, this language isn't defined so far, since we can't
+	 speak of "modding down" rational numbers. Instead we'll back up and
+	 reconsider what division should mean in this context.
+
+		<h3>Multiplicative Inverses Modulo $m$</h3>
+
+		<p>Obviously we're not going to actually divide integers, since we don't
+		want to create havoc with rational numbers. Instead, let's take a new
+		perspective on what it means to divide by a number. Observe that if
+		$a,b\in\mathbb{Z}$, then we can define "dividing by $a$" to be an operation
+		that transforms $ab$ to $b$. Put another way, "dividing by $a$" can be
+		phrased as "multiplying by $a^{-1}$".  Under the usual interpretation,
+		$a^{-1}$ is simply $1/a$, but we can't do that with equivalence classes.
+		Instead, we're going to define a suitable stand-in that adapts the
+		following point of view: $a^{-1}$ is a number such that $a\cdot a^{-1}=1$.
+
+		<p>This discussion motivates the following definition.
+
+    <p><strong>Definition 9.1.</strong> Let $m,a$ be integers. We say
+		that another integer $b$ is a <strong>multiplicative inverse
+			of $a$ modulo $m$</strong> if $ab \equiv_m 1$. When $a$ has
+		a multiplicative inverse modulo $m$, we say that $a$ is
+		<strong>invertible modulo $m$</strong>.
+
+		<p>When the context and modulus are clear, we will sometimes just call $b$
+		"an inverse of $a$". We may go even further and write $a^{-1}$ for an
+		inverse of $a$, with the understanding this implicitly depends on the
+		modulus $m$. 
+
+		<p>So, for example, $3$ is an inverse of $2$ modulo $5$, since $2\cdot 3
+		\equiv_m 1$. Notice also that $-2$ and $8$ are also inverses of $2$
+		modulo $5$.
+		
+		<p><strong>Example.</strong> Consider $m=4$. There are four equivalence
+		classes: $0,1,2,3$. Observe that 1 and 3 have inverses modulo $4$: $1^{-1}
+		\equiv_4 1$ (this is obvious) and $3^{-1} \equiv_4 3$, which we get by
+		observing that $3 \cdot 3 \equiv_4 9 \equiv_4 1$. However, a little
+		searching turns up no inverse for 2:
+    \begin{align*}
+    2 \cdot 0 &\equiv_4 0  \\
+    2 \cdot 1 &\equiv_4 2  \\
+    2 \cdot 2 &\equiv_4 4 \equiv_4 0 \\
+    2 \cdot 3 &\equiv_4 6 \equiv_4 2 
+    \end{align*}
+
+		<p>If you poke around though, you'll notice that similarly
+		$6$ does not appear to have any inverses modulo $12$. There is
+		pattern here, but it is non-obvious. To see it, we need
+		the following definition.
+
+		<p><strong>Definition 9.2.</strong> Two integers $a$ and $b$ are
+		<strong>relatively prime</strong> (or <em>coprime</em>) if $\gcd(a,b) = 1$.
+
+		<p><strong>Example.</strong>  The numbers 10 and 21 are relatively
+		prime, since $\operatorname{Div}(10) = \{\pm 1, \pm 2, \pm 5, \pm 10\}$ and
+		$\operatorname{Div}(21) = \{\pm 1, \pm 3, \pm 7, \pm 21\}$ and their
+		only common divisors are $\pm 1$, of which $1$ is the largest.
+
+		<p><strong>Theorem 9.3.</strong> Let $m$ be a positive integer and $a$ be
+		an integer.  Then there exists a multiplicative inverse of $a$ modulo $m$
+		if and only if $a$ and $m$ are relatively prime. 
+
+		<p><em>Proof.</em> Since this is an "if and only if" statement, we need
+		to prove the implication in both directions. So let's first assume that
+		$a$ and $m$ are relatively prime.
+		By Bézout's Identity, there exist integers $s$ and $t$
+		such that $sa + tm = 1$. We claim that $s$ is a multiplicative inverse
+		of $a$ modulo $m$. Indeed, since $sa\equiv_m 1$, $m$ divides $(sa-1)$, as
+		$sa-1 = -tm$.
+
+		<p>For the other direction, assume there exists multiplicative inverse of
+		$a$ modulo $m$, say $b$. Then $m |(ab-1)$, so there exists $k\in\mathbb{Z}$
+		such that $km = ab-1$. This gives $ba+(-k)m=1$, showing that
+		$$
+		1 \in \{sa + tm \ \mid \ s,t\in\mathbb{Z}\}.
+		$$
+		By our previous proof of Bézout's Identity, we know that $\gcd(a,m)$
+		is the smallest positive element of this set, meaning that it must
+		be $1$.
+    $$\tag*{$\Box$}$$
+
+		<!--
+		    <p>One might ask whether there is any integer $m$ for which $\mathbb Z_m$ has a multiplicative inverse for all non-zero elements. Our discussion about prime numbers gives us a hint.
+
+    <p><strong>Corollary 8.12.</strong> If $p$ is prime and $p \not\mid a$, then $a$ has a multiplicative inverse mod $p$.
+
+    <p>This is easy to see since every integer $2, \dots, p-1$ aren't divisors of $p$ and therefore share no non-trivial common divisors with $p$.
+
+    <p><strong>Definition 8.13.</strong> When it exists, we denote the multiplicative inverse of $a$ by $a^{-1}$.
+		--!>
+
+
+		<h3>Cancellation and Uniqueness of Inverses</h3>
+
+		<p>One application of inverses is to solving "equations" like $$6x
+		\equiv_{17} 8.$$ These are usually called "congruences" since they
+		are not asserting that anything is equal. In any case, intuitively
+		we want to "divide" both sides by $6$ to solve for $x$. The next
+		theorem justifies using inverses for this.
+
+		<p><strong>Theorem 9.3.</strong> Let $m$ be a positive integer. For
+		all $a,b,c\in\mathbb{Z}$ such that $a$ is relatively prime to
+		$m$, if $ab \equiv_m ac$, then $b \equiv_m c$.
+
+		<p>This says that we can cancel $a$ from both sides. The analogous
+		version of this from basic algebra says that if $a,b,c$ are real
+		numbers <em>such that $a$ is non-zero</em>, then $ab=ac$ implies $b=c$.
+		Note the connection between being non-zero and being invertible.
+		In the case of real numbers, the conclusion may not be true of $a$
+		is zero. Similarly, when working modulo $m$ the conclusion may not
+		be true if $a$ is not invertible. You should try out some examples,
+		say with $m=12$ and $a=6,b=2,c=4$.
+
+
+		<p><em>Proof.</em> Since $a$ is relatively prime to $m$, it has
+		an inverse modulo $m$, say $a^{-1}$. Then since $ab \equiv_m ac$,
+		we have $a^{-1}ab \equiv_m a^{-1}ac$. But the left hand side is
+		$a^{-1}ab \equiv_m 1\cdot b \equiv_m b$. Similarly, the right
+		hand side is congruent to $c$ modulo $m$. Thus $b\equiv_m c$.
+    $$\tag*{$\Box$}$$
+
+		<p>Note that proofs like this implicitly use transitivity of $\equiv_m$,
+		since they are chaining together relations.
+
+		
+		<p>To solve the congruence $6x \equiv_{17} 8$ from above,  observe that $3$
+		is an inverse of $6$ modulo $17$. Thus we can transform this to an equivalent
+		congruence $3\cdot 6x \equiv_{17} 3\cdot 8$, or $x \equiv_m 24$. Thus
+		$x=24$ is a solution, and modding down further gives $x=7$ as another
+		solution. After working a few of these, they are not too hard (see Rosen,
+		8th edition, Section 4.4.2 for some more examples). It is however important
+		to understand how each of those steps is formally justified. (For example:
+		Why is it the case that $3\cdot 6x \equiv_{17} 3\cdot 8$, i.e. why does
+		multiplying by $3$ preserve equivalence?)
+
+		<p>We can apply Theorem 9.3 to conclude that inverses are "unique up to
+		congruence modulo $m$", as made precise in the following theorem.
+
+		<p><strong>Theorem 9.4.</strong> Let $m$ be a positive integer and $a$ be
+		an integer relatively prime to $m$. If $b$ and $c$ are inverses of $a$
+		modulo $m$, then $b \equiv_m c$.
+
+		<p><em>Proof.</em> Since $ab\equiv_m 1$ and $ac \equiv_m 1$, we have
+		$ab\equiv_m ac$ (by transitivity).  By the previous theorem, this implies
+		$b\equiv_m c$.
+    $$\tag*{$\Box$}$$
+
+
+		<h3>Primes, Inverses Modulo a Prime, and Wilson's Theorem</h3>
+
+		The study of <em>primes</em> is a central topic of number theory.  This
+		section will prove what is arguably a first deeper result, called Wilson's
+		Theorem, that builds on several facts about inverses modulo a prime.
+
+		<p><strong>Definition 9.5.</strong> An integer $p$ greater than 1 is called
+		<strong>prime</strong> if the only positive divisors of $p$ are 1 and $p$.
+		Otherwise, $p$ is called <strong>composite</strong>.
+
+		<p><strong>Example.</strong> Primes are obviously relatively prime to any
+		positive number less than them, since they don't have any divisors except 1
+		and themselves. However, non-prime numbers (called composite numbers) can
+		be relatively prime, even to each other. The numbers 10 and 21 are not
+		prime, since $10 = 2 \cdot 5$ and $21 = 3 \cdot 7$. However, they are
+		relatively prime, since $\operatorname{Div}(10) = \{\pm 1, \pm 2, \pm 5,
+		\pm 10\}$ and $\operatorname{Div}(21) = \{\pm 1, \pm 3, \pm 7, \pm 21\}$.
+
+		<p>Now, let's prove something about primes. First, we need the following
+		very useful theorem, a result from the ancient Euclid's <em>Elements</em>.
+
+		<p><strong>Theorem 9.6 (Euclid's lemma).</strong> If $p$ is prime, and
+		$a,b$ are integers such that $p \mid a \cdot b$, then $p \mid a$ or $p \mid
+		b$.
+
+		<p><em>Proof.</em> Without loss of generality, suppose $p \not \mid a$.
+		Then $\gcd(p,a) = 1$ and there exist integers $x$ and $y$ such that $xa +
+		yp = 1$. Then multiplying both sides by $b$, we have $$b = xab + ypb.$$
+		Since $p \mid ab$, let $n$ be an integer such that $ab = pn$. Then we have
+		$$b = xab + ypb = xpn + ypb = p \cdot (xn+yb).$$ Therefore, by definition
+		of divisibility, $p \mid b$.  $$\tag*{$\Box$}$$
+
+		<p>Notice that this proof makes use of Bézout's lemma. Since Bézout's lemma
+		appears about 2000 years after Euclid, it is safe to say that this is not
+		the proof that appears in the Elements.
+
+
+
+
+		<p>One important property of primes is that we can divide by every
+		integer modulo a prime, except for those congruent to zero.
+
+		<p><strong>Theorem 9.7.</strong>  Let $p$ be a prime, and assume
+		$p$ does not divide $a$. Then $a$ is invertible modulo $p$.
+
+		<p><em>Proof.</em> Since $p$ is prime, we have that $\gcd(p,a)\in\{1,p\}$.
+		Since $p$ does not divide $a$, we have $\gcd(p,a)=1$ and hence
+		$a$ is invertible modulo $p$. $$\tag*{$\Box$}$$
+
+		<p><strong>Example.</strong> The inverses modulo the prime $5$ of $1,2,3,4$
+		are  $1,3,2,4$ respectively. Modulo the prime $7$, the inverses
+		of $1,2,3,4,5,6$ are $1,4,5,2,3,6$ respectively.
+
+		<p>In the above example, you may notice that an inverse of $4$ modulo
+		$5$ is itself, i.e. $4$, and similarly $1$ is an inverse of itself. But
+		also notice that for the other values, none is an inverse of itself.
+		This is also true modulo $7$, and in fact for any prime, as the
+		next two lemmas show.
+
+		<p><strong>Lemma 9.8.</strong>  Let $m$ be an integer greater than $1$.
+		Then $m-1$ is an inverse of itself modulo $m$.
+
+		<p><em>Proof.</em> Multiplying out $(m-1)(m-1)$ gives
+		$(m-1)(m-1) = m^2 - 2m + 1$. Modulo $m$, this is congruent to $1$ since
+		$m$ divides $m^2$ and $-2m$. $$\tag*{$\Box$}$$
+
+		<p>An even quicker proof uses that $m-1 \equiv_m -1$, and that
+		$(-1)^2=1$, so $(-1)(-1) \equiv_m 1$.
+
+		<p>The next lemma is harder to prove, and the conclusion may not hold if
+		$p$ is not prime. It shows that the numbers that are inverses of themselves
+		modulo a prime must be congruent to $\pm 1$ modulo that prime.
+
+		<p><strong>Lemma 9.9.</strong>  Let $p$ be a prime, and $a$ be integer such
+		that $a \not\equiv_p 0$, and let $a^{-1}$ be an inverse of $a$ modulo $p$.
+		Then if $a \not\equiv_p 1$ and $a \not\equiv_p p-1$, we have $a^{-1}
+		\not\equiv_p a$.
+
+		<p><em>Proof.</em> Let's prove the contrapositive. If $a^{-1}\equiv_p a$,
+		then $a^2 -1 \equiv_p 0$. Factoring gives $(a+1)(a-1) \equiv_p 0$.
+		Thus $p|(a+1)(a-1)$, so by Euclid's Lemma $p|(a+1)$ or $p|(a-1)$. But
+		this means $a+1\equiv_p 0$ or $a-1\equiv_p 0$, i.e. $a\equiv_p p-1$ or
+		$a \equiv_p 1$.
+		$$\tag*{$\Box$}$$
+
+
+		<p>Our final result, the jewel of this lecture, is called Wilson's Theorem,
+		because it was stated by John Wilson in the 1700s. It turns out that it was
+		stated around 700 years prior by an Arab mathematician, Hasan Ibn
+		al-Haytham. It uses the factorial function, which may be familiar
+		to you from calculus.
+
+		<p><strong>Definition 9.10.</strong> We define the factorial function $n!$
+		recursively by
+    <ul>
+        <li>if $n = 0$, then $0! = 1$, and
+        <li>if $n \gt 0$, then $n! = (n-1)! \cdot n$.
+    </ul>
+
+
+		<p><strong>Theorem 9.11 (Wilson's Theorem).</strong> For all primes $p$,
+		$(p-1)! \equiv_p -1 $.
+
+		<p><em>Proof.</em> This is clearly true if $p=2,3$, so assume $p\geq 5$.
+		Each number in $\{2,\ldots, p-2\}$ has a multiplicative inverse that is not
+		congruent to itself (Theorem 9.9). Moreover, since inverses are unique
+		(Theorem 9.4), each number in $\{2,\ldots, p-2\}$ is an inverse of exactly
+		one other number in that set. This implies that we can pair up the numbers
+		with their inverses, creating $(p-3)/2$ disjoint pairs of elements that
+		are inverses of each other.
+		
+		<p>Now consider multiplying the product $$ 2 \cdot 3 \cdots (p-2).$$
+		Since each pair in this product is congruent to $1$ modulo $p$, we have
+		that the entire product is congruent to $1$ modulo $p$. Thus we get
+
+		$$1 \cdot 2 \cdot \cdots \cdot (p-2) \cdot (p-1) \equiv_p 1 \cdot (p-1)  
+		\equiv_p 1 \cdot
+		-1 \equiv_p -1.$$ $\tag*{$\Box$}$
+
+
+		<h3>Recommended Exercises</h3>
+
+		<p>Coming soon!
+
+
+		

@@ -1,0 +1,374 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 11</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 11</h1>
+
+	 <h2>Proof Techniques: Contradiction and Induction</h2>
+
+	 <p>In the lecture and the next we shift our focus from number theory
+	 to two new methods of proving mathematical statements: Proof by
+	 Contradiction and Proof by Induction. Both are intuitively strange at
+	 first, but universally accepted as valid methods.
+
+	 <p>In discussing both of these methods, we will make use a something called
+	 the <strong>well-ordering principle</strong>, which is the following
+	 statement:
+
+	 <p><strong>Theorem 11.1. (Well-Ordering Principle)</strong> Any non-empty
+	 subset of $\mathbb{N}$ contains a smallest element.
+
+	 <p>We won't offer a proof of this fact; For the purpose of this course we'll
+	 consider it self-evident. (We've actually used it a few times already.) The
+	 intuition is that if such a set is non-empty, then it contains a positive
+	 number $x$. If $x$ is the smallest element, then we're done. Otherwise, we
+	 can "walk back" towards zero, and eventually we'll run out of elements.
+
+	 <p>In case this sounds silly, you should note that the well-ordering
+	 principle does <strong>not</strong> hold if we replace $\mathbb{N}$
+	 with $\mathbb{Z}$ or $\mathbb{R}$. It does however hold if we make a
+	 small change, as we often will: We can replace $\mathbb{N}$ with
+	 $\mathbb{N}\cup\{0\}$ and the same reasoning above applies.
+
+	 <h3>Proof by Contradiction</h3>
+
+	 <p>A proof by contradiction follows a simple template: When we want to prove
+	 a statement $p$, we start by assuming that $p$ is in fact <em>false</em>,
+	 i.e. we assume the opposite of what we want to prove.  We then use this
+	 assumption to reach a logical contradiction (in the sense of propositional
+	 logic).
+
+	 <p>In terms of propositional logic, the method looks as follows. If we
+	 want to prove $p$, we find another proposition $q$ and then instead
+	 prove $\neg p \rightarrow (q\wedge \neg q)$. This is logically equivalent
+	 to $p$, as the following truth table shows:
+
+    <table>
+        <tr> <th>$p$ <th>$q$ <th>$\quad$ <th>$\neg p$ <th>$q \wedge \neg q$ <th>$\neg p \rightarrow (q\wedge \neg q)$ 
+        <tr> <td>$T$ <td>$T$ <td><td>$F$  <td>$F$ <td>$T$
+        <tr> <td>$T$ <td>$F$ <td><td>$F$  <td>$F$ <td>$T$
+        <tr> <td>$F$ <td>$T$ <td><td>$T$  <td>$F$ <td>$F$
+        <tr> <td>$F$ <td>$F$ <td><td>$T$  <td>$F$ <td>$F$ 
+    </table>
+
+		<p>The truth table might still not convince everybody. The intuitive point
+		is that such a proof demonstrates that a world in which $p$ is not true
+		must suffer from some unacceptable inconsistency, and we reject such
+		worlds.  There's a lot to that thinking, and logicians and philosophers
+		have a lot more to say on it.
+
+		<p>Practically speaking, proofs by contradiction are often easier to
+		find than direct proofs or proofs-by-contraposition. Many people
+		find it is easier to set up the assumptions and start playing around
+		until they can contradict something. They can still be challenging,
+		and one issue is that finding the appropriate statement $q$ can
+		require an intuitive leap. 
+
+		<p>Here are two examples. One is a simple example from the Rosen text, and
+		the other is one of the most famous proofs by contradiction ever.
+
+		<p><strong>Theorem 11.2.</strong> For all $n\in\mathbb{N}$, if $3n+2$
+		is odd, then $n$ is odd.
+
+		<p>Here, "odd" means that the remainder when dividing $n$ by $2$ is $1$
+		(of course, we use the Division Theorem to make this rigorous).
+
+	 <p><em>Proof.</em> For the purpose of contradiction, suppose there is
+	 an $n\in\mathbb{N}$ such that $3n+2$ is odd but $n$ is not odd.
+	 Thus there exists $k\in \mathbb{Z}$ such that $n=2k$. But then 
+	 $$
+	 3n+2 = 3(2k)+2 = 2(3k+2),
+	 $$
+	 which shows that $3n+2$ is even. But we assumed this number was odd,
+	 and a number can't be even and odd at the same time by the Division
+	 Theorem. Thus we reached a contradiction, and our original assumption
+	 must be wrong. This completes the proof by contradiction.
+    $$\tag*{$\Box$}$$
+
+		<p>From a style point of view, this wasn't the best proof. A contrapositive 
+		proof, which you can supply, is arguably more clear. Here is a better
+		example where contradiction helps make the idea more clear.
+
+		<p><strong>Theorem 11.3.</strong> Any square root of $2$
+		is irrational. More precisely, for all $a,b\in\mathbb{Z}$ with $b\neq 0$,
+		$(a/b)^2 \neq 2$.
+
+	 <p><em>Proof.</em> Let's continue avoiding division, and prove the equivalent
+	 statement that $a^2 \neq 2b^2$ for all $a,b\in\mathbb{Z}$ with $b\neq 0$. (Note
+	 that the assumption that $b$ is non-zero is necessary, since otherwise
+	 we can take $a=0$ and $b=0$.)
+
+	 <p>Now suppose for the purpose of contradiction that there exist
+	 $a,b\in\mathbb{Z}$, $b\neq 0$, such that $a^2 = 2 b^2$. Since there exists
+	 at least one pair, we can select a pair that minimizes the value of
+	 $|a|+|b|$. This requires Theorem 11.1, the well-ordering principle.
+	 We are going to contradict our choice of $a,b$ by showing that we can
+	 find another pair with a smaller value.
+
+	 <p>Since $a^2=2b^2$, we have that $2|a^2$. Since $2$ is prime, we have
+	 that $2|a$ by our earlier work in number theory, so there exists
+	 $k\in\mathbb{Z}$ such that $a=2k$.
+
+	 <p>Next we have that $2b^2 = a^2 = (2k)^2 = 4k^2$. Thus $b^2 = 2k^2$. We can
+	 repeat the argument from the previous paragraph to show that $2|b$ as well,
+	 so there is $\ell\in\mathbb{Z}$ such that $b=2\ell$.
+
+	 <p>We now show that $k,\ell$ is a pair that gives a contradiction to
+	 our choice of $a,b$. Since $a^2=2b^2$, we have that
+	 $(2k)^2=2(2\ell)^2$, which implies $k^2=2\ell^2$. Moreover, since $b\neq 0$,
+	 we have that $|k| + |\ell| = |a/2| + |b/2| \lt |a| + |b|$. This completes
+	 the proof.
+    $$\tag*{$\Box$}$$
+
+	 <h3>Proof by Induction</h3>
+
+	 <p>Our next proof technique is another template. It works particularly well
+	 for theorems that have the form $\forall n\in\mathbb{N}\cup\{0\}, P(n)$ for
+	 some predicate $P$.
+
+		<p><strong>Theorem 11.4.</strong> Let $P(n)$ be a predicate 
+		with domain $n \in \mathbb N\cup\{0\}$. If
+
+    <ol>
+    <li>$P(0)$
+    </ol>
+		and
+    <ol start="2">
+			<li>for all $k \in \mathbb N\cup\{0\}$, if $P(k)$, then $P(k+1)$
+    </ol>
+    are both true, then the following is true:
+    <ol start="3">
+			<li>for all $n \in \mathbb N\cup\{0\}$, $P(n)$.
+    </ol>
+    <p>This is called the <strong>principle of mathematical induction</strong>.
+
+		<p>How and when do we make use of this? Mathematical induction is a
+		property of the natural numbers. What this means is that if there is some
+		property that we want to prove about <em>all</em> natural numbers, all we
+		need to do is prove that the property holds for the number 0 and that for
+		any other natural number $k$, if it's true for $k$, then we can show that
+		it's true for the next natural number, $k+1$.
+
+    <p>More formally, to prove that for all $n \in \mathbb N$ that $P(n)$ holds,
+    <ol>
+    <li>first, prove that $P(0)$ holds, then,
+    <li>prove that for $k \in \mathbb N$, if $P(k)$ holds, then $P(k+1)$ also holds.
+    </ol>
+
+    <p>So why does this even work? Basically, what we're really proving is a very large, infinite chain of implications,
+    \begin{align*}
+    P(0)&, \\
+    P(0) &\rightarrow P(1), \\
+    P(1) &\rightarrow P(2), \\
+    P(2) &\rightarrow P(3), \\
+    & \vdots
+    \end{align*}
+    The usual analogy for this is a chain of dominoes: we set up our argument so that any one domino is guaranteed to knock over the next domino ($P(k) \rightarrow P(k+1)$ for any $k$). Once we've set this up, all we need to do is knock over the first domino (showing $P(0)$) to set off the chain reaction.
+
+    <p>This leads us to what a proof by induction actually <em>looks</em> like.
+    <ol>
+    <li><strong>Statement.</strong> Clearly state the statement $P$ that you want to prove and what you'll be performing induction on. Most often, $P$ is
+			just from the theorem you're proving. Sometimes a proof will artfully
+			choose a different $P$.
+    <li><strong>Base case.</strong> Prove $P(0)$.
+    <li><strong>Inductive case.</strong> Let $k$ be an arbitrary natural number and state the <em>inductive hypothesis</em> $P(k)$ and the statement $P(k+1)$ to be proven. Then, using the assumption $P(k)$, prove $P(k+1)$. Clearly indicate when the inductive hypothesis is used.
+    </ol>
+
+
+    <p><strong>Notation.</strong> 
+		If $m,n$ are integers with $n\geq m$ and $x_1,\ldots,x_n$ are integers, 
+		we use the following notation:
+    $$\sum_{i = m}^n x_i = x_m + x_{m+1} + \cdots + x_{n-1} + x_n.$$
+
+    <p><strong>Theorem 11.5.</strong> For every $n \in \mathbb N$,
+    $$\sum_{i=0}^n i = \frac{n(n+1)}2.$$
+
+    <p>If you've been taught this formula before, then you've probably been told the story of Gauss solving this problem when he was 7. However, his teachers, in assigning $n = 100$, gave him an easy out since he only needed to consider one instance of the problem, so his solution does not use induction. We don't have that luxury, since we want to prove that this formula holds for all $n$. 
+
+    <p><em>Proof.</em> We will prove this by induction on $n$.
+
+    <p><strong>Base case.</strong> $n = 0$. Then 
+    $$\sum_{i = 0}^0 i = 0 \quad \text{and} \quad \frac{0 \cdot (0+1)}2 = 0,$$
+    so clearly $\sum_{i=0}^n i = \frac{n(n+1)}2$ holds for $n=0$.
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary and assume that $\sum_{i=0}^k i = \frac{k(k+1)}2$. We will show that $\sum_{i=0}^{k+1} i = \frac{k+1(k+2)}2$. We have
+    \begin{align*}
+    \sum_{i=0}^{k+1} i &= \sum_{i=0}^k i + (k+1) \\
+    &= \frac{k(k+1)}2 + (k+1) & \text{by ind. hyp.} \\
+    &= (k+1) \cdot \left(\frac k 2 + 1 \right) \\
+    &= (k+1) \cdot \left(\frac k 2 + \frac 2 2 \right) \\
+    &= \frac{(k+1)(k+2)}2
+    \end{align*}
+    Thus, we have shown that $\sum_{i=0}^n i = \frac{n(n+1)}2$ holds for $n=k+1$. Therefore, $\sum_{i=0}^n i = \frac{n(n+1)}2$ holds for all $n \in \mathbb N$.
+    $\tag*{$\Box$}$
+
+    
+		<p>This method works remarkably well for proving formulas like this.
+		Some more exercises are suggested at the end of these notes. Once you've
+		done a few of them, new problems will mostly reduce to finding the
+		right algebraic manipulation.
+
+		<hr>
+		<p>There is room for creativity in using induction. Here is another
+		famous example.
+
+
+A <em>triomino</em> is a tile consisting of three unit squares in the shape of an L.
+
+    <p><img src="triomino.png" alt="A single triomino" width="80px" max-width="800px" class="center">
+
+		<p><strong>Theorem 11.6.</strong> For all $n \in \mathbb N\cup\{0\}$, all $2^n \times 2^n$ grid of squares with one square removed can be covered by triominoes.
+
+    <p><em>Proof.</em> We will show this by induction on $n$.
+
+    <p><strong>Base case.</strong> Let $n = 0$. Then our board is $1 \times 1$, which is our "removed" square and so our tiling consists of 0 triominoes.
+
+    <p>For the purposes of proof, this is perfectly fine. However, some people may not be convinced by this. Let's look at $n = 1$. Then our board is $2 \times 2$. We can remove any square and rotate a single triomino to tile what's left.
+
+    <p><img src="triomino3.png" alt="A simple tiling" width="80px" max-width="800px" class="center">
+
+		<p><strong>Inductive case.</strong> Assume that for $k \in \mathbb N\cup\{0\}$, the $2^k \times 2^k$ with one square removed can be tiled by triominoes. Now, consider an arbitrary grid of size $2^{k+1} \times 2^{k+1}$ with one square removed.
+
+    <p>We split the grid into four $2^k \times 2^k$ grids. The square that is removed from our grid falls into one of these four subgrids. By our inductive hypothesis, each of these four grids can be tiled with triominoes with one square removed. So we have a tiling for the subgrid with our designated square removed and three other subgrids. 
+
+    <p><img src="triomino-final-3.png" alt="Our inductive case" width="200px" max-width="800px" class="center">
+
+    <p>Our inductive hypothesis also implies we can tile the remaining three grids when their interior corners are removed:
+
+    <p><img src="triomino-final-1.png" alt="Just one last step" width="200px" max-width="800px" class="center">
+		
+  <p>This leaves a spot for our last triomino, allowing us to tile the recomposed $2^{k+1} \times 2^{k+1}$ grid with only our designated tile missing.
+    $\tag*{$\Box$}$ 
+
+		<hr>
+		Now let's see what can go wrong with induction.
+		Consider the following false statement.
+
+    <p><strong>"Theorem".</strong> All horses are the same color. 
+
+		<p>This is obviously false, so the following proof must be wrong. Try
+		to spot the error.
+
+		<p><em>Proof.</em> We will that for all sets $H$ of horses, the horses in
+		$H$ are all the same color. We do this by induction on $n = |H|$, the
+		number of horses under consideration.
+
+		<p><strong>Base case.</strong> If $|H|=1$, then there is only one horse.  A
+		single horse is the same color as itself, so we are done. 
+
+    <p><strong>Inductive case.</strong> Assume that any set of $n$ horses
+		is the same color. Let $H$ be a set of $n+1$ horses, and consider 
+		two distinct horses in $H$. By the inductive assumption,
+		if we remove either horse, then the remaining $n$ horses will be the
+		same color. Thus, the first horse is the same color as the other horses,
+		and similarly so is the second horse. Therefore all horses are the same
+		color, completing the inductive proof.
+    $\tag*{$\Box$}$
+
+		<p>Can you spot the error? We will discuss this one in class.
+		
+		<hr>
+
+	Here are some nice examples that we didn't get to in class, but make for nice
+	induction practice:
+	
+		<p>Suppose we wish to determine a formula for the sum of the first $n$
+		consecutive odd numbers, $\sum_{i=0}^n (2i+1)$. We would have to try out a
+		few values and see where we end up.
+    \begin{align*}
+    1 &= 1 \\
+    1 + 3 &= 4 \\
+    1 + 3 + 5 &= 9 \\
+    1 + 3 + 5 + 7 &= 16 \\
+    1 + 3 + 5 + 7 + 9 &= 25 \\
+    \end{align*}
+		So it looks like a familiar pattern has developed, so we can attempt to
+		prove it.
+
+		<p><strong>Theorem 11.7.</strong> For all $n \in \mathbb N \cup \{0\}$, 
+    $$\sum_{i=0}^n (2i+1) = (n+1)^2.$$
+
+    <p><em>Proof.</em> We will prove this by induction on $n$.
+
+		<p><strong>Base case.</strong> Let $n = 0$. Then $\sum_{i=0}^0 (2i+1) = 1 =
+		1^2$.
+
+		<p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary and
+		assume that $\sum_{i=0}^k (2i+1) = (k+1)^2$.  We want to show that
+		$\sum_{i=0}^{k+1} (2i+1) = (k+2)^2$.
+    We have
+    \begin{align*}
+    \sum_{i=0}^{k+1} (2i+1) &= \sum_{i=0}^{k} (2i+1) + 2(k+1) + 1 \\
+    &= (k+1)^2 + 2(k+1) + 1 &\text{ind. hyp.} \\
+    &= k^2 + 2k + 1 + 2k + 2 + 1 \\
+    &= k^2 + 4k + 4 \\
+    &= (k+2)^2
+    \end{align*}
+    $\tag*{$\Box$}$
+
+		<p>Now here we happened to end up with a recognizable pattern. But what
+		happens if you don't? The snide answer is to Google it and that might work
+		if you happen to be looking for a relatively famous sequence. However,
+		Google isn't great if you just throw a bunch of numbers at it. So you might
+		be expecting me to build up to show you how to do this "properly" but in my
+		opinion, that's a lot of work and a bit outside the scope of the course. 
+
+		<p>Instead, I'd like to highlight the excellent <a
+			href="https://oeis.org">Online Encyclopedia of Integer Sequences</a>,
+		founded by Neil Sloane. The OEIS is purpose-built to be a search engine for
+		integer sequences and it contains more sequences than you can ever have
+		imagined, complete with bibliographic links and other related sequences.
+
+		<p>We can also use induction to prove inequalities. Something that we do in
+		the analysis of algorithms is compare the growth rate of functions. We can
+		use inductive arguments to do the same, since we often use functions with
+		the domain $\mathbb N$ when quantifying computational resources like time
+		or space.
+
+		<p><strong>Theorem 11.8.</strong> For all $n \in \mathbb N \cup \{0\}$ and $x \geq 0$,
+		$(1+x)^n \geq 1+nx$.
+
+    <p><em>Proof.</em> We will show this by induction on $n$.
+
+		<p><strong>Base case.</strong> Let $n = 0$. Then $(1+x)^0 = 1 \geq 1 = 1 +
+		0 \cdot x$.
+
+		<p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary and
+		assume that $(1+x)^k \geq 1+kx$. Consider $n = k+1$.
+    \begin{align*}
+    (1+x)^{k+1} &= (1+x)^k (1+x) \\
+    &\geq (1+kx) (1+x) & \text{ind. hyp.} \\
+    &= 1 + kx + x + kx^2 \\
+    &= 1 + (k+1)x + kx^2 \\
+    &\geq 1+(k+1)x & kx^2 \geq 0
+    \end{align*}
+    $\tag*{$\Box$}$
+
+		<p>Note that in this result, our functions had two variables, $x$ and $n$.
+		This is a great example of why what you're applying induction to needs to
+		be carefully considered and clearly stated.
+	
+
+		<h3>Recommended Exercises</h3>
+
+		Rosen Chapter 5.1 has many examples. In the 8th edition, exercises 3-9 and
+		13-17 should give  you more than enough practice with proving sums.
+

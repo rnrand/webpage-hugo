@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>CMSC 27100: Discrete Mathematics (Winter 2023)</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1>CMSC 27100: Discrete Mathematics</h1>
+    <p><em>This page is intended for <strong>Section 1</strong> of
+      CMSC 27100 at the University of Chicago, Winter 2023</em>.</p>
+
+<div id="content">
+	
+<h1>General information</h1>
+<dl>
+<dt>Instructor</dt>
+<dd><a href="http://people.cs.uchicago.edu/~rand/">Robert Rand</a><span>&nbsp;</span>(<a class="inline_disabled" href="mailto:rand@uchicago.edu" target="_blank" rel="noopener">rand@uchicago.edu</a>)
+<br />&emsp;&emsp;<em>Office hours</em>: Thursday 1:00 - 2:00 pm (JCL 313)</dd>
+
+<dt>Teaching Assistants</dt>
+<dd>Youngchan Cho (<a class="inline_disabled" href="mailto:youngchan@uchicago.edu" target="_blank" rel="noopener">youngchan@uchicago.edu</a>)
+	<br />&emsp;&emsp;<em>Office hours</em>: Friday 4:00 - 5:20 pm (JCL 257)</em></dd>
+
+<dd>Grace Williams (<a href="mailto:gcwill@uchicago.edu" target="_blank" rel="noopener">gcwill@uchicago.edu</a>)
+	<br />&emsp;&emsp;<em>Office hours</em>: Friday 1:00 - 2:20 pm (JCL 257)</em></dd>
+
+<dd>Ryan Wandsnider (<a href="mailto:rjwandsnider@uchicago.edu" target="_blank" rel="noopener">rjwandsnider@uchicago.edu</a>)
+	<br />&emsp;&emsp;<em>Office hours</em>: Monday 4:40-6:00 (JCL 257)</em></dd>
+	
+<dt>Review Sections ("Labs")</dt>
+<dd>Wed 3:30-4:20, Cobb 112 (Youngchan)</dd>
+<dd>Thu 4:00-4:50, Cobb 402 (Grace)</dd>
+<dd>Bonus review section: Wed 4:30-5:20, JCL 354 (Ryan)</dd>
+
+<dt>Website</dt>
+<dd><a href="index.html">www.rand.cs.uchicago.edu/cmsc271/winter23/index.html</a></dd>
+
+</dl>
+
+
+<h2>Overview</h2>
+<p>Discrete mathematics is the study of discrete mathematical structures. This includes things like integers and graphs, whose basic elements are<span>&nbsp;</span><em>discrete</em><span>&nbsp;</span>or separate from one another. This is in contrast to continuous structures, like curves or the real numbers. We will investigate a variety of topics in discrete math and the proof techniques common to discrete math. This course provides the mathematical foundation for further theoretical study of computer science, which itself can be considered a branch of discrete mathematics.</p>
+
+<h2>Topics</h2>
+<dl>
+<dt>Logic and Set Theory</dt>
+<dd>Propositional logic, predicates, and quantification, natural deduction, naive set theory</dd>
+<dt>Elementary Number Theory</dt>
+<dd>Induction, Divisibility, modular arithmetic, prime numbers</dd>
+<dt>Combinatorics</dt>
+<dd>Counting, permutations, combinations, pigeonhole principle, inclusion-exclusion, binomial theorem, generating functions, recurrences, asymptotics</dd>
+<dt>Discrete Probability</dt>
+<dd>Probability, independence, correlation, random variables, expectation, variance</dd>
+<dt>Graph Theory (time permitting)</dt>
+<dd>Directed and Undirected Graphs, Representations, Traversal</dd>
+</dl>
+
+    <h2>Communication</h2>
+    <p>We will use Canvas, Ed, and Gradescope. The pages specific
+    to this course are linked below. When communicating with the course
+    staff, please use the appropriate channel, and only use email for
+    exceptional situations.</p>
+    <dl>
+      <dt><a href="https://canvas.uchicago.edu/courses/47544">Canvas</a></dt>
+      <dd>Non-public materials (e.g. problem sets) will be posted on
+        Canvas. Some timely announcements may be sent via Canvas. 
+      </dd>
+      <dt><a href="https://edstem.org/us/courses/32595/discussion/">Ed</a></dt>
+      <dd>We will use Ed for general course communication, most often for help
+      on problem sets. Please post clarification questions publicly so other students can see them, 
+	  and questions that may contain partial solutions privately.</dd>
+      <dt><a href="https://www.gradescope.com/courses/481493">Gradescope</a></dt>
+      <dd>We will use Gradescope for problem set submissions and for returning
+        graded papers. We will also use Gradescope to communicate regarding
+        regrade requests.</dd>
+
+    </dl>
+
+
+    <h2>Written Resources</h2>
+
+    <p>You are <em>not required</em> to purchase a textbook for this course.
+    All problem sets will be self-contained.  I will post notes after each
+    lecture, and will serve as an official record of the topics covered.</p> The
+    notes for this class were largely written by <a
+      href="https://people.cs.uchicago.edu/~timng/">Timothy Ng</a> and extended
+    by me and <a href="https://people.cs.uchicago.edu/~davidcash/">David Cash</a>.
+
+    <p>Learning the material in this course deeply will require doing several
+    examples and exercises. Thus I highly recommend you get access to a copy of
+    the following resources. Readings from these resources will be posted to the
+    course schedule. 
+    Specific exercises from these books will also be recommended but not
+    required.</p>
+
+    <dl>
+
+    <dt><cite><a href="https://www.mheducation.com/highered/product/discrete-mathematics-applications-rosen/M9781259676512.html">Discrete
+        Mathematics and Its Applications, 7th/8th ed.</a></cite> by K.H. Rosen.
+    </dt>
+    <dd>The most comprehensive resource for this course.  Other editions are
+      also fine, but be careful to check that the content aligns. This text
+      has many exercises.
+    </dd>
+
+    <dt><cite><a href="https://mfleck.cs.illinois.edu/building-blocks/index-sp2020.html">Building
+                  Blocks for Theoretical Computer Science, Version 1.3b</a>
+      </cite> by M.M. Fleck</dt> 
+    <dd>This book is freely available. It is less comprehensive, but
+        covers its content very well. It doesn't have traditional exercise
+    sections, but the <a
+                          href="https://mfleck.cs.illinois.edu/study-problems/index.html">study
+                          problems</a> are nice.</dd>
+
+		<dt><cite><a href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Introduction to Probability, 2nd ed.</a></cite> by J.K. Blitzstein and J. Hwang
+    </dt>
+		<dd>
+		This only covers combinatorics and probability, but it does so wonderfully,
+		and it's free!
+    </dd>
+
+    </dl>
+
+<h2>Evaluation</h2>
+<p>Your final grade is based on the following graded components:</p>
+<ul>
+<li>problem sets worth 40% in total,</li>
+<li>a midterm exam worth 25%,</li>
+<li>a final examination worth 35%.</li>
+</ul>
+
+<h2>Midterm</h2>
+<p>The midterm exam will tentatively take place on February 7th (UPDATED!) from 6:30 to 8:30 pm in the Kersten Physics Teaching Center Room 106. <strong>If you have an unmovable conflict please email me ASAP.</strong></p>
+
+<h1 id="lectures">Lectures</h1>
+<p> All of the lecture notes, as well as the corresponding chapters in the recommended textbooks, will be posted on the <a href="schedule.html">schedule</a> page, which we recommend you bookmark.
+
+<h1 id="psets">Problem sets</h1>
+<ul>
+<li>Students are welcome to discuss the problem sets with fellow students and post general questions to Ed. However, the solutions must be entirely your own.</li>
+<li>Problem sets will be released every Monday and due the following Monday.</li>
+<li>Students can use up to two extensions to submit work by the end of Friday. Please conserve these extensions (I'd recommend not using them at all if possible).</li>
+<li>We will be using Gradescope for assignment submission. You should receive an email notifying you that you've been enrolled by the end of the first week. If you haven't been enrolled or joined the class after the first week, please contact the instructor.</li>
+<li>Please ensure that submissions are legible. (LaTeX is recommended, but not required.) See<span>&nbsp;</span><a href="https://gradescope-static-assets.s3.amazonaws.com/help/submitting_hw_guide.pdf">this guide</a><span>&nbsp;</span>for submitting on Gradescope.</li>
+</ul>
+<ul>
+</ul>
+
+
+<h1>Academic integrity</h1>
+<p>It is your responsibility to be familiar with the University&rsquo;s<span>&nbsp;</span><a href="https://studentmanual.uchicago.edu/academic-policies/academic-honesty-plagiarism/">policy on academic honesty</a>. Instances of academic dishonesty will be referred to the Office of the Provost for adjudication. Following the guidelines above on collaboration and citation should be sufficient, but if you have any questions, please ask me.</p>
+
+<h1>Accessibility</h1>
+<p>Students with disabilities who have been approved for the use of academic accommodations by<span>&nbsp;</span><a href="https://disabilities.uchicago.edu/">Student Disability Services (SDS)</a><span>&nbsp;</span>and need reasonable accommodation to participate fully in this course should follow the procedures established by SDS for using accommodations. Timely notifications are required in order to ensure that your accommodations can be implemented. Please meet with me to discuss your access needs in this class after you have completed the SDS procedures for requesting accommodations.</p>
+</div>
+</body>
+</html>

@@ -17,20 +17,39 @@ design:
 ---
 
 ### Organizer
-- Programming Languages for Quantum Computing (PLanQC), 2020-2021
+
+- Dagstuhl Seminar on Formal Analysis and Verification in Quantum Programming Languages, 2026.
+- Principles of Programming Languages (POPL), 2025 \& 2026. Workshops Co-Chair
+- Programming Languages for Quantum Computing (PLanQC), 2020-2025
+- DIMACS Workshop on Quantum Software Systems and Theory, 2025.
+- Midwest Programming Languages Symposium (MWPLS), 2024.
 
 ### Program Committee
+- Quantum Physics and Logic (QPL), 2025.
+- Programming Languages Design and Implementation (PLDI), 2025.
+- Programming Languages Design and Implementation (PLDI), Student Research Competition, 2025.
+- Workshop on Quantum Networks and Distributed Quantum Computing (QuNet), 2025.
+- Quantum Physics and Logic (QPL), 2024.
+- Quantum Programming (QP), 2024.
+- Workshop on Quantum Software (WQS), 2024
+- Programming Languages Design and Implementation (PLDI), 2024.
+- Verification, Model Checking, and Abstract Interpretation (VMCAI), 2024.
 - Principles of Programming Languages (POPL), 2023. 
 - Quantum Software Engineering (Q-SE), 2022.
-- Programming Languages Design and Implementation (PLDI), 2022. 
+- Programming Languages Design and Implementation (PLDI), 2022. Distinguished Reviewer 
 - European Symposium on Programming Languages (ESOP), 2022. 
 - Quantum Computing and Engineering (QCE), 2021.
-- Programming Languages for Quantum Computing (PLanQC), 2020-2021. PC Chair in 2020
+- Programming Languages for Quantum Computing (PLanQC), 2020-2024. PC Chair in 2020
 - Object-Oriented Programming, Systems, Languages & Applications (OOPSLA), 2020. External Review Committee
 - Principles of Programming Languages (POPL), 2019. Artifact Evaluation Committee
 - Reversible Computing (RC), 2019. 
 
 ### Reviewer
+- Principles of Programming Languages (POPL), 2026.
+- Information and Computation, 2025.
+- ACM Transactions on Software Engineering and Methodology (TOSEM), 2025.
+- Transactions on Quantum Engineering (TQE), 2024
+- PeerJ Computer Science, 2023.
 - Symposium on Discrete Algorithms (SODA), 2022
 - Theoretical Computer Science (TCS), 2021
 - Quantum Physics and Logic (QPL), 2021

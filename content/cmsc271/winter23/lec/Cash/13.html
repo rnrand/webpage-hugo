@@ -1,0 +1,422 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 13</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 13</h1>
+
+	 <h2>Introduction to Counting and Probability</h2>
+
+   <p>In this lecture we turn to the next major section of CMSC 27100:
+   Combinatorics and Probability. Probability has become an essential part of a
+   computer scientist's toolbox. Whether studying data structures, cryptography,
+   machine learning, or any number of other subareas of CS, a basic
+   understanding of probability is required for deep understanding. 
+
+   <p><em>Combinatorics</em> is perhaps a less familiar word. For the purpose of
+   this class, it is a fancy word for "counting." That is, it consists of
+   solving problems that, in various forms, describe a set to you and ask you
+   how many elements it contains. This sounds simple but there are quite a few
+   interesting methods to learn.
+
+   <p>We start with a description of "Naive Probability", which gives the
+   first hint of why we study probability and combinatorics together.
+
+   <p>I highly recommended that you read the textbook <a
+     href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">
+     Introduction to Probability by Blitzstein and Hwang</a> in tandem with
+   this lecture, which covers sections 1.1 through 1.4.1.  The text is freely
+   available online.
+     
+   
+
+	 <h3>Naive Probability</h3>
+
+   <p>Probability models all sorts of phenomena related to unpredictability and
+   uncertainty. We are going to start with a simple class of random experiments:
+   Those where every outcome is equally likely. We'll call this <em>Naive
+   Probability</em> and later come back to think about situations where events
+   aren't equally likely.
+
+   <p>To model a random experiment, one first defines a set of possible
+   outcomes.
+
+
+   <p><strong>Definition.</strong> A <strong>sample space</strong> for
+   a random experiment is a set $\Omega$, the members of which correspond
+   to the possible outcomes.
+
+   <p><strong>Example.</strong>
+
+   <ul>
+
+     <li> Consider flipping a fair coin, which has two equally weighted
+       outcomes.  We could take $\Omega_1 = \{H,T\}$, or perhaps $\Omega_1 =
+       \{0,1\}$, depending on our taste.
+     </li>
+
+     <li>If we roll a fair six-sided die, a good sample space is
+       $\Omega_2 = \{1,2,3,4,5,6\}$.
+     </li>
+
+     <li>Now consider flipping <em>two</em> coins. A correct sample
+       space for this experiment is $\Omega_3 = \{HH,HT,TH,TT\}$.
+       Note that we need two outcomes $HT$ and $TH$; These are different,
+       and they must be for proper modeling, as we will discuss later.
+     </li>
+
+     <li>Similarly, consider rolling two fair six-sided dice. The sample space
+       in this case is $\Omega_4 = \{(1,1), (1,2), \ldots, (6,5), (6,6)\}$.
+     </li>
+
+     <li>If we pick a card at random from a standard deck of cards, a
+       sample space could be
+       $$
+       \Omega_5 = \{A\spadesuit,A\heartsuit,\ldots, 2\clubsuit\},
+       $$
+       or any other set that intuitively corresponds to the 52 cards
+       in the deck.
+     </li>
+
+   </ul>
+
+   <p> Once we have a sample space, we could stop there and just consider
+   individual outcomes. However, much of the richness of probability comes from
+   using <em>sets</em> of outcomes, which correspond to English-language
+   descriptions of features of outcomes. This motivates the following
+   definition.
+
+   <p><strong>Definition.</strong> Let $\Omega$ be the sample space for
+   a random experiment. An <strong>event</strong> is a subset of $\Omega$.
+
+   <p><strong>Example.</strong> These examples use $\Omega_1,\ldots,\Omega_4$
+   from the previous examples.
+   <ul>
+
+     <li> In $\Omega_1$, the event "the flip showed Heads" is simply
+       $\{H\}$. In general, we can always use singleton sets to
+       define events in this way.
+     </li>
+
+     <li>In $\Omega_2$, the event "the roll was even" is $\{2,4,6\}$.  </li>
+
+     <li>In $\Omega_3$, the event "the flips were the same " is $\{HH,TT\}$.
+     </li>
+
+     <li>In $\Omega_4$, the event "the rolls sum to 4" is  $\{(1,3), (2,2),
+       (3,1)\}$.  </li>
+
+   </ul>
+
+   <p>Events can be combined via unions, intersections, and complements to give
+   new events. These operations have a very intuitive interpretation: If
+   $E_1,E_2 \subseteq \Omega$ are events on the same sample space, then $E_1
+   \cup E_2$ represents "$E_1$ or $E_2$", $E_1 \cap E_2$ represents "$E_1$ and
+   $E_2$", and $E_1^c$ represents "not $E_1$". (The complement is taken with
+   respect to the universe $\Omega$.)
+
+   <p><strong>Example.</strong> (This example is from <a
+   href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">[BH]</a>.)
+    Suppose we flip $10$ coins. The sample space
+   will be all length-$10$ strings consisting of $H$ and $T$ letters.
+   That is, $\Omega$ contains strings like $HTTHTTTHHT$.
+
+   <ul>
+     <li>For each $i=1,\ldots,10$ we can define $A_i$ to be the event
+       that the $i$-th toss shows Heads. Then, say, $A_1$ consists
+       of strings in $\Omega$ that start with $H$.
+     </li>
+
+     <li>Let $B$ be the event that at least one of the tosses shows Heads.
+       Then
+       $$
+       B = A_1 \cup A_2 \cup \cdots \cup A_{10} = \bigcup_{i=1}^{10} A_i.
+       $$
+       (The notation $\bigcup_{i=1}^{10} A_i$ works like the summation
+       notation; It runs the counter form $1$ to $10$ and unions up
+       all the corresponding sets.)
+     </li>
+
+     <li>Let $C$ be the event that all of the tosses show Heads.
+       Then
+       $$
+       C = A_1 \cap A_2 \cap \cdots \cap A_{10} = \bigcap_{i=1}^{10} A_i.
+       $$
+       In fact, $C$ is just $\{HHHHHHHHHH\}$.
+     </li>
+
+     <li>Let $D$ be the event that at least two consecutive tosses
+       show Heads. Then
+       $$
+       C = (A_1 \cap A_2) \cup (A_2 \cap A_3) \cup \cdots \cup (A_9 \cap
+       A_{10}) = \bigcup_{i=1}^9 A_i\cap A_{i+1}.
+       $$
+     </li>
+   </ul>
+
+   Finally, we define the probability of an event.
+
+   <p><strong>Definition.</strong> Let $\Omega$ be the sample space for
+   a random experiment and $E\subseteq \Omega$ be an event. The (naive)
+   probability of $E$ is defined to be
+   $$
+   \mathrm{Pr}(E) = \frac{|E|}{|\Omega|}.
+   $$
+
+   <p>Of course, for this to make sense, $\Omega$ must be finite. We will return
+   to the infinite case later. You can work through some of the small examples
+   above to calculate probabilities by hand, but to do the larger ones you'll
+   need to infer the sizes of the events and samples spaces indirectly.  This
+   explains why counting is the main technical challenge in naive probability.
+
+	 <h3>How to Count: The Multiplication Rule</h3>
+
+   <p>Suppose you are ordering an ice cream cone. There are three
+   flavors of ice cream (chocolate, vanilla, strawberry), and two types 
+   of cones (cake and waffle). How many different orders are possible?
+   Intuitively, it's $3\cdot 2 = 6$.
+
+   <p>To see this in an organized way, you can draw a tree, like in Figure 1.4
+   on page 10 of <a
+                     href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">[BH]</a>. 
+	 </p>
+
+	    <p><strong>Theorem 12.1 (Multiplication Rule).</strong> If $A_1, A_2, \dots,
+   A_k$ are finite sets, then $$|A_1 \times A_2 \times \cdots \times A_k| =
+   |A_1| \cdot |A_2| \cdots |A_k|.$$
+
+   <p>Returning to our examples above, we get that $\Omega_4 =
+   \Omega_2\times\Omega_2$, so $|\Omega_4|=6\cdot 6 = 36$.
+
+	 <p>The Multiplication Rule gets applied in ad hoc ways to all sorts of
+	 problems where one is making a sequence of decisions (like our ice cream
+	 cones).  There are two patterns that are so common in probability and
+	 combinatorics that they are given names: Sampling with and without
+	 replacement.
+
+   <p><strong>Theorem 12.2 (Sampling With Replacement).</strong> If we
+   make $k$ choices, one after the other, from a set of $n$ objects, and
+   we allow the same object to be chosen multiple times, then
+   there are $n^k$ possible outcomes.
+
+   <p>This theorem is just the Multiplication Rule with all of the
+   sets $A_1,\ldots,A_k$ taken as the same set of objects.
+
+  <p><strong>Theorem 12.3 (Sampling Without Replacement).</strong> If we
+   make $k$ choices, one after the other, from a set of $n$ objects, and
+   we do <em>not</em> allow the same object to be chosen multiple times, then
+   there are $n\cdot(n-1)\cdots (n-k+1)$ possible outcomes.
+
+   <p>Another way to write $n\cdot(n-1)\cdots (n-k+1)$ is
+   $$
+   \frac{n!}{(n-k)!}.
+   $$
+   Later this notation will be more convenient, and it's also easier to remember
+   since you don't have to mess with the $n-k+1$ factor
+   each time.
+
+   <p> Justifying the formula Theorem 12.3 is a little harder than Theorem 12.2.
+   If you think about, the set are modeling is no longer a Cartesian
+   product of sets. But it is not too hard to justify intuitively; You can
+   think of making the first selection ($n$ choices), and then the second
+   selection ($n-1$ choices), and then drawing a tree as we did with
+   ice cream cones.
+
+    <p><strong>Example.</strong> 
+    <ul>
+
+      <li>How many $6$ character passwords can we make using only lowercase
+        letters? This is sampling with replacement, with $n=26$ and $k=6$; so
+        there are $26^6$.  </li>
+
+      <li>How many $6$ character passwords can we make using only lowercase
+        letters, if we don't ever repeat a letter? This is sampling without
+        replacement, again with $n=26$ and $k=6$; so there are 
+        $26\cdot 25\cdot 24\cdot 23\cdot 22\cdot 21$ possibilities.</li>
+
+    </ul>
+
+    <p>
+
+    <p><strong>Example.</strong> Suppose that I have a set $A = \{x_1, x_2,
+    \dots, x_k\}$ with $k$ objects in it. How many subsets of $A$ are there?
+    Let's consider the following approach. For each subset $S
+    \subseteq A$, let $w_S$ be a binary (i.e. zero/one) string  of $k$ bits
+    $a_1 a_2 \cdots a_k$,
+    where for $1 \leq i \leq k$,
+    \begin{equation*}
+      a_i = \begin{cases} 0 & 
+      \text{if $x_i \not \in S$,} \\ 1 &\text{if $x_i \in S$.} \end{cases}
+    \end{equation*}
+    For instance, $w_\emptyset = 00 \cdots 0 = 0^k$, while $w_A = 11\cdots 1 =
+    1^k$. How many strings of the form $w_S$ are there? This is sampling
+    with replacement where $n=2$ and $k$ is given, so there
+    are exactly $2^k$ strings of length $k$. The string $w_S$ is sometimes
+    called the <em>characteristic string</em> of $S$.
+
+    <p>Occasionally counting problems will ask you to find the size of
+    a set $A$ which can be written as the <em>disjoint</em> union of other
+    sets. The next rule formalizes what is very intuitive: You can just
+    count the sets in the union, and then add up their sizes.
+
+    <p><strong>Theorem 12.4 (Addition Rule).</strong> If $A_1, A_2, \dots,
+   A_k$ are disjoint finite sets, then $$|A_1 \cup A_2 \cup \cdots \cup A_k| =
+   |A_1| + |A_2| + |A_k|.$$
+
+   <p>I consider this self-evident, so I won't offer a proof.
+
+    <p><strong>Example.</strong> 
+    <ul>
+
+      <li>If passwords must consist of either 6 lowercase letters or
+        6 digits (both with repetitions allowed), then there are 
+        $26^6+10^6$ possible passwords.  </li>
+    </ul>
+
+
+	 <h3>The Complement Trick and The Birthday Problem</h3>
+
+   <p>Consider the following question: How many $6$ character passwords
+   can we form using only lowercase letters and the digits $0$ through $9$?
+   This is no harder than before; It is $(26+10)^6 = 36^6$.
+
+   <p>What if we add the condition that the password contains <em>at least one
+     digit</em>? Attacking this question directly using sampling with or without
+   replacement doesn't work.  If we try that approach, then the first option has
+   $36$ choices. But how many options does the second choice have?  Well, it's
+   still $36$. But if you can continue until the end sixth choice, when your
+   number of choices will depend on the past: If you picked a digit in one
+   or more of the first five spots, then you have $36$ options. If not, then 
+   you must pick a digit, and you only have $10$ options.
+
+   <p>The result is a tree that is not regularly shaped: At the last level, some
+   nodes will have $36$ branches and some will have only $10$. This means we
+   can't apply the Multiplication Rule, at least not directly.
+
+   <p>There is a trick to use when you notice this happening in your counting:
+
+    <p><strong>Theorem 12.5 (Complement Rule).</strong> If $U, A$
+    are finite sets, and $A \subseteq U$, then 
+    $$|U \setminus A| = |U| - |A|.$$
+    In the language of complements, this is
+    $$|A^c| = |U|-|A|$$
+		or, equivalently,
+    $$|A| = |U|-|A^c|,$$
+    where $U$ is the universe under consideration.
+
+   <p>I also consider this self-evident, but one can give a proof from
+   the Addition Rule.
+
+    <p><strong>Example.</strong> 
+    <ul>
+
+			<li>Let us count the number of $6$ character passwords consisting of
+				lowercase letters and digits, that have at least one digit.  Let's
+				do this by counting the compliment: How many passwords are there that
+				do <em>not</em> contain a digit? That's easy, those are just passwords
+				with all letters, and there are $26^6$ of them.  The set of all
+				passwords consisting of letters and digits has size $36^6$, as
+				calculated above. Putting this together gives $36^6-26^6$.  </li>
+
+    </ul>
+
+		<p>Now we'll apply this method to a famous calculation called the "Birthday
+		Problem" or "Birthday Paradox." It starts with following question: 
+		
+		<blockquote>
+			If there are $k$ people in a room, what is the probability that at least
+			two people have the same birthday?
+		</blockquote>
+		A more specific question is:
+		<blockquote>
+			What is the minimal value of $k$ such that there is at least a $1/2$
+			probability that two people have the same birthday?
+		</blockquote>
+
+		<p>Once we have $366$ people the probability is $1$. Also, with only
+		one person the probability is zero. The problem is to understand how
+		the probability changes with $k$ between those two extremes.
+		Let's remove some real-world complications by assuming that there
+		are no leap days and that everyone's birthday is equally likely to be
+		any day of the year.
+
+		<p>To solve this, we first need a sample space. We'll take
+		$\Omega = \{1,\ldots,365\}^k$, since we are sampling $k$ birthdays
+		with replacement, and we have $|\Omega| = 365^k$.
+
+		<p>Now define $E\subseteq \Omega$ to be the event that at least
+		two people share a birthday. Formally, $E$ is the set of $k$-tuples with
+		entries from $\{1,\ldots,365\}$ which repeat a value at some point.
+		Following our thinking above, we will calculate $|E^c|$ and use the
+		Complement Rule.
+
+		<p>What is $E^c$? It is the set of tuples from $\Omega$ that do not
+		contain any repeats. This is sampling without replacement, so
+		$|E^c| = 365\cdot 364\cdots \cdot (365-k+1)$.
+
+		<p>Now we get
+		\begin{align*}
+		\mathrm{Pr}(E) & = \frac{|E|}{|\Omega|} \\
+									 & = \frac{|\Omega|-|E^c|}{|\Omega|} \\
+									 & = 1 - \frac{|E^c|}{|\Omega|} \\
+									 & = 1 - \frac{365\cdot 364\cdots \cdot (365-k+1)}{365^k}. 
+		\end{align*}
+
+		<p>This formula is not too enlightening on its own, but we can plug
+		in values for $k$ and see what happens. The result is the following
+		graph, taken from <a href="https://en.wikipedia.org/wiki/Birthday_problem">Wikipedia</a>:
+
+		<p>
+		<center>
+		<img src="bday.png" width=70%">
+		</center>
+		</p>
+
+		<p>This graph is intuitively surprising to most people: Once $k=23$,
+		the probability goes over $1/2$! Those $23$ people only cover a
+		small fraction of the entire space, and yet collisions are very likely.
+		Also note that this graph tops out at $100$; By the point the probability
+		is essentially one.
+
+		<p>Of course, predicting birthday collisions isn't that important in
+		practice. But this phenomenon arises in several settings where coincidences
+		are much more likely that one expects. One instance I have personal
+		experience with is the class of <a
+		href="https://en.wikipedia.org/wiki/Birthday_attack">Birthday Attacks</a>
+	in cryptography, but that is a subject for another course.
+
+	<p>At this point it is fair to object to this being solution, since it does
+	not really <em>explain</em> why such a small $k$ works. When we return to
+	studying general probability we will be able to give a better answer (i.e. a
+	solution that does not use counting in the same way). For now, you might
+	be able to justify to yourself that the probability should (sort of) grow
+	proportionally to $k^2$, not $k$, because amongst $k$ people there are
+	(about) $k^2$ chances at a collision. With that intuition, it it
+	less surprising that $k=23$ works, since $23^2 = 529$. But that reasoning
+	is extremely sketchy!
+
+	<h3>Recommend Exercises</h3> 
+
+	<p>
+	<a href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Blitzstein and Hwang</a>, Section 1.9, Problems 2, 3.
+
+	<p>Rosen, Section 6.1, Problems 1 - 19, will give you plenty of practice
+	with basic counting.
+

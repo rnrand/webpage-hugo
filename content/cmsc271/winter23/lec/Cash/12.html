@@ -1,0 +1,396 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 12</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 12</h1>
+
+	 <h2>Strong Induction with Applications to Number Theory</h2>
+
+
+  Sometimes, ordinary induction will prove inconvenient for accomplishing a
+  given task. Conveniently, probably the best example of this is the
+  <strong>Fundamental Theorem of Arithmetic</strong>, which we want to prove
+  anyway. Here's the statement of the theorem:
+
+  <p><strong>Theorem 12.1.</strong> Every integer $n \gt 1$ can be written as a
+  product of primes. This product is unique up to reordering.
+
+  <p>First, let's think about the problem, leaving the "uniquely" aside for the
+  moment. We want to show that every natural number $n$ has a prime
+  factorization. So assuming that we set everything up properly, we make our
+  hypothesis, that if $n$ has a prime factorization, then $n+1$ has a prime
+  factorization. So we consider $n+1$. If it's prime, then we're good. If it
+  isn't, then we observe that $n+1 = ab$ for some natural numbers $a$ and $b$.
+  What we want is that we can apply our inductive hypothesis to $a$ and $b$.
+  However, our inductive hypothesis doesn't quite say what we want: it only says
+  that $n$ has a prime factorization, not $a$ or $b$!
+
+  <p>Strong induction is a reformulation of induction that gives us a "stronger"
+  hypothesis to say these kinds of things.
+
+  <p><strong>Theorem 12.2.</strong> Let $P(n)$ be a predicate with domain
+  $\mathbb N\cup\{0\}$. If
+    <ol>
+    <li>$P(0)$
+    </ol>
+    and
+    <ol start="2">
+      <li>for all $k \in \mathbb N\cup\{0\}$, if $P(i)$ for all
+        $i\in\{0,1,\ldots,k-1\}$, then $P(k)$
+    </ol>
+    <p> are both true, then the following is true:
+    <ol start="3">
+      <li>for all $n \in \mathbb N\cup \{0\}$, $P(n)$ holds.
+    </ol>
+    <p>This is called the <strong>principle of strong induction</strong>.
+
+    <p>What is the difference between ordinary mathematical induction and
+    <em>strong</em> induction? Or, in other words, what makes strong induction
+    strong? The hypothesis that we make in part 2 is stronger.
+    Recall that ordinary induction was stated as a chain of implications $P(k)
+    \rightarrow P(k+1)$. Strong induction is a chain of implications of the form
+    $$P(0) \wedge P(1) \wedge P(2) \wedge \cdots \wedge P(k) \rightarrow
+    P(k+1).$$ Then what we're really proving is all of the following statements,
+    \begin{align*} &P(0), \\ P(0) \rightarrow &P(1), \\ P(0) \wedge P(1)
+    \rightarrow &P(2), \\ P(0) \wedge P(1) \wedge P(2) \rightarrow &P(3), \\ &
+    \vdots \end{align*}
+    
+    <p>It's important to note that strong induction is not stronger in the sense
+    that it allows us to prove things that we wouldn't be able to with
+    mathematical induction. This is why I described strong induction as an
+    alternate form of mathematical induction. It is possible to use mathematical
+    induction to prove anything we would prove with strong induction, but this
+    involves slightly altering the statement that you want to prove to
+    incorporate your stronger assumptions.
+    
+    <p>A proof by strong induction looks similar to a proof by mathematical
+    induction.
+    <ol>
+    <li><strong>Statement.</strong> Clearly state the statement $P$ that you
+      want to prove and what you want to show induction on.
+    <li><strong>Base case.</strong> Prove $P(0)$.
+    <li><strong>Inductive case.</strong> State the <em>inductive
+        hypothesis</em>, $\forall i \in\{0,1,\ldots,k-1\}, P(i)$. Then, using
+      the assumption that $P(i)$ for all $i \in\{0,1,\ldots,k-1\}$, prove
+      $P(k)$. Clearly indicate when the inductive hypothesis is used.  
+    </ol>
+
+    <p>There is room for variation in how you carry out the induction,
+    and your proofs should be careful about the details. For instance,
+    induction still makes sense if we start from 1 instead of 0 (we
+    just won't conclude that $P(0)$ is true, but we'll know that
+    $P(n)$ is true for all $n\geq 1$.)  Starting from a larger
+    number is also fine, as long as we adjust the conclusion.
+
+    <p>Another variation of induction will sometimes prove $P(0)$ and
+    $P(1)$ in the base case instead of just $P(0)$. When this is necessary
+    depends on what is needed to "get the induction going". Proving $P(1)$
+    might not depend on $P(0)$, but $P(2)$ might need both of them. We
+    will see an instance where this is natural, with Fibonacci numbers.
+
+    <p>Finally, you may opt to change the notation in the inductive step without
+    affecting your proof. Instead of showing that $P(0)\wedge \cdots \wedge
+    P(k-1)$ implies $P(k)$, you can show $P(0)\wedge \cdots \wedge P(k)$ implies
+    $P(k+1)$. Just be careful that you're <em>actually</em> proving step 2 of
+    the induction template.  It's also worth checking that your notation does
+    not inadvertently use something undefined like $P(-1)$, which can happen if
+    you try to use case $P(k-2)$ when $k=1$.
+
+    <p>For the remainder of the lecture, we are going to apply strong induction
+    to prove some famous theorems.
+
+    <h3>The Fundamental Theorem of Arithmetic</h3>
+
+    Let's prove Theorem 12.1.
+
+    <p><em>Proof of Theorem 12.1.</em> We will first prove that for $n \gt 1$,
+    $n$ can be written as a product of primes. (That is, we'll put off proving
+    the uniqueness up to reordering for now.) We use strong induction on $n$.
+
+    <p><strong>Base case.</strong> $n = 2$. Clearly, 2 is a product of primes
+    because 2 itself is a prime number.
+
+    <p><strong>Inductive case.</strong> Assume that for $2 \leq m \lt k$, $m$
+    can be written as a product of primes. We want to show that $k$ can be
+    written as a product of primes. There are two cases to consider.
+    <ul>
+
+    <li>If $k$ is <em>prime</em>, then $k$ can clearly be written as a product
+      of primes since $k$ is itself a prime number.
+
+    <li>If not, then $k$ is <em>composite</em>, then we can write $k = a \cdot
+      b$ for some $a, b \in \mathbb N$. Observe that $2 \leq a, b \lt k$.
+      Therefore, by the inductive hypothesis, $a$ and $b$ can be written as a
+      product of primes. Let $a = p_1 p_2 \cdots p_s$ and $b = q_1 q_2 \cdots
+      q_t$, where $p_1, p_2, \dots, p_s, q_1, q_2, \dots, q_t$ are primes. Then
+        $$k = a \cdot b = p_1 p_2 \cdots p_s q_1 q_2 \cdots q_t$$
+      and therefore $k$ can be written as a product of primes.
+
+    </ul>
+
+    <p>It remains to prove that the product of primes is unique up to
+    reordering. We'll use the following Lemma to do this. We defer its
+    proof for a moment.
+
+    <p><strong>Lemma 12.3.</strong> If $p, p_1, \dots, p_k$ are prime and $p
+    \mid p_1 \cdots p_k$, then $p = p_i$ for some $i$.
+
+
+    <p>Now suppose that $$n = p_1p_2\dots p_s = q_1q_2 \dots q_t$$ is two ways
+    of writing $n$ as a product of primes. We must show that $q_1, q_2, \ldots,
+    q_m$ is a reordering of $p_1, p_2, \ldots, p_s$.  We'll prove this by
+    standard induction, this time on $s$, the number of primes in the
+    first product.
+		 
+     <p><strong>Base case.</strong> Our base case is the claim with $s=1$.  We
+     must show that if $p_1 = q_1 \cdots q_t$, and $p_1$ and $q_1,\ldots,q_t$
+     are all prime, then $t=1$ and $p_1=q_1$. Start by using Lemma 12.3, so $p_1
+     = q_i$ for some $i$. We cannot have $t>1$, since otherwise the product $q_1
+     \cdots q_t$ would be greater than $p_1$ (since primes are all greater than
+     $1$). This establishes the base case.
+
+     <p><strong>Inductive case.</strong> For the inductive assumption is tricky
+     to state, so be careful here.  The inductive assumption $P(s)$, $s>1$, is
+     that for <em>for all</em> $n>1$, if $n = p_1\dots p_s = q_1 \dots q_t$ are
+     two ways of writing $n$ as a product of primes, with the first one
+     consisting of $s$ primes, then $q_1, \ldots, q_t$ is a reordering of
+     $p_1,\ldots,p_s$. 
+
+     <p>We must show that $P(s)$ implies $P(s+1)$. Let $n$ be any integer,
+     and suppose $n = p_1\dots p_{s+1} = q_1 \dots q_t$ are two ways
+     of writing $n$ as a product of primes, the first of which has $s+1$
+     primes. Since $p_s | q_1 \cdots q_t$, Lemma 12.3 says that $p_s = q_j$
+     for some $j\in\{1,\ldots,t\}$. This gives
+     $$
+     n' p_1 \cdots p_{s-1} =  q_1\cdots q_{j-1} q_{j+1} \cdots q_t.
+     $$
+     (In this notation, we drop $p_s$ from the original product on the left,
+     and $q_j$ from the product on the right. Note that it may be
+     possible that $j=1$ or $j=n$; This notation implicitly means we just
+     remove the appropriate $q_j$).
+
+     <p>The equality $n'= p_1 \cdots p_{s-1} =  q_1\cdots q_{j-1} q_{j+1} \cdots
+     q_t$ has $s-1$ primes on the left, so we can apply the inductive hypothesis
+     and conclude that $q_1,\ldots, q_{j-1}, q_{j+1}, \ldots, q_t$ is a
+     reordering of $p_1,\ldots,p_{s-1}$. But then we can conclude
+     that $q_1,\ldots, q_{j-1}, q_j, q_{j+1}, \ldots, q_t$ is a reordering
+     of $p_1,\ldots,p_{s-1},p_s$, since we are just adding $p_s=q_j$ to
+     both lists.
+    $\tag*{$\Box$}$
+    <p>That second induction was tricky because the inductive hypothesis was
+    a statement about <em>all $n$</em> while doing induction on the
+    not-so-obvious parameter $s$. You might take a second a think about
+    why this was necessary.
+    
+    
+    <p>
+    We need to go back and prove Lemma 12.3.
+
+    <p><em>Proof of Lemma 12.3.</em> We will prove this by induction on $k$, the
+    number of primes.
+
+    <p><strong>Base case.</strong> In this case, $p \mid p_1$. Since $p$ and
+    $p_1$ are both prime, it must be the case that $p = p_1$.
+
+    <p><strong>Inductive case.</strong> Suppose our lemma is true for $k$ and
+    consider $p \mid p_1 \cdots p_k \cdot p_{k+1}$. By Theorem 12.1, if $p \mid
+    a \cdot b$, then $p \mid a$ or $p \mid b$. Let $a = p_1 \cdots p_k$ and
+    $p_{k+1} = b$. If $p \mid a$, then $p = p_i$ for some $i$ with $1 \leq i
+    \leq k$ by our inductive hypothesis and our result holds. If $p \mid b$,
+    then $p = p_{k+1}$ and our result holds.  $$\tag*{$\Box$}$$
+
+
+  <h3>Fibonacci numbers</h3>
+
+    <p>Another really nice example for strong induction is the Fibonacci
+    numbers.
+
+    <p><strong>Definition.</strong> The <strong>Fibonacci numbers</strong> are defined by
+    <ol>
+    <li>$f_0 = 0$, $f_1 = 1$, and
+    <li>$f_n = f_{n-1} + f_{n-2}$ for $n \geq 2$.
+    </ol>
+
+    <p>In this form, the Fibonacci numbers lend themselves to inductive proofs quite naturally. However, just like with sums, sometimes we just want a nice neat formula to compute one term. It turns out that one can get an exact formula for $f_n$ in terms of the solutions to $x^2 - x - 1 = 0$. These are $\varphi = \frac{1 + \sqrt 5}{2}$, the Golden Ratio, and its conjugate root, $\widetilde \varphi = 1 - \varphi = \frac{1-\sqrt 5}{2}$. What we get is
+    $$f_n = \frac{\varphi^n - \widetilde \varphi^n}{\sqrt 5}.$$
+    This is now known as Binet's formula, although it seems like it was known by a bunch of mathematicians like Euler, Bernoulli, and de Moivre over a century earlier.
+
+    <p><strong>Theorem 12.4.</strong> For all $n \in \mathbb N$,
+    $$f_n = \frac{\varphi^n - \widetilde \varphi^n}{\sqrt 5}.$$
+
+    <p><em>Proof.</em> We will show this by strong induction on $n$.
+
+    <p><strong>Base case.</strong> For $n = 0$, we have $f_0 = 0 = \frac{\varphi^0 - \widetilde \varphi^0}{\sqrt 5}$. For $n = 1$, we have 
+    \begin{align*}
+    \frac{\varphi - \widetilde \varphi}{\sqrt 5} &= \frac{\frac{1+\sqrt 5}{2} - \frac{1-\sqrt 5}{2}}{\sqrt 5} \\
+    &= \frac{\frac{2\sqrt 5}{2}}{\sqrt 5} \\
+    &= \frac{\sqrt 5}{\sqrt 5} \\
+    &= 1
+    \end{align*}
+
+    <p><strong>Inductive case.</strong> Suppose that $f_j = \frac{\varphi^j - \widetilde \varphi^j}{\sqrt 5}$ for all $j$ with $j \leq k$. Consider $f_{k+1}$.
+    \begin{align*}
+    f_{k+1} &= f_k + f_{k-1} \\
+    &= \frac{\varphi^k - \widetilde \varphi^k}{\sqrt 5} + \frac{\varphi^{k-1} - \widetilde \varphi^{k-1}}{\sqrt 5} &\text{by ind. hyp.} \\
+    &= \frac{\varphi^k + \varphi^{k-1} - (\widetilde \varphi^k + \widetilde \varphi^{k-1})}{\sqrt 5} \\
+    &= \frac{(1 + \varphi) \varphi^{k-1} - (1 + \widetilde \varphi) \widetilde \varphi^{k-1}}{\sqrt 5} \\
+    &= \frac{\varphi^2 \varphi^{k-1} - \widetilde \varphi^2 \widetilde \varphi^{k-1}}{\sqrt 5} &\text{since $\varphi^2 = \varphi + 1$ and $\widetilde \varphi^2 = \widetilde \varphi+1$}\\
+    &= \frac{\varphi^{k+1} - \widetilde \varphi^{k+1}}{\sqrt 5}
+    \end{align*}
+    $\tag*{$\Box$}$
+
+    <h3>Analysis of the Euclidean Algorithm</h3>
+
+    <p>Using this property of the Fibonacci numbers, we can prove something
+    interesting about the Euclidean algorithm. The following is a result
+    attributed to Gabriel Lamé in 1844, which makes it likely the earliest
+    example of both <a
+    href="https://www.sciencedirect.com/science/article/pii/S0315086084710317">analysis
+  of an algorithm</a> and an application of the Fibonacci numbers.
+
+    <p><strong>Theorem 12.5 (Lamé's Theorem).</strong> Suppose $a_n \gt a_{n-1}
+    \gt \cdots \gt a_1 \gt a_0 = 0$ is the sequence of numbers obtained from
+    Euclid's algorithm. Then $a_i \geq f_i$ for all $i \leq n$.
+
+    <p><em>Proof.</em> We will prove this by (strong) induction on $n$.
+
+    <p><strong>Base case.</strong> From the statement, we have $a_0 = f_0$ and $0 \lt a_1$ and $f_1 = 1 \leq a_1$.
+
+    <p><strong>Inductive case.</strong> Assume that $a_j \geq f_j$ for all $j \lt n$. By the Division Theorem, there exists an integer $q$ such that $a_n = q \cdot a_{n-1} + a_{n-2}$ and that $a_{n-2} \lt a_{n-1}$. Then $q \geq 1$ and
+    \begin{align*}
+    a_n &= q \cdot a_{n-1} + a_{n-2} \\
+    & \geq a_{n-1} + a_{n-2} \\
+    & \geq f_{n-1} + f_{n-2} & \text{by ind. hyp.} \\
+    & = f_n
+    \end{align*}
+    $\tag*{$\Box$}$
+		
+	<p>When analyzing algorithms, we are concerned with the number of elementary operations that are performed in proportion to the size of the input and we are concerned with the growth of this function. Here, we consider the number of divisions to be our elementary operation, since that's the most important and costly operation we execute.
+
+    <p><strong>Corollary 12.6.</strong> Let $a \gt b \geq 0$ be natural numbers such that the representation of $a$ requires $d$ decimal digits and the calculation of $\gcd(a,b)$ via Euclid's algorithm requires $k$ division steps. Then $k \leq 5 \cdot d$.
+
+    <p><em>Proof.</em> Since the decimal representation of $a$ requires $d$
+    digits, we have $a \lt 10^d$. If the computation of $\gcd(a,b)$ by Euclid's
+    algorithm requires $k$ steps, by Lamé's Theorem, we have $a \geq f_k$. Then
+    we have the
+    \begin{align*}
+    \frac{\varphi^k}{\sqrt 5} &\leq f_k \leq 10^d. 
+    \end{align*}
+    Taking logs of both sides gives
+    \begin{align*}
+    k \log \varphi - \frac{\log 5}{2} &\leq d \log 10. 
+    \end{align*}
+    A little algebra gives
+    \begin{align*}
+    k &\leq \frac{d \log 10}{\log \varphi} - \frac{\log 5}{2 \log \varphi}, 
+    \end{align*}
+    and filling in the constants finally shows
+    \begin{align*}
+    k &\leq 4.789d + 1.673.
+    \end{align*}
+    That this implies $k \leq 5d$ is clear for large $d$. For small $d$, we can check the values by hand.
+    $\tag*{$\Box$}$
+
+    <p>This is a neat result that goes back to our brief discussion about the efficiency of trying to find a gcd. What Lamé's theorem tells us is that Euclid's algorithm executes operations roughly linearly to the number of digits of the largest number $a$. The number of digits of a number turns out to be about $\log a$, so Euclid's algorithm scales roughly logarithmically with $a$.
+
+    <p>If we compare this to the computing all the divisors method, we would be executing approximately as many operations as there are numbers from 1 to $n$. This means that our naive algorithm scales roughly linearly with $a$. Comparing the two algorithms, we have an approximately exponential difference between the two.
+	
+
+    <h3>The Frobenius Problem</h3>
+
+    <p>The following is an instance of the <em>Frobenius problem</em>, due to
+    Ferdinand Frobenius in the late 1800s. In general, the Frobenius problem
+    asks, given positive relatively prime integers $x_1, x_2, \dots, x_n$, what
+    is the largest integer not representable as a non-negative integer linear
+    combination of the $x_i$.
+
+    <p>We can think of this as a currency denomination problem. In the US,
+    pennies are still in use, so every integer is representable, since we can
+    just fill in the gaps with the 1 cent coins. However, in Canada, the penny
+    was eliminated in 2012 and the smallest coin that is still minted is the
+    nickel, which is 5 cents. Combined with the fact that the other coin
+    denominations are 10 and 25 cents, this means that no integer number of
+    cents that is not divisble by 5 can be represented (which is why we require
+    relatively prime integers).
+
+    <p><strong>Theorem 12.7.</strong> Every natural number $n \geq 12$ can be
+    written as $n = 4a + 5b$ for some integers $a,b \geq 0$.
+
+    <p>We will prove this twice: first by standard induction, and then by strong
+    induction.
+
+    <p><em>First Proof of Theorem 12.7.</em> We will prove this by induction on $n$.
+
+    <p><strong>Base case.</strong> For $n = 12$, we observe that $12 = 4 \cdot 3$.
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary with $k \geq 12$ and assume $k = 4a + 5b$ for $a,b \in \mathbb N$. Consider $n = k+1$. There are two cases to consider.
+    <ul>
+    <li>Suppose that $a \geq 1$. Then $k+1 = 4(a-1) + 5(b+1)$.
+    <li>Suppose that $a = 0$. In other words, $k = 5b$. Since $k \geq 12$, we have $b \geq 3$. Then $k+1 = 4 \cdot 4 + 5(b-3)$.
+    </ul>
+    $\tag*{$\Box$}$
+
+    <p>We can also prove this via strong induction. Recall that strong induction says that for a statement $P(n)$, if
+    <ol>
+    <li>$P(0)$, and
+    <li>for all $k \in \mathbb N$, if $P(j)$ for all $j \leq k$, then $P(k+1)$
+    </ol>
+    <p> are both true, then the following is true:
+    <ol start="3">
+    <li>for all $n \in \mathbb N$, $P(n)$ holds.
+    </ol>
+    
+    <p><em>Second Proof of Theorem 12.7.</em> We will prove this by strong induction on $n$.
+
+    <p><strong>Base case.</strong> We will show that this is true for $n = 12, 13, 14, 15$. We have
+    \begin{align*}
+    12 &= 4 \cdot 3 + 5 \cdot 0, \\
+    13 &= 4 \cdot 2 + 5 \cdot 1, \\
+    14 &= 4 \cdot 1 + 5 \cdot 2, \\
+    15 &= 4 \cdot 0 + 5 \cdot 3.
+    \end{align*}
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary with $k \geq 15$ and assume for all $12 \leq j \leq k$ that $j = 4a + 5b$ for some $a,b \in \mathbb N$. Consider $n = k+1$. Since $k \geq 15$, we have that $k - 3 \geq 12$ and $k-3 = 4a + 5b$ with $a,b \in \mathbb N$. Then $k+1 = 4(a+1) + 5b$.
+    $\tag*{$\Box$}$
+
+    <p>You can find the proof of this in the Rosen textbook, where the question is formulated in terms of stamps and stamp denominations. This is not a perfect analogy like the coin formulation of the problem because an envelope has a finite amount of space for you to place stamps. This leads to a variant of the problem, where you also limit the number of stamps you can use.
+
+    <p>Another instance of the Frobenius problem was formulated as a question not about coins, but about boxes of McNuggets. At the time the problem was posed, McNuggets came in boxes of 6, 9, and 20 in the UK, which is where Picciotto, who posed the problem, was from. So if you wanted to, say, split a bunch of nuggets evenly between seven people, you had to get at least 35 nuggets because there would be no way to get 7, 14, 21, or 28. It turns out that 43 is the smallest non-representable number.
+
+		<p><strong>Theorem 12.8.</strong> Every natural number $n \geq 44$ can be written as $n = 20a + 9b + 6c$ for some integers $a,b,c \geq 0$.
+
+    <p><em>Proof.</em> We will prove this by strong induction on $n$.
+
+    <p><strong>Base case.</strong> We will show that this is true for $n = 44, 45, 46, 47, 48, 49$. We have
+    \begin{align*}
+    44 &= 20 \cdot 1 + 9 \cdot 0 + 6 \cdot 4 \\
+    45 &= 20 \cdot 0 + 9 \cdot 3 + 6 \cdot 3 \\
+    46 &= 20 \cdot 2 + 9 \cdot 0 + 6 \cdot 1 \\
+    47 &= 20 \cdot 1 + 9 \cdot 3 + 6 \cdot 0 \\
+    48 &= 20 \cdot 0 + 9 \cdot 0 + 6 \cdot 8 \\
+    49 &= 20 \cdot 2 + 9 \cdot 1 + 6 \cdot 0 \\
+    \end{align*}
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary with $k \geq 50$ and assume for all $44 \leq j \leq k$ that $j = 20a + 9b + 6c$ for some $a,b,c \in \mathbb N$. Consider $n = k+1$. Since $k \geq 50$, we have that $k - 6 \geq 44$ and therefore $k-6 = 20a + 9b + 6c$ with $a,b,c \in \mathbb N$. Then $k+1 = 20a + 9b + 6(c+1)$.
+    $\tag*{$\Box$}$
+
+    <p>Nowadays, nuggets don't come in odd-numbered denominations, at least not in the US or Canada.
+	

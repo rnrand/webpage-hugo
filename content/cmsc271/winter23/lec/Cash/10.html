@@ -1,0 +1,404 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 10</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 10</h1>
+
+	 <h2>Euler's Theorem and RSA Encryption</h2>
+
+	 This lecture continues the study of multiplicative inverses and primes,
+	 towards a proof of something called Euler's Theorem. While Euler's
+	 Theorem will appear highly obscure, it in fact underlies one of the
+	 most important technologies developed in the 20th century: public-key
+	 encryption. After proving Euler's Theorem, we'll see how it used in
+	 an encryption method called RSA.
+
+
+	 <h3>The Euler $\varphi$ Function</h3>
+
+	 We start with a definition.
+
+
+	 <p><strong>Definition 10.1.</strong> The <strong>Euler $\varphi$
+		 function</strong> $\varphi:\mathbb{N}\to\mathbb{N}$ is defined to
+	 be
+	 $$
+	 \varphi(n) = |\{x \ : \ 1\leq x \leq n, \  \gcd(x,n)=1\}|.
+	 $$
+
+	 <p>In other words, $\varphi(n)$ is the number of positive integers
+	 that are at most $n$ and relatively prime to $n$.
+
+
+	 <p><strong>Example.</strong> We can calculate the first few values of
+	 $\varphi(n)$ by hand.
+		<table>
+        <tr> <th>$n$ <th>$\varphi(n)$
+        <tr> <td>$1$ <td>$1$
+        <tr> <td>$2$ <td>$1$
+        <tr> <td>$3$ <td>$2$
+        <tr> <td>$4$ <td>$2$
+        <tr> <td>$5$ <td>$4$
+        <tr> <td>$6$ <td>$2$
+        <tr> <td>$7$ <td>$6$
+    </table>
+		For example, $\varphi(6)=2$ because $1$ and $5$ are the only numbers
+		in $\{1,2,3,4,5,6\}$ that are relatively prime to $6$.
+
+    <p>From the example we can already get a hint that $\varphi(n)$ is an
+    erratic function; It is neither always increasing nor always decreasing. It
+    turns out that the value of $\varphi(n)$ has a lot to do with how the number
+    $n$ factors.  For now,
+    we'll work out two simple cases for computing $\varphi(n)$.
+
+	 <p><strong>Theorem 10.2.</strong> For any prime $p$, $\varphi(p)=p-1$.
+
+	 <p>We can see this theorem at work in the table, since $\varphi(2)=1$,
+	 $\varphi(3)=2$, and so on.
+
+
+	 <p><em>Proof.</em> Since $p$ is prime, for any $x$ that is not divisible by
+	 $p$, we have $\gcd(x,p)=1$. Next, we have that none of the elements of
+	 $\{1,\ldots,p-1\}$ is divisible by $p$, since the smallest positive multiple
+	 of $p$ is $p$. Thus $\gcd(x,p)=1$ for all $1\leq x \lt p$, and
+	 $\varphi(p)=p-1$.
+    $$\tag*{$\Box$}$$
+
+    <p>Eventually we'll compute $\varphi(n)$ for all $n$. In this lecture,
+    however, we will only need the following case.
+
+	 <p><strong>Theorem 10.3.</strong> For all distinct primes $p,q$, 
+	 $\varphi(pq)=(p-1)(q-1)$.
+
+	 <p><em>Proof.</em> Let $n=pq$. We have
+	 \begin{align*}
+	 \varphi(n) & =  |\{x \ : \ 1\leq x \leq n, \  \gcd(x,n)=1\}| \\
+	 &= n -|\{x \ : \ 1\leq x \leq n, \  \gcd(x,n)\neq 1\}|. 
+	 \end{align*}
+	 We need to figure out how large the set
+	 $S = \{x \ : \ 1\leq x \leq n, \  \gcd(x,n)\neq 1\}$ is.
+
+   <p>We claim that, for all $1\leq x \leq n$, $x\in S$ if and only if $x$ is
+   either a multiple of $p$ or a multiple of $q$.  The "$\Leftarrow$" direction
+   is easy.  The "$\Rightarrow$" direction follows by considering the four cases
+   where $\gcd(x,p)$ is $1$ or $p$ and $\gcd(x,q)$ is $1$ or $q$ (by the
+   definition of primes, these are the only possibilities).  If $\gcd(x,p)=1$
+   and  $\gcd(x,q)=1$, then $\gcd(x,pq)=1$ (Exercise), so $x\notin S$.  If
+   $\gcd(x,p)=p$ or $\gcd(x,q)=q$, then $p|x$ or $q|x$, as desired.
+
+	 <p>Thus we can write $S = S_p \cup S_q$, where
+	 $$
+	 S_p = \{x \ : \ 1\leq x \leq n, \  p|x\}
+	 $$
+	 and
+	 $$
+	 S_q = \{x \ : \ 1\leq x \leq n, \  q|x\}.
+	 $$
+	 We can then use the identity $|S|=|S_p \cup S_q| = |S_p| + |S_q| - |S_p \cap
+	 S_q|$, which is true for all finite sets.
+
+	 <p>We have $|S_p|=q$, because the multiples of $p$ in $\{1,\ldots,n\}$
+	 are $p,2p,\ldots,qp$. Similarly, we have $|S_q|=p$. Finally, 
+	 $|S_p\cap S_q|=1$, because $n=pq$ is the only number in this set
+	 that is both a multiple of $p$ and $q$ (Exercise: Check carefully.). Thus
+	 \begin{align*}
+	 \varphi(n) 
+	 & = pq - |S| \\
+	 & = pq -  (|S_p| + |S_q| - |S_p \cap S_q|) \\
+	 & = pq- (q + p - 1) \\
+	 & = (p-1)(q-1). 
+	 \end{align*}
+    $$\tag*{$\Box$}$$
+
+    <p>That proof was a little clunky. After we cover a little more number
+    theory, we will be able to give a simpler proof.
+
+    <p><strong>Exercise.</strong> The theorem assumes $p\neq q$. Can you find
+    where in the proof we used this fact? It must, because the theorem is not
+    true when if we allow $p=q$!
+
+		
+	 <h3>Euler's Theorem</h3>
+
+   <p>Euler's Theorem is beautifully simple to state, but it's worth taking a
+   moment to observe how complex it is, as it uses the non-trivial definitions
+   we have built up.
+
+	 <p><strong>Theorem 10.4. (Euler's Theorem)</strong> For any integer
+   $n>1$, and any integer $a$ relatively prime to $n$,
+   \begin{align*}
+   a^{\varphi(n)} \equiv_n 1.
+   \end{align*}
+
+   <p><strong>Example.</strong> Take $n=4$, $a=3$. Then $a^{\varphi(n)} = 3^2 =
+   9$, and $9\equiv_4 1$, as predicted by the theorem.
+
+   <p>The proof of Euler's Theorem is also beautifully simple. It uses
+   the following lemma.
+
+   <p><strong>Lemma 10.5.</strong> For any integer $n>1$ and any integer $a$
+   relatively prime to $n$, let $S = \{x \ : \ 1\leq x \leq n, \  \gcd(x,n)=
+   1\}$ and define the function $f:S\to S$ by
+   \begin{align*}
+   f(x) = ax \mathop{\mathbf{mod}} n.
+   \end{align*}
+   Then $f$ is a bijection. Consequently, if
+   \begin{align*}
+   x_1,\ldots,x_{\varphi(n)}
+   \end{align*}
+   is a list of all the distinct elements of $S$, then
+   \begin{align*}
+   f(x_1),\ldots,f(x_{\varphi(n)})
+   \end{align*}
+   is also a list of all the distinct elements of $S$, possibly in a different
+   order.
+
+   <p><em>Proof of Lemma 10.5.</em> First observe that the output of
+	 $f$ is indeed always in $S$, since if $a$ and $x$ are relatively prime
+	 to $n$ then so is $ax$ and hence $ax \mathop{\mathbf{mod}} n$ is as well.
+	 
+	 <p>If suffices to prove that $f$ is injective,
+   since an injective function from a finite set to itself must be a bijection.
+   (Exercise: Instead, prove that $f$ is surjective directly.)
+
+   <p>If $f(x)=f(x')$, then $(ax \mathop{\mathbf{mod}} n) =  (ax'
+   \mathop{\mathbf{mod}} n)$, so $ax \equiv_n ax'$. Since $a$ is relatively
+   prime to $n$, we can cancel it, getting $x \equiv_n x'$. But $x,x'\in S$
+   satisfy $x \equiv_n x'$ only if $x=x'$ (we have seen this reasoning before;
+   it follows because the smallest positive multiple of $n$ is $n$ itself). Thus
+   $f$ must be injective.  $$\tag*{$\Box$}$$
+
+      <p>In other words, when working modulo $n$, we can mod down exponents
+   <em>modulo $\varphi(n)$</em>. Note that the exponent is modded down by
+   $\varphi(n)$, and <strong>not</strong> $n$.
+
+
+
+   <p><strong>Example.</strong> Take $n=5, a=2$. Then we get
+<table>
+        <tr> <th>$x$ <th>$f(x)$
+        <tr> <td>$1$ <td>$2$
+        <tr> <td>$2$ <td>$4$
+        <tr> <td>$3$ <td>$1$
+        <tr> <td>$4$ <td>$3$
+    </table>
+<table>
+  and notice that the right column contains the same numbers as the left column,
+  just in a different order. For another example, take $n=7, a=3$, to get
+        <tr> <th>$x$ <th>$f(x)$
+        <tr> <td>$1$ <td>$3$
+        <tr> <td>$2$ <td>$6$
+        <tr> <td>$3$ <td>$2$
+        <tr> <td>$4$ <td>$5$
+        <tr> <td>$5$ <td>$1$
+        <tr> <td>$6$ <td>$4$
+    </table>
+    and once again the numbers in the left column all appear example once
+    in the right column, as the theorem says.
+
+   <p><em>Proof of Theorem 10.4 (Euler's Theorem).</em> Again let $S = \{x \ : \
+   1\leq x \leq n, \ \gcd(x,n)= 1\}$, and let $x_1,\ldots,x_{\varphi(n)}$
+   be the distinct elements of $S$. By Lemma 10.5, we have
+   $$
+   f(x_1)\cdot f(x_2) \cdots f(x_{\varphi(n)})
+   =
+   x_1\cdot x_2 \cdots x_{\varphi(n)}
+   $$
+   since the numbers on either side are the same, just in different orders.
+   We also have
+   $$
+   f(x_1)\cdot f(x_2) \cdots f(x_{\varphi(n)})
+   \equiv_n 
+   (ax_1)\cdot (ax_2) \cdots (ax_{\varphi(n)})
+   \equiv_n
+   a^{\varphi(n)}\cdot x_1\cdot x_2 \cdots x_{\varphi(n)}
+   $$
+   since we can take all of the $a$ values to the front, and there
+   are $\varphi(n)$ of them. Thus
+   $$
+   a^{\varphi(n)}\cdot x_1\cdot x_2 \cdots x_{\varphi(n)}
+   \equiv_n
+   x_1\cdot x_2 \cdots x_{\varphi(n)}.
+   $$
+
+   <p>Now let $y = x_1\cdot x_2 \cdots x_{\varphi(n)}$. Since each $x_i$ is
+   relatively prime to $n$, we have that $y$ is as well (<em>Exercise: Prove
+   this. After we cover induction in the next lecture, it will be
+   easier, but a proof is possible now.</em>). This means
+   we can cancel $y$ (modulo $n$) from both sides of the equation, leaving
+  $$
+   a^{\varphi(n)} \equiv_n 1
+   $$
+   as desired.$$\tag*{$\Box$}$$
+
+
+
+
+   <p><strong>Corollary 10.6.</strong> For any integer $n>1$ and any integer
+    $a$ relatively prime to $n$, and any integer $b\geq 0$, $$a^b \equiv_n a^{b
+    \mathop{\mathbf{mod}} \varphi(n)}.$$
+
+   <p><strong>Exercise.</strong> Prove the Corollary. (Hint: Use the
+   Division Theorem.)
+
+   <h2>Application to Encryption</h2>
+
+   <p>We are just going to touch on encryption in the lecture. There is quite
+   a bit that we can't fit here, but if you are interested, you should consider
+   taking CMSC 28400 (Cryptography), or just ask me about it!
+
+   <p><em>Encryption</em> is generally speaking the process of scrambling a
+   message to keep it from being read by eavesdroppers.  Your devices all
+   use encryption when sending data over networks, because otherwise the
+   networking operators, governments, or other malicious parties could
+   read everything you send.
+
+   <p>Historically, encryption worked by having two parties physically exchange
+   a <em>key</em> before they started encrypting messages for each other. Early
+   20th century ciphers, for example, required that military units all had
+   physical books of keys to be used on different days. One party would use the
+   key to encrypt a message $M$ to generate a <em>ciphertext</em> $C$, which is
+   what was sent. The receiver could decrypt $C$ to obtain $M$ using the same
+   key.
+
+   <p>With the growth of the internet starting in the late 1970's, it became
+   clear that traditional encryption would be problematic. To communicate with
+   each endpoint on the internet, a computer would need a key specific to that
+   endpoint, and it wasn't clear how we'd ever agree on so many keys.
+
+   <p>A solution to this problem, and also a fundamental insight into the
+   nature of communication, was called <em>public-key encryption</em>.
+   It has the following properties:
+   <ul>
+
+     <li>Instead of single key, one generates two keys, called the
+       <em>public key</em> $pk$ and <em>secret key</em> $sk$ respectively.
+     </li>
+
+     <li>Encryption will use the
+       public key $pk$, while decryption will use the secret key $sk$.
+     </li>
+
+     <li>
+       The public key $pk$ can be posted online for anyone to see. It is
+       not kept secret. Thus anyone can run encryption.
+     </li>
+
+     <li>
+       The secret key $sk$ must be kept, well, secret, because otherwise
+       anyone could use it to decrypt ciphertexts that they observe.
+     </li>
+
+   </ul>
+
+   <p>Public-key encryption enabled a revolution in private communication on the
+   internet, and specifically for commerce online. It allowed the average user
+   to send their confidential payment information over the internet to any
+   vendor without needing to first get a key (say by physical mail). To do so,
+   they'd download the vendor's public key, and then use it to encrypt their
+   information before sending. The vendor, who possessed the secret key, could
+   decrypt and process the payment.
+
+   <p>Let's see how Euler's Theorem is used to construct RSA encryption,
+	 which is named after its inventors Rivest, Shamir, and Adleman who shared
+	 the Turing Award for this invention.
+   We'll describe key generation, encryption, and decryption in turn.
+
+
+   <p><strong>Key generation.</strong> To generate a public key and
+   secret key, we do the following:
+   <ol>
+
+     <li>First choose two large distinct prime numbers $p,q$.  How large? Very
+       large. Today, we take $p,q\approx 2^{1000}$. Set $N=pq$.
+     </li>
+
+     <li>Next, choose a number $e$ relatively prime to $\varphi(N)$. A common
+       choices are $e=3$ or $e=65537$.
+     </li>
+
+     <li>Now compute $d$, an inverse of $e$ modulo $\varphi(N)$. For this one
+       uses the Extended Euclidean Algorithm, which we did not cover but
+       you can find in the recommended course textbooks.
+     </li>
+
+     <li>The public key is $(N,e)$. The secret key is $(N,d)$.
+   </ol>
+
+   <p><strong>Encryption.</strong> We assume that the message we want
+   to encrypt is a number $M\in \{1,2,\ldots,N\}$ that is relatively
+   prime to $M$. This assumption is not at all a problem in practice,
+   and for this lecture let's just assume this is fine. Encryption
+   takes the message $M$ and public key $(N,e)$ and outputs
+   $$
+   C = (M^e \mathop{\mathbf{mod}} N).
+   $$
+  
+   <p><strong>Decryption.</strong> Using the secret key $(N,d)$, we decrypt
+   a ciphertext $C$ as
+   $$
+   M = (C^d \mathop{\mathbf{mod}} N).
+   $$
+
+   <p>We need to argue that decryption recovers the message properly. This
+   is true by Corollary 10.6, because
+   $$
+   C^d \equiv_N (M^e)^d \equiv_N M^{ed} \equiv_N M^{ed\mathop{\mathbf{mod}}
+   \varphi(N)}
+   \equiv_N M^{1}.
+   $$
+   The last congruence used that $d$ is the inverse of $e$ modulo $\varphi(N)$,
+   so $ed \equiv_{\varphi(N)} 1$.
+  
+
+   <p>A fair question is: Is this <em>secure</em>? This is a very nuanced
+   question, but at the very least we'd want that no one should be able
+   to recover $M$ from $C$. But observe that:
+   <ol>
+
+     <li> If someone can factor $N$, they can learn $p,q$.  </li>
+
+     <li> If someone knows $p,q$ then they can learn $\varphi(N)$.  </li>
+
+     <li> If someone knows $\varphi(N)$ then they can compute an inverse
+       $d$ of $e$ modulo $\varphi(N)$.  </li>
+
+     <li> If someone knows $d$, then they can decrypt ciphertexts. </li>
+
+   </ol> 
+
+	 <p>Thus the security of RSA rests (amongst other things) upon the hardness
+	 of the factoring problem, which is: Given a large integer, find its prime
+	 factors. So far there is no indication that anyone can factor the large
+	 integers used in practice for RSA. However, it is known that (in principle)
+	 a large quantum computer <em>can</em> factor these integers, should it ever
+	 be built!  The quantum method is called Shor's algorithm, in case you want
+	 to continue reading about it yourself.
+
+
+   <p>I'll close by saying that, as a cryptographer, I can't present this
+   version of RSA without clarifying that practical implementations require
+   a lot of hardening before they are secure. This version of RSA is called
+   "textbook RSA", and is meant for an introduction only.
+
+
+
+

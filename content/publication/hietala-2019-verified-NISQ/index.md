@@ -16,7 +16,7 @@ lastmod: 2021-07-26T16:34:20-05:00
 featured: false
 draft: false
 
-image:
+image: 
   caption: ''
   focal_point: ''
   preview_only: false

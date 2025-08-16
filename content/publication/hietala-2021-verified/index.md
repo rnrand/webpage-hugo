@@ -51,9 +51,9 @@ publication: '*ACM SIGPLAN Symposium on Principles of Programming Languages (POP
 
 doi: 10.1145/3434318
 url_pdf: 'files/popl_2021_full.pdf'
-url_code: 'https://github.com/inQWIRE/SQIR'
+url_code: 'https://github.com/inQWIRE/SQIR/'
 url_dataset: ''
-url_poster: ''
+url_poster: 'files/cc_2022_poster.pdf'
 url_project: ''
 url_slides: 'files/popl_2021_slides.pdf'
 url_source: ''

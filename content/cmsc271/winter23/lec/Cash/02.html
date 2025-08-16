@@ -1,0 +1,587 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 2</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 2</h1>
+
+  In this lecture we'll first wrap up our coverage of connectives, and
+  then discuss how the truth values of propositions are
+  related. This leads us to the notion of a <em>proof</em>, which is
+  an argument establishing the truth of a proposition based on the truth
+  of other propositions.
+
+    <h3>The Conditional and Biconditional Connectives</h3>
+
+  <p>
+    Last time we defined the conditional connective $\rightarrow$; Next we
+    consider a simpler related connective:
+    </p>
+
+    <p><strong>Definition 1.6.</strong> $p \leftrightarrow q$ is called <strong>a
+      biconditional</strong> or <strong>logical equivalence</strong> and is
+    pronounced "$p$ if and only if $q$".  It is defined to be true
+    exactly when $p$ and $q$ have the same truth values (i.e. both false
+    or both true).</p>
+
+    <p>The truth table for this one is
+    <table>
+        <tr> <th>$p$ <th>$q$ <th>$\quad$ <th>$p \leftrightarrow q$
+        <tr> <td>$T$ <td>$T$ <td> <td>$T$ 
+        <tr> <td>$T$ <td>$F$ <td> <td>$F$
+        <tr> <td>$F$ <td>$T$ <td> <td>$F$
+        <tr> <td>$F$ <td>$F$ <td> <td>$T$
+		</table></p>
+
+    <p><strong>Example.</strong> Again let $p =$ <em>"It is Wednesday."</em> and
+    $q =$ <em>"I will be a milkshake."</em> Then $p\rightarrow q$ is <em>"If it
+      is Wednesday, then I will buy a milkshake"</em>, and $p\leftrightarrow q$
+    is <em>"It is Wednesday, if and only if I will buy a milkshake".</em></p>
+
+    <p>
+    Now examine $p \rightarrow q$ in the case that $p$ is false - Say it's
+    Monday, not Wednesday. In that case, we declare $p \rightarrow q$ to
+    be true, regardless of whether or not we buy a milkshake. This follows
+    the conventions discussed above.
+    </p>
+
+    <p>The biconditional $p\leftrightarrow q$ can be reworded as <em>"I always
+    buy a milkshake on Wednesdays, and if it is Wednesday, then I must be
+    buying a milkshake."</em> which is closer to normal English. Intuitively
+    it says that buying a milkshake and the day being Wednesday are equivalent
+    in some sense.
+    &#x220E;
+    </p>
+
+
+
+		<p>We close this section with a few more definitions:</p>
+
+		<p><strong>Definition 1.7.</strong> Let $p$ and $q$ be propositions.
+		We define
+		<ul>
+
+			<li>The <strong>converse of $p\rightarrow q$</strong> is $q\rightarrow
+				p$.</li>
+
+			<li>The <strong>inverse of $p\rightarrow q$</strong> is $\neg
+				p\rightarrow \neg q$.</li>
+
+			<li>The <strong>contrapositive of $p\rightarrow q$</strong> is $\neg
+				q\rightarrow \neg p$.</li>
+		</ul>
+		</p>
+
+    <p><strong>Example.</strong> Again let $p =$ <em>"It is Wednesday."</em> and
+    $q =$ <em>"I
+      will be a milkshake." </em>
+    <ul>
+
+      <li> The converse of $p\rightarrow q$ is <em>"If I buy a milkshake, then
+          it is Wednesday"</em>, or more naturally, <em>"If I buy a milkshake,
+          then it must be Wednesday".</em></li>
+
+      <li>The inverse of $p \rightarrow q$ is <em>"If it's not Wednesday, then I
+          won't buy a milkshake."</em></li>
+
+      <li> The contrapositive of $p \rightarrow q$ is <em>"If I don't buy a
+          milkshake, then it is not Wednesday"</em>, or <em>"If I don't buy a
+          milkshake, then it can't be Wednesday".</em></li>
+
+    </ul>
+    Next time we will discuss logical equivalence, but its worth taking a
+    second to see if you have some intuition about those statements relate
+    to other.&#x220E;
+
+
+		<h3>More Complex Propositions and Order of Operations</h3>
+
+    <p>
+    We can string together propositions using the connectives $\neg,
+    \wedge,\vee,\rightarrow,\leftrightarrow$ to model more complex assertions.
+    As with arithmetic, we need to be careful about the order of operations.
+    </p>
+
+    <p> An example of a more complex proposition we'd like to model is <em>"If
+      it is either Wednesday and it is not raining, then I buy a
+      milkshake."</em> This could be modeled as $(p \vee (\neg q)) \rightarrow
+    r$, where $p =$ <em>"It is Wednesday."</em> and $q =$ <em>"It is
+      raining."</em> and $r =$ <em>"I will be a milkshake."</em>
+    </p>
+
+    <p>In order to avoid being overwhelmed by parentheses, we introduce an order
+    of precedence amongst the connectives: From highest to lowest, we take them
+    in the order $\neg, \wedge,\vee$ and let $\rightarrow,\leftrightarrow$ have
+    equal precedence (and thus ties are broken by reading them left-to-right).
+    So, for example, $\neg p \wedge q$ means $(\neg p) \wedge q$ and not $\neg
+    (p \wedge q)$ because $\neg$ has higher precedence than $\wedge$.  Something
+    like $p\rightarrow q \leftrightarrow r$ will be avoided, because we have to
+    assign precedence from left to right, meaning it is $(p\rightarrow q)
+    \leftrightarrow r$ and not $p\rightarrow (q \leftrightarrow r)$. In these
+    cases we'll try to use parentheses always.  </p>
+
+    <p>
+    Arbitrarily complex propositions are allowed; For instance we could
+    consider $((p\wedge q)\rightarrow r) \leftrightarrow (r \rightarrow q)$
+    or other even larger combinations of connectives.
+    </p>
+
+    <p>
+    To compute the truth table of a compound proposition, we proceed by
+    computing the truth tables of its components and iteratively put them
+    together, as in the following example.
+    </p>
+
+    <p><strong>Example.</strong> Let's compute the truth table of 
+    $\neg p\wedge q$. We start by computing the truth table
+    of $\neg p$ as before:
+    <table>
+        <tr> <th>$p$ <th>$q$ <th>$\quad$ <th>$\neg p$
+        <tr> <td>$T$ <td>$T$ <td> <td>$F$ 
+        <tr> <td>$T$ <td>$F$ <td> <td>$F$
+        <tr> <td>$F$ <td>$T$ <td> <td>$T$
+        <tr> <td>$F$ <td>$F$ <td> <td>$T$
+		</table>
+    Now we use this column, along with the existing column for $p$, the
+    compute the truth table we are after. We simply extend the table with
+    another column:
+        <table>
+          <tr> 
+            <th>$p$ </th>
+            <th>$q$ </th> 
+            <th>$\quad$ </th>
+            <th>$\neg p$ </th>
+            <th>$\quad$ </th>
+            <th>$\neg p\wedge q$ </th>
+            <tr> 
+              <td>$T$ </td> 
+              <td>$T$ </td> 
+              <td> </td>
+              <td>$F$ </td>
+              <td> </td>
+              <td> $F$</td>
+            </tr>
+            <tr> 
+              <td>$T$ </td> 
+              <td>$F$ </td> 
+              <td> </td>
+              <td>$F$ </td>
+              <td> </td>
+              <td> $F$</td>
+            </tr>
+            <tr> 
+              <td>$F$ </td> 
+              <td>$T$ </td> 
+              <td> </td>
+              <td>$T$ </td>
+              <td> </td>
+              <td> $T$</td>
+            </tr>
+            <tr> 
+              <td>$F$ </td> 
+              <td>$F$ </td> 
+              <td> </td>
+              <td>$T$ </td>
+              <td> </td>
+              <td> $F$</td>
+            </tr>
+		</table>
+
+    <p>
+    Once you do a few of these, they become a simple matter of robotically
+    composing together truth tables until you have the one you're after.
+    Here's a more complicated example, given in one table, for the
+    proposition $((p \wedge q) \rightarrow r) \leftrightarrow (p \rightarrow (q
+    \rightarrow r))$.
+        <table>
+        <tr> <th>$p$<th>$q$<th>$r$<th>$p \wedge q$<th>$(p \wedge q) \to r$<th>$q \to r$<th>$p \to (q \to r)$<th>$(p \wedge q) \to r \leftrightarrow p \to (q \to r)$
+        <tr> <td>$T$<td>$T$<td>$T$<td>$T$         <td>$T$                 <td>$T$      <td>$T$      <td>$T$
+        <tr> <td>$T$<td>$T$<td>$F$<td>$T$         <td>$F$                 <td>$F$      <td>$F$      <td>$T$
+        <tr> <td>$T$<td>$F$<td>$T$<td>$F$         <td>$T$                 <td>$T$      <td>$T$      <td>$T$
+        <tr> <td>$T$<td>$F$<td>$F$<td>$F$         <td>$T$                 <td>$T$      <td>$T$      <td>$T$
+        <tr> <td>$F$<td>$T$<td>$T$<td>$F$         <td>$T$                 <td>$T$      <td>$T$      <td>$T$
+        <tr> <td>$F$<td>$T$<td>$F$<td>$F$         <td>$T$                 <td>$F$      <td>$T$      <td>$T$
+        <tr> <td>$F$<td>$F$<td>$T$<td>$F$         <td>$T$                 <td>$T$      <td>$T$      <td>$T$
+        <tr> <td>$F$<td>$F$<td>$F$<td>$F$         <td>$T$                 <td>$T$      <td>$T$      <td>$T$
+    </table>
+    Note that since we had three atomic propositions $p,q,r$ we needed
+    eight rows in our table this time. Also note that, curiously, this
+    proposition is always true.
+    &#x220E;
+
+
+
+		<h3>Translating from English</h3>
+
+    Recall that the point of studying propositional logic at this stage is so
+    that we can later understand what mathematical statements are saying
+    precisely. The application of logic will thus involve translating between
+    English and the language of propositional logic (at least in your head).
+    A well-written statement should make this easy, but it is good to have
+    practice a bit first, and there are some gotchas in common mathematical
+    language.
+
+    <p><strong>Example.</strong>
+    Consider the proposition:
+
+    <blockquote> Hina knows Python if she is a CS major and
+      took 141, and she is a CS major or did not take 141.
+    </blockquote>
+    A mathematical statement of this form would be rejected outright as
+    too complicated; If you find yourself twisting around words like this,
+    it's a sign that you should refactor your claims into something plainer.
+    But let's try to parse it, just for the challenge. The atomic propositions
+    are
+    <ul>
+      <li>$p=$<em>Hina knows Python.</em></li>
+      <li>$q=$<em>Hina is a CS major.</em></li>
+      <li>$r=$<em>Hina took 141.</em></li>
+    </ul>
+
+    Next, if you look at the statement, it breaks apart into two independent
+    pieces at the comma, joined by a conjunction. The first piece (<em>Hina
+    knows Python if she is a CS major and took 141,</em>) is $(q \wedge r)
+  \rightarrow p$; Note that $q$ and $r$ come second in the English but are on
+  the left-hand side in logical notation. The second piece
+  (<em>she is a CS major or did not take 141</em>) is $q \vee \neg r$.
+  </p>
+
+  Putting  that all together gives $((q \wedge r) \rightarrow p) \wedge (q \vee
+  \neg r)$. Quite a mouthful.
+    &#x220E;
+
+    <p><strong>Example.</strong>
+    Consider the proposition:
+        <blockquote> I'm having pie, unless I'm having a milkshake.  
+        </blockquote>
+        The problem here is with "unless". Take $p=$<em>"I'm having pie"</em>
+        and $q=$<em>"I'm having a milkshake"</em>. The question is: What does
+        "$p$ <em>unless</em> $q$" mean, logically?
+    </p>
+
+    <p>The common interpretation is $\neg q \rightarrow p$, that is, "<em>If I'm
+      not having a milkshake, then I'm having pie.</em>". You can justify this
+    to yourself by writing down a truth table directly from the sentence and
+    comparing it to  $\neg q \rightarrow p$ (though the case where $p$ and $q$
+    are both false is still awkard; it's similar to the situation with
+    $\rightarrow$). In any case, you may see "unless" from time to time, but
+    we'll try to avoid it.
+    </p>
+
+	<h3>Tautologies and Contradictions</h3>
+
+  <p>
+  The first lecture noted that the proposition $((p \wedge q) \rightarrow r)
+  \leftrightarrow (p \rightarrow (q \rightarrow r))$ had the interesting
+  property that its truth table consisted of all true values. A simpler
+  example of this phenomenon is $p \vee \neg p$; No matter if $p$ is
+  true or false, $p \vee \neg p$ will be true. 
+  </p>
+
+  <p>Propositions with the property are called <em>tautologies</em>:</p>
+
+  <p><strong>Definition 1.1.</strong> A proposition is called a
+  <strong>tautology</strong> if its truth table is all true values.</p>
+
+  <p>
+  You may have heard the word "tautology" before as in "But that is a
+  tautology!".  The suggestion is that whatever was just said is not
+    interesting; It's just always true and not claiming anything. For example,
+    if you claim <em>"Raising taxes is the right thing to do, or raising taxes
+      is the wrong thing to do."</em> then you're unlikely to kick off an
+    interesting debate, except maybe with a nihilist.
+  </p>
+
+  <p>
+  The opposite extreme is called a contradiction:
+  </p>
+
+  <p><strong>Definition 1.2.</strong> A proposition is called a
+  <strong>contradiction</strong> if its truth table is all false values.</p>
+
+  <p>
+  A simple example of a contradiction of $p \wedge \neg p$. This proposition
+  is never true, as can be seen from its truth table. For more interesting
+  examples, consider $p \rightarrow \neg p$
+  </p>
+
+  <p>
+  Contradictions are only slightly more interesting than tautologies; When
+  someone utters a contradiction, at least you have the chance to declare
+  victory, since you know they're wrong!
+  </p>
+
+	<h3>Logical Equivalences</h3>
+
+  The following notion of logical <em>equivalence</em> is both simple and
+  very useful.
+
+  <p><strong>Definition 1.3.</strong> Two propositions $p,q$ are said
+  to be <strong>equivalent</strong> if they have the same truth tables. 
+  We write $p \equiv q$ to indicate that $p$ and $q$ are
+  equivalent.</p>
+
+  The definition is simple because no matter how hairy two propositions are, you
+  can always derive their truth tables mechanistically and then compare them.
+  Why it should be useful will hopefully be apparent later. At a high level,
+  when you're asked to prove a mathematical statement is true, a common trick is
+  to translate it to a proposition $p$, manipulate it into an equivalent
+  proposition $q$, and then prove the equivalent proposition instead.
+
+  The rest of this section records a set of equivalences that are "universal"
+  in a sense we will explain in the next section.
+
+  <p><strong>Some basic equivalences.</strong> You can check the following
+  equivalences by computing truth tables:
+		<em>
+		<ul>
+      <li>  $p \wedge q \equiv q \wedge p$
+      &nbsp;&nbsp;&nbsp;&nbsp;(Commutativity of $\wedge$)</li>
+      <li> $p \vee q \equiv q \vee p$
+      &nbsp;&nbsp;&nbsp;&nbsp;(Commutativity of $\vee$)</li>
+      <li> $(p \wedge q)\wedge r \equiv p \wedge (q \wedge r)$
+        &nbsp;&nbsp;&nbsp;&nbsp;(Associativity of $\wedge$)</li>
+      <li> $(p \vee q)\vee r \equiv p \vee (q \vee r)$
+        &nbsp;&nbsp;&nbsp;&nbsp;(Associativity of $\vee$)</li>
+      <li> $p \vee (q\wedge r) \equiv (p \vee q) \wedge (p \vee r)$
+        &nbsp;&nbsp;&nbsp;&nbsp;(Distributive law) </li>
+      <li> $p \wedge (q\vee r) \equiv (p \wedge q) \vee (p \wedge r)$
+        &nbsp;&nbsp;&nbsp;&nbsp;(Distributive law) </li>
+    <li> $p \leftrightarrow q \equiv (p \rightarrow q) \wedge (q \rightarrow p)$
+      &nbsp;&nbsp;&nbsp;&nbsp;(Biconditional equivalence) </li>
+		</ul>
+		</em>
+		In addition to the truth tables, you can intuit why these
+    equivalences
+    should hold. For example, in the last equivalence, if $p$ is true
+    then both sides are true; If $p$ is false, then both sides are true
+    exactly when $q$ and $r$ are both true.  
+  </p>
+
+  
+  <p><strong>De Morgan's Laws.</strong> Here are two more famous equivalences:
+  <em>
+		<ul>
+      <li>  $\neg(p \wedge q) \equiv \neg p \vee \neg q$
+        &nbsp;&nbsp;&nbsp;&nbsp;(De Morgan's laws)</li>
+      <li>  $\neg(p \vee q) \equiv \neg p \wedge \neg q$
+        &nbsp;&nbsp;&nbsp;&nbsp;(De Morgan's laws)</li>
+		</ul>
+		</em>
+		These equivalences are also fairly intuitive. In fact, you've probably
+    thought through them at some point while programming. For example, 
+    the code
+  </p>
+    <p>
+    <code>
+      if( !((x>0) and (y==1)) ) {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;// do something<br>
+      }<br>
+    </code>
+  </p>
+  is equivalent to the code
+  <p>
+    <code>
+      if( (x<=0) or (y!=1) ) {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;// do something<br>
+      }<br>
+    </code>
+  </p>
+  <p>
+  This is another form of De Morgan's Laws.
+  </p>
+
+
+  <p><strong>Some more basic equivalences.</strong> 
+  Below let us write $T$ as a placeholder for any proposition
+  that is a tautology, similarly $F$ for a contradiction.
+  <em>
+  <ul>
+    <li>  $p\wedge T \equiv p$ and $p \vee F \equiv p$ 
+      &nbsp;&nbsp;&nbsp;&nbsp;(Identity laws) </li>
+    <li>  $p\vee T \equiv T$ and $p \wedge F \equiv F$ 
+      &nbsp;&nbsp;&nbsp;&nbsp;(Domination laws) </li>
+    <li>  $p\vee p \equiv p$ and $p \wedge p \equiv p$ 
+      &nbsp;&nbsp;&nbsp;&nbsp;(Idempotence of $\vee$ and $\wedge$) </li>
+    <li>  $p\vee (p \wedge q)\equiv p$ and $p \wedge (p\vee q) \equiv p$ 
+      &nbsp;&nbsp;&nbsp;&nbsp;(Absorption laws) </li>
+    <li>  $p\vee \neg p \equiv T$ and $p\wedge \neg p \equiv F$
+      &nbsp;&nbsp;&nbsp;&nbsp;(Negation laws) </li>
+    <li>  $\neg \neg p \equiv p$ 
+      &nbsp;&nbsp;&nbsp;&nbsp;(Double negation)</li>
+    <li> $\neg T \equiv F$ and $\neg F \equiv T$
+      &nbsp;&nbsp;&nbsp;&nbsp;(Tautology or Contradiction Negation)</li>
+  </ul>
+  </em>
+  <p>
+  Most of these are so simple that you may wonder why we bother to record them.
+  The reason is that we plan to use them in the section for showing more
+  complicated equivalences.
+
+  <p><strong>Implication.</strong> Of all the equivalences in this section,
+  this one is probably the least familiar:
+  <em>
+  <ul>
+    <li>  $p \rightarrow q \equiv \neg p \vee q$
+      &nbsp;&nbsp;&nbsp;&nbsp;(Implication equivalence) </li>
+  </ul>
+  </em>
+  Let's look at the truth tables for these:
+      <table>
+        <tr> <th>$p$ <th>$q$ <th>$\quad$ <th>$p \rightarrow q$
+                  <th> $\neg p$ <th> $\neg p \vee q$
+        <tr> <td>$T$ <td>$T$ <td>  <td>$T$ <td>$F$ <td>$T$ 
+        <tr> <td>$T$ <td>$F$ <td>  <td>$F$ <td>$F$ <td>$F$
+        <tr> <td>$F$ <td>$T$ <td>  <td>$T$ <td>$T$ <td>$T$
+        <tr> <td>$F$ <td>$F$ <td>  <td>$T$ <td>$T$ <td>$T$
+		</table></p>
+  </em>
+  The truth tables match, so they're definitely equivalent. But why?
+  One way to understand it is that when we assert $p\rightarrow q$, if
+  $p$ is not true, then we're done and it holds. But if $p$ is true, then
+  we need $q$ to hold; This is exactly what the right-hand side of the
+  equivalence says.
+
+	<h3>Proving Equivalences</h3>
+
+  <p>
+  In principle, any equivalence can be proven by writing out the truth tables
+  of the given propositions and checking that they are equal. This has two
+  drawbacks. First, if there are several atomic propositions, then the truth
+  table will be really large (even with only four atomic propositions its
+  annoying to do this by hand).  Second, and more importantly for us, truth
+  tables alone don't help us understand <em>why</em> the equivalence holds.
+  </p>
+
+  <p>This section describe a different approach to establishing that two
+  propositions are equivalent. It is based on repeatedly applying the
+  simple observation that if $p\equiv q$ and $q \equiv r$, then $p \equiv r$.
+  (Take a second to think about that; It's true because all three must have
+  the same truth table.) It turns out that if <em>any</em> two equivalent
+  propositions can be shown equivalent by repeated applications of the
+  <em>only</em> the basic equivalences in the previous section.
+  (In fact, only a small subset of them is needed, but having them all at
+  our disposal will make the process much less painful.)
+  </p>
+
+
+  <p><strong>Equivalence of the contrapositive.</strong> Here is a particularly
+  useful equivalence:
+
+  $$\begin{aligned}p\rightarrow q \equiv \neg q \rightarrow \neg
+  p.\end{aligned}$$ 
+
+  In other words, an implication
+  is equivalent to its contrapositive! This isn't true for converses and
+  inverses. Later we'll learn about "switching to the contrapositive" as a
+  very useful trick in finding proofs. 
+  </p>
+
+  Let's prove it using the equivalences from the previous section. To do this,
+  we list a sequence of equivalences and note which one we're applying on
+  each line.
+  $$\begin{aligned}
+    p \rightarrow q &\equiv \neg p \vee q & \text{(Implication equivalence)} \\
+                    &\equiv q \vee \neg p & \text{(Commutativity of $\vee$)} \\
+                    &\equiv \neg\neg q \vee \neg p & \text{(Double negation)} \\
+                     &\equiv \neg q \rightarrow \neg p & \text{(Implication equivalence)}
+    \end{aligned}$$
+  The first two lines are direct applications of the known equivalences.  The
+  last one is a bit tricky; We're applying the Implication equivalence in the
+  first reverse direction (i.e., starting with $\neg s \vee t$ and turning this
+  into $s \rightarrow t$; we did this with $s = \neg q$ and $t=\neg p$.
+
+
+
+  <p><strong>Example.</strong> Using the equivalence of the contrapositive,
+  <em>"If it is Wednesday, then I buy a milkshake"</em> is equivalent to <em>"If
+  I don't buy a milkshake, then it is not Wednesday"</em>. It's worth
+appreciating that these are equivalent logically, but in daily life an English
+speaker may argue that there are unspoken assumptions in those statements that
+make them not equivalent. For instance, you might make the above statement even
+if you don't intend to buy a milkshake on Wednesday of Thanksgiving break.  But
+in logic and mathematics in general, we interpret every statement completely at
+face value (sometimes to the point of irritating our colleagues!).&#x220E;
+
+
+  <p><strong>Example.</strong> Let's show that
+  $$
+    (p \wedge q) \vee (\neg p \wedge q) \vee (\neg p \wedge \neg q)
+    \equiv \neg p \vee q.
+  $$
+  </p>
+
+  <p>
+  Actually guessing that this equivalence might hold is sort of intuitive,
+  if you think the possibilities with $p$ is true or false and then for
+  $q$.
+  </p>
+
+  <p>In any case, here's the proof. Note that it is important that each
+  step is labeled with the equivalence being applied.</p>
+
+  $$\begin{aligned}
+    (p \wedge q) \vee (\neg p \wedge q) \vee (\neg p \wedge \neg q)
+    & \equiv 
+    (p \wedge q) \vee [(\neg p \wedge q) \vee (\neg p \wedge \neg q)]
+       & \text{(Associativity of $\vee$)} \\
+    & \equiv 
+    (p \wedge q) \vee [\neg p \wedge (q \vee \neg q)]
+       & \text{(Distribution law)} \\
+    & \equiv 
+    (p \wedge q) \vee [\neg p \wedge T]
+       & \text{(Negation law)} \\
+    & \equiv 
+    (p \wedge q) \vee \neg p 
+       & \text{(Identity law)} \\
+    & \equiv 
+    \neg p \vee (p \wedge q) 
+       & \text{(Commutativity of $\vee$)} \\
+    & \equiv 
+    (\neg p \vee p) \wedge (\neg p \vee q) 
+       & \text{(Distribution law)} \\
+    & \equiv 
+    T \wedge (\neg p \vee q) 
+       & \text{(Negation law)} \\
+    & \equiv 
+    \neg p \vee q.
+       & \text{(Identity law)} \\
+    \end{aligned}
+  $$
+  <p>
+  Finding proofs like that just takes a little practice. One strategy is to
+  just pattern-match and see which laws looks useful, or likely to produce
+  a simpler proposition.&#x220E;
+  </p>
+
+  <p>One might ask: What's the point of proving equivalences like this, at least
+  in this class? It's a good question, actually. It's possible to go forward in
+  learning math without ever doing this carefully. But at this stage, our goal
+  is become completely comfortable with manipulating logical propositions so
+  that we can do it almost automatically later, and these proofs are good
+  exercises. These proofs are also our first encounter with the precision
+  required in such proofs. You can compare this to other math classes you've
+  likely taken, where you don't need to explicitly justify steps that use
+  $x+y=y+x$ (the commutativity of addition). After some initial stage, this
+  class too will return to that level of reasoning, but it's good to pause and
+  appreciate how it is justified.</p>
+  
+</body>
+</html>

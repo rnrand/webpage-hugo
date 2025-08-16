@@ -1,0 +1,410 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 24</title>
+	<link rel="stylesheet" href="style-notes.css" type="text/css" media="screen, print">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 24</h1>
+	
+
+	<h2>Introduction to Graph Theory</h2>
+
+  <p>Our final week of CMSC 27100 is about <em>graph theory</em>. 
+  By <em>graphs</em>, we mean mathematical objects that consist of nodes
+  connected by edges; You can scroll down to see some visualizations of
+  graphs. Note that these graphs have nothing to do with the graphs you
+  saw in calculus: It is a just a collision of names.
+
+  <p> It is hard to overstate how important graph theory is to so many
+  varied disciplines. As a computer scientist you will use graphs to
+  model all sorts of abstract relationships in data structures, and use
+  graphs as intermediate tools in solving algorithmic problems. In
+  order to give some examples, let's fix the definition of a graph.
+
+  <p><strong>Definition 24.1.</strong> A <strong>graph</strong> $G = (V,E)$ is a
+  pair sets with $V$ finite, and every element of $E$ a subset of
+  $V$ of size $2$. We refer to the elements of $V$ as the <strong>vertices of
+    $G$</strong> and the elements of $E$ as the <strong>edges of $G$</strong>.
+  When $e=\{u,v\}$ is an edge,
+  we will usually write $e=uv$ instead of $\{u,v\}$.
+  We define the <strong>empty graph</strong> to mean $G= (\emptyset,\emptyset)$.
+
+  <p>
+  This definition is presented for technical precision. In practice, graphs
+  and statements about them are quite intuitive, and we won't appeal to
+  the precise definition that often. Here is a visualization of a graph:
+
+    <img src="24-1.png" class="center" width="25%">
+
+  <p>This graph is called "the" Petersen graph (there are actually many such
+  graphs represented by this picture; we'll discuss why we refer to it as "the"
+  Petersen graph anyway). The Petersen graph is a particularly interesting
+  graph, not just because it looks neat, but because it happens to be a common
+  counterexample for many results in graph theory.
+
+  <p>Graphs can represent relatively obvious relationships, like friendships in
+  social networks and how computers are connected. In machine learning, graphs
+  are used to describe how a neural network is structured. One of my favorite
+  applications is to compilers: To decide how to store variables in registers,
+  compilers create graphs where the variables are nodes and edges indicate that
+  two variables are "live" at the same time (and thus can't be put into the same
+  register).
+
+  <p>A few comments about Definition 24.1 are in order. The objects defined here
+  are called <strong>finite simple undirected graphs</strong> in other contexts.
+  <ol>
+
+    <li>They are <strong>finite</strong> because we require that $V$
+    is finite. In other contexts $V$ is allowed to be infinite.</li>
+
+    <li>They are <strong>simple</strong> because we disallow self-loops
+    (i.e. edges of form the $e=vv$) and we do not allow "multiple edges"
+    in a graph. Self loops are disallowed because we define edges to
+    subsets of size exactly 2. Multiple edges are disallowed because
+    $E$ is a set and can contain an edge $e$ at most once (by our definition
+    of a set).</li>
+
+    <li>They are <strong>undirected</strong> because within an edge
+      $e=\{u,v\}$ there is no notion of "direction". In the graph
+    above this is represented by the fact that we just drew lines with
+    out arrow tips.
+    A <strong>directed graph</strong>, which we don't have time
+    to cover in detail, has directed edges, which are <em>ordered
+      pairs</em> $e=(u,v)$. Diagrams for directed graphs have arrows
+    to indicate the direction of the edge.</li>
+  </ol>
+
+  <p>All graphs this week will obey our definition. It is good practice
+  for authors to clarify which flavor of graph they allow - Conventions
+  vary!
+
+  <p>Graph theory has a lot of definitions and terminology, but it is all very
+  intuitive and easy to remember.
+
+  <p><strong>Definition 24.2.</strong> Two vertices $u$ and $v$ of a graph $G$
+  are <strong>adjacent</strong> or are <strong>neighbors</strong> if $uv\in E$.
+  We say the edge $e$ is <strong>incident</strong> to $u$ if $u\in e$. If $e=uv$
+  is an edge, we refer to $u$ and $v$ as the
+  <strong>ends</strong> or <strong>endpoints of $e$</strong>.
+
+  <p><strong>Definition 24.3.</strong> The <strong>neighbourhood of a
+  vertex $v$</strong>, denoted $N(v)$, is the set of neighbors of $v$. In symbols,
+  this is
+    $$N(v) = \{u \in V \mid uv \in E\}.$$
+    The <strong>neighborhood of a set of vertices $A \subseteq V$</strong> 
+    is defined to be
+    $$N(A) = \bigcup_{v \in A} N(v)\setminus A.$$
+    That is, $N(A)$ consists of all vertices that are adjacent to
+    some vertex in $A$, but not in $A$ themselves.
+
+    <p><strong>Definition 24.4.</strong> The <strong>degree</strong> of a vertex
+    $v$ in $G$, denoted $\deg(v)$ or $d(v)$, is the number of its neighbors. A
+    graph $G$ is <strong>$k$-regular</strong> if every vertex in $G$ has degree
+    $k$.
+
+    <p>Observe that every vertex in the Petersen graph has degree 3, so the Petersen graph is 3-regular, or <em>cubic</em>.
+
+    <p>The following results are some of the first graph theory results, proved by Leonhard Euler in 1736.
+
+    <p><strong>Theorem 24.5 (Handshaking Lemma).</strong> Let $G = (V,E)$ be an undirected graph. Then
+    $$\sum_{v \in V} \deg(v) = 2 \cdot |E|.$$
+
+    <p><em>Proof.</em> This proof is usually presented very quickly, and indeed
+    it is true for a simple reason: Every edge $uv$ is incident to exactly two
+    vertices: $u$ and $v$. Therefore, each edge contributes 2 to the sum of the
+    degrees of the vertices in the graph.
+
+    <p>In case that is too fast, here is a more detailed proof. Define a
+    function $f: V \times E \to \{0,1\}$ by
+    $$
+    f(v,e) =
+    \begin{cases}
+    1 & \text{if $v$ is incident with $e$} \\
+    0 & \text{otherwise}
+    \end{cases}.
+    $$
+    Now consider the sum
+    $$
+    D = \sum_{v\in V}\sum_{e\in E} f(v,e).
+    $$
+    On the one hand, we have
+    $$
+    D = \sum_{v\in V}\deg(v)
+    $$
+    since the inner sum counts the edges incident at $v$, which
+    is the same as the degree of $v$. On the
+     other hand, we can reverse order of the sums to get
+    $$
+    D = \sum_{e\in E}\sum_{v\in V} f(v,e). 
+    $$
+    The inner sum is always equal to $2$, since every edge is incident at
+    exactly two vertices. Therefore
+    $$
+    D = \sum_{e\in E} 2 = 2|E|,
+    $$
+    proving the theorem.
+    $\tag*{$\Box$}$
+
+    <p><strong>Corollary 24.6.</strong> Let $G$ be a graph. Then the number of
+    vertices of odd degree in $G$ is even.
+
+    <p><em>Proof.</em> Let $V_1, V_2 \subseteq V$ be the sets of odd and even
+    vertices of $G$, respectively. Then
+    $$2|E| = \sum_{v \in V_1} \deg(v) + \sum_{v \in V_2} \deg(v).$$
+    We observe that since $\deg(v)$ for $v \in V_2$ is even, then the sum
+    $\sum_{v \in V_2} \deg(v)$ is even. Then since $2|E|$ is even, this must
+    mean that the sum $\sum_{v \in V_1} \deg(v)$ is even. But since $\deg(v)$ is
+    odd for $v \in V_1$, this implies that $|V_1|$ must be even.
+    $\tag*{$\Box$}$
+
+    <p>It's the corollary that gives the name for the handshaking lemma. When
+    rephrased as a bunch of people shaking hands, the lemma says that there must
+    be an even number of people who have shaken an odd number of hands.
+
+    <p>We close this section with more terminology for special graphs.
+
+    <p><strong>Definition 24.7.</strong> The <strong>complete graph on $V$
+    </strong> is the graph $(V,E)$, 
+    $$E = \{uv \mid u,v \in V\}.$$
+    That is, all vertices are neighbours with each other.
+
+    <p>Here are some complete graphs:
+
+    <img src="24-2.png" class="center" width="50%">
+
+    <p><strong>Definition 24.8.</strong> A <strong>path on
+      $v_1,\ldots,v_n$ </strong> is a graph $(V,E)$ with $V = \{v_1,
+    \dots, v_n\}$ and $E = \{v_1v_2, v_2v_3,\ldots, v_{n-1}v_n \}$,
+    where $v_1,\ldots,v_n$ are all distinct. 
+
+    The <strong>cycle on $v_1,\ldots,v_n$</strong> is the graph $(V,E)$ with the
+    same $V$, and $E=\{v_1v_2,\ldots,v_{n-1}v_n,v_nv_1\}$.
+
+    For cycles and paths, we define their <strong>length</strong> to be the
+    number of edges they contain.
+    
+    <p>Here are some path graphs:
+
+    <img src="24-8.png" class="center" width="30%">
+
+    <p>And here are some cycle graphs:
+
+    <img src="24-3.png" class="center" width="50%">
+
+    <p><strong>Definition 24.9.</strong> The <strong>$n$-(hyper)cube
+      graph</strong> is the graph $Q_n = (V,E)$, where $V = \{0,1\}^n$ (i.e.,
+    binary strings of length $n$) and $uv\in E$ if and only if $u,v$
+    $u$ and $v$ differ in exactly one bit.
+
+    <img src="24-4.png" class="center" width="50%">
+
+    <p>It's called a cube (or hypercube) because one of the ways to draw it is
+    to arrange the vertices and edges so that they form the $n$th-dimensional
+    cube.
+
+        <h3>Graph isomorphisms</h3>
+
+    <p>Consider the following diagrams of graphs.
+
+    <img src="24-5.png" class="center" width="50%">
+    
+    <p>From the perspective of many applications, these graphs represented by
+    these diagrams would be considered the "same". In fact, these are both
+    diagrams of the hypercube $Q_3$
+
+    <p>Although the visual representation of the graph is very convenient, it is
+    sometimes misleading, because we're limited to 2D drawings. In fact, there
+    is a vast area of research devoted to graph drawing and the mathematics of
+    embedding graphs in two dimensions. The point of this is that two graphs may
+    <em>look</em> very different, but turn out to be the same. 
+
+    <p>But even more fundamental than that, we intuitively understand that just
+    because the graph isn't <em>exactly</em> the same (i.e., the vertices are
+    named something differently) doesn't mean that we don't want to consider
+    them equivalent. The next definition is how we define whether two graphs are
+    basically the same, just with different names or drawings.
+		
+    <p><strong>Definition 24.10.</strong> An <strong>isomorphism</strong>
+    between two graphs $G_1 = (V_1,E_1)$ and $G_2 = (V_2,E_2)$ is a bijection
+    $f:V_1 \to V_2$ which preserves adjacency. That is, for all vertices $u,v
+    \in V_1$, $u$ and $v$ are adjacent in $G_1$ if and only if $f(u)$ and $f(v)$
+    are adjacent in $G_2$. Two graphs $G_1$ and $G_2$ are
+    <strong>isomorphic</strong> if there exists an isomorphism between them,
+    denoted $G_1 \cong G_2$.
+
+      <p>In other words, we consider two graphs to be the "same" or equivalent
+      if we can map every vertex to the other graph such that the adjacency
+      relationship is preserved. In practice, this amounts to a "renaming" of
+      the vertices, which is what we typically mean when we say that two objects
+      are isomorphic. Of course, this really means that the edges are preserved. 
+
+      <p><strong>Example 24.11.</strong> Consider the following graphs $G_1 =
+      (V_1, E_1)$ and $G_2 = (V_2, E_2)$.
+
+	    <img src="24-7.png" class="center" width="70%">
+
+	    <p>We will show that these two graphs are isomorphic by defining a bijective function $f:V_1 \to V_2$ which preserves adjacency:
+	    \begin{align*}
+	    f(a_0) &= u_0 & f(a_1) &= v_3 & f(a_2) &= u_2 & f(a_3) &= v_1 \\
+	    f(b_0) &= v_2 & f(b_1) &= u_1 & f(b_2) &= v_0 & f(b_3) &= u_3 \\
+	    \end{align*}
+	    This is a bijection, since every vertex in $V_1$ is paired with a vertex in $V_2$. We then verify that this bijection preserves adjacency by checking each edge under the bijection:
+	    \begin{align*}
+	    (f(a_0),f(b_1)) &= (u_0,u_1) & (f(a_0),f(b_2)) &= (u_0,v_0) & (f(a_0),f(b_3)) &= (u_0,u_3) \\
+	    (f(a_1),f(b_0)) &= (v_3,v_2) & (f(a_1),f(b_2)) &= (v_3,v_0) & (f(a_1),f(b_3)) &= (v_3,u_3) \\
+	    (f(a_2),f(b_0)) &= (u_2,v_2) & (f(a_2),f(b_1)) &= (u_2,u_1) & (f(a_2),f(b_3)) &= (u_2,u_3) \\
+	    (f(a_3),f(b_0)) &= (v_1,v_2) & (f(a_3),f(b_1)) &= (v_1,u_1) & (f(a_3),f(b_2)) &= (v_1,v_0)
+	    \end{align*}
+
+    <p>Let us return our special graphs in Definitions 24.7 and 24.8. When we want
+    to talk about a complete graph, we often don't care too much about what the
+    vertices are, but only <em>how many</em> vertices there are, because all
+    complete graphs on $n$ vertices will be isomorphic (exercise).  The
+    situation is similar for paths and cycles.  For this purpose, we introduce
+    the following notation.
+
+    <p><strong>Notation.</strong> For any positive integer $n$, we
+    define
+    <ul>
+      <li>$K_n$ to mean a complete graph on $n$ vertices,</li>
+      <li>$P_n$ to mean a path on $n$ vertices, and</li>
+      <li>$C_n$ to mean a path on $n$ vertices.</li>
+    </ul>
+
+    <p> Graph theory
+    literature often goes further with this notation and says that
+    "$K_n$ is <strong>the</strong> complete graph on $n$ vertices". The
+    understanding is that they really mean to deal with some specific graph,
+    but the identities of the vertices will never be relevant. It is subtle
+    but rarely confusing, in my experience.
+    
+    <h2>Determining if graphs are isomorphic</h2>
+	
+    <p>So an obvious and fundamental problem that arises from this definition
+    is: Given two graphs $G_1$ and $G_2$, are they isomorphic? The obvious
+    answer is that we just need to come up with an isomorphism or show that one
+    doesn't exist. Unfortunately, to do this on a computer, there are $n!$
+    possible such mappings we would need to check. In fact, characterizing the
+    complexity of solving the graph isomorphism problem is one of the most
+      challenging problems in theoretical computer science. The <a
+                                                                    href="https://www.quantamagazine.org/algorithm-solves-graph-isomorphism-in-record-time-20151214">most
+                                                                    significant
+                                                                  progress</a>
+      on this problem was made in 2015 (and 2017) by our own Lazlo Babai, who
+      proved that graph isomorphism can be solved in $2^{O(\log^c n)}$ for some
+      $c$.
+
+
+   <p>When determining if two graphs are isomorphic by hand, however, you can be
+   clever and take shortcuts. A common tool is <em>isomorphism invariants</em>.
+
+   <p><strong>Definition 24.12.</strong> Let $P$ be a function (or predicate)
+    on graphs. We say that $P$ is an <strong>isomorphism invariant</strong>
+    if for all graphs $G_1,G_2$,
+    $$
+    G_1 \cong G_2 \Rightarrow P(G_1)=P(G_2).
+    $$
+
+    <p>For example, $P(G) = |V|$ is clearly an isomorphism invariant, since the
+    existence of a bijection implies the vertex sets have the same size.
+    We can also show that $P(G)=|E|$ is an isomorphism invariant (exercise;
+    one simple approach uses the handshaking lemma). 
+
+    <p>Here is another useful isomorphism invariant.
+
+    <p><strong>Definition 24.13.</strong> The <strong>degree sequence</strong> of a graph
+   $G$ is list of degrees of its vertices, in sorted order with repetitions
+   allowed.
+
+   <p><strong>Theorem 24.14</strong> The degree sequence of a graph
+   is an isomorphism invariant. In other words, if two graphs are isomorphic
+   then they have the same degree sequence.
+
+    <p><em>Proof.</em> Assume $G_1\cong G_2$. We must show that $G_1$ and $G_2$
+    have the same degree sequence. Let $v_1,\ldots,v_n$ be the vertices of $G_1$
+    sorted by their degree; Then $(\deg(v_1),\ldots,\deg(v_n))$ is the degree
+    sequence of $G_1$. 
+
+    <p>Since $G_1\cong G_2$, there exists a bijection $f$ between their
+    vertex sets that preserves adjacency. 
+    Since $f$ is a bijection,
+    the list
+    $(\deg(f(v_1)), \ldots, \deg(f(v_n)))$ is also a list of the
+    degrees of vertices in $G_2$.    
+
+    <p>Since $f$ preserves adjacency, for every
+    $v_i$ in $G_1$, $\deg(v_i) = \deg(f(v_i))$.  This means
+$$(\deg(f(v_1)), \ldots, \deg(f(v_n))) = (\deg(v_1),\ldots,\deg(v_n)).$$
+Thus $(\deg(f(v_1)), \ldots, \deg(f(v_n)))$
+is sorted as well, and is thus the degree sequence of $G_2$ as well as $G_1$.
+    $\tag*{$\Box$}$
+
+    <p>Flipping around the definition of isomorphism invariant gives
+    the following very simple theorem.
+
+   <p><strong>Theorem 24.15</strong> Let $P$ be an isomorphism invariant
+   and $G_1,G_2$ be graphs. If $P(G_1)\neq P(G_2),$ then $G_1$ and $G_2$
+   are not isomorphic.
+
+    <p>Here is an example of how this can be used. Consider these graphs:
+
+    <img src="24-6.png" class="center" width="35%">
+    <p>These graphs have the same degree sequence $(3,3,3,3,2,2)$, but they
+    are not isomorphic; Theorem 24.15 does not apply! Here is one that works:
+    Let $T(G)$ be the number of "triangles" in $G$ (that is, sets of three
+    vertices that are all pairwise connected; we could say these are
+    "copies of $K_3$".) This is an isomorphism invariant (exercise),
+    and $T(G_1) = 2$ while $T(G_2)=0$.
+
+	<h2>Subgraphs and Induced Subgraphs</h2>
+	
+	<p>It will frequently be useful to speak of one graph "containing"
+	another graph. For instance, we could describe a graph with a
+	triangle as "containing a $K_3$", or we could naturally say that a
+	graph "contains a path from $u$ to $v$". The notion of a subgraph
+	makes this precise.
+
+		<p><strong>Definition 24.16</strong> A graph $G' = (V',E')$ is a
+		<strong>subgraph</strong> of a graph $G = (V,E)$ if $V' \subseteq V$ and
+		$E' \subseteq E$. 
+
+		<p>We will also use the concept of an <em>induced</em> subgraph.
+
+		<p><strong>Definition 24.17</strong> The <strong>subgraph induced by a
+			subset $V' \subseteq V$ </strong> is the graph $G'=(V',E')$, where
+		$E' \subseteq E$ consists of every edge with both ends in $V'$.
+		We say a subgraph $G'$ is an <strong>induced subgraph of $G$</strong> if it
+		is induced by some subset of $V$.
+
+		<p>A subgraph being induced by $V'$ means that it takes all of the edges
+		from $G$ that go between its vertices. For example, the graph induced
+		by $V'=V$ is always the original graph.
+
+		<p><strong>Example 24.18.</strong> Consider the graphs from Example 24.15.
+		One graph contains $K_3$ (the complete graph over 3 vertices – a triangle)
+		as a subgraph, while the other does not. Both graphs contain $C_6$ as a
+		subgraph, but neither has $C_6$ as an induced subgraph (because once you
+		take all six vertices, you would be obligated to take some "cross edges" as
+		well).
+
+
+  <h3>Recommend Exercises</h3> 
+
+	<p>Rosen, Section 10.3, Problems 38-50, 54-62. (Some of these require the
+  notation of complementary graphs, which is defined in that section.)
