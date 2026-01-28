@@ -1,5 +1,7 @@
 ## Recent and Upcoming Talks
 
+- [An Invitation to Quantum Programming Languages](https://popl26.sigplan.org/details/PLMW-POPL-2026/5/-An-Invitation-to-Quantum-Programming-Languages). Programming Languages Mentoring Workshop, 2026.
+- [Quantum Programming in Qunity](https://www.mccormick.northwestern.edu/information-technology/inside-our-program/events/?eid=632644). CS Seminar, Northwestern University, 2025.
 - Writing and Compiling High-Level Quantum Programs. QSI Seminar, University of Technology Sydney, 2025.
 - Compiling High- and Low-Level Quantum Languages. Workshop on Quantum Software and Theory, Academia Sinica, 2025.
 - [Verifying Quantum Graphical Calculi](http://dimacs.rutgers.edu/events/details?eID=3274). DIMACS Workshop on Quantum Software Systems and Theory, Rutgers University, 2025. 
