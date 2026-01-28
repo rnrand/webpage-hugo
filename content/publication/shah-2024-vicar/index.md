@@ -41,7 +41,8 @@ projects. Upon verifying relevant coherence conditions, ViCAR gives a set of lem
 manipulating categorical structures. We also provide a visualizer that can display any composition and
 tensor product of morphisms as a string diagram, showing its categorical structure. This enables graphical
 reasoning and automated rewriting for Coq projects with monoidal structures.'
-url_pdf: files/vicar.pdf
+doi: 10.4204/EPTCS.429.13
+url_pdf: https://arxiv.org/pdf/2404.08163
 url_code: https://github.com/inQWIRE/ViCaR
-publication: 'The 7th International Conference on Applied Category Theory (ACT)'
+publication: '*The 7th International Conference on Applied Category Theory (ACT)*'
 ---

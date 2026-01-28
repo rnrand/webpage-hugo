@@ -49,7 +49,7 @@ abstract: We present voqc, the first verified optimizer for quantum circuits, wr
   number of quantum bits. sqir’s careful design and our provided automation make it
   possible to write and verify a broad range of optimizations in voqc, including full-circuit
   transformations from cutting-edge optimizers.
-publication: '*ACM Transactions on Programming Languages and Systems*'
+publication: '*ACM Transactions on Programming Languages and Systems (TOPLAS)*'
 doi: 10.1145/3604630
 links:
 - name: URL

@@ -42,7 +42,7 @@ uses a semantics of matrices of complex numbers, which is the standard for quant
 matrices symbolically in order to reason about programs that use an arbitrary number of quantum bits. SQIR’s
 careful design and our provided automation make it possible to write and verify a broad range of optimizations
 in VOQC, including full-circuit transformations from cutting-edge optimizers.'
-publication: '*ACM SIGPLAN Symposium on Principles of Programming Languages (POPL 2021)*'
+publication: '*Principles of Programming Languages (POPL)*'
 
 # Custom links (uncomment lines below)
 # links:

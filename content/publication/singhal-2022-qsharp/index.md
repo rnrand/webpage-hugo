@@ -34,8 +34,7 @@ publishDate: '2022-08-02T18:55:11.441196Z'
 publication_types:
 - '1'
 abstract: ''
-publication: '*Proceedings of the 19th International Conference on Quantum Physics
-  and Logic (QPL 2022)*'
+publication: '*Quantum Physics and Logic (QPL)*'
 doi: 10.4204/EPTCS.394.10
 url_pdf: 'files/q_sharp_algol.pdf'
 url_code: 'https://github.com/LambdaQs/lambda-qs'

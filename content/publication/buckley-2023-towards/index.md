@@ -47,8 +47,7 @@ abstract: The main attributes of quantum networks are the utilization of quantum
   languages. Such a model should contain the essential constructs for programming
   quantum networks, allow for specification and verification of end-to-end entanglement
   distribution, and provide guidelines for composing network protocols.
-publication: '*Proceedings of the 1st Workshop on Quantum Networks and Distributed
-  Quantum Computing*'
+publication: '*Quantum Networks and Distributed Quantum Computing (QuNET)*'
 doi: 10.1145/3610251.3610557
 url_pdf: files/QuNet_2023.pdf
 links:

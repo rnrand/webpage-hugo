@@ -34,7 +34,7 @@ publishDate: '2022-04-27T06:03:33.175062Z'
 publication_types:
 - '1'
 abstract: ''
-publication: '*ACM SIGPLAN Symposium on Principles of Programming Languages (POPL 2023)*'
+publication: '*Principles of Programming Languages (POPL)*'
 doi: 10.1145/3571225
 links:
 - name: arXiv

@@ -35,7 +35,7 @@ publishDate: '2021-07-26T21:34:21.735292Z'
 publication_types:
 - '1'
 abstract: ''
-publication: '*International Conference on Interactive Theorem Proving (ITP 2021)*'
+publication: '*Interactive Theorem Proving (ITP)*'
 url_pdf: files/itp_2021.pdf
 url_video: https://youtu.be/_0V46pBkRYo?t=32
 doi: 10.4230/LIPIcs.ITP.2021.21

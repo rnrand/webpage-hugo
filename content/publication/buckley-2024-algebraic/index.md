@@ -50,5 +50,9 @@ abstract: Quantum networks connect quantum capable nodes in order to achieve cap
   rules that allow for modular specification. We give BellKAT a sound and complete
   equational theory, allowing us to verify network protocols. We provide a prototype
   tool to showcase the expressiveness of BellKAT and how to verify networks in practice.
-publication: '*ACM SIGPLAN Conference on Programming Language Design and Implementation (PLDI 2024)*'
+publication: '*Programming Language Design and Implementation (PLDI)*'
+url_video: 'https://youtu.be/RYyAMsVD4Gs?si=iRRe_XEG-_fQCZsh'
+doi: 10.1145/3656430
+url_code: 'https://github.com/swystems/bellkat'
 ---
+<iframe width="560" height="315" src="https://www.youtube.com/embed/RYyAMsVD4Gs?si=eH1ppVOEYiVKrWnQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>

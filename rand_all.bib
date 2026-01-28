@@ -345,14 +345,12 @@ numpages = {35},
 keywords = {Formal verification, quantum computing, circuit optimization, certified compilation}
 }
 
-@misc{lehmann2023vyzx,
+@article{lehmann2026vyzx,
       title={VyZX: Formal Verification of a Graphical Quantum Language}, 
       author={Adrian Lehmann and Ben Caldwell and Bhakti Shah and Robert Rand},
-      year={2023},
-      eprint={2311.11571},
-      archivePrefix={arXiv},
-      primaryClass={cs.PL},
-	  doi={10.48550/arXiv.2311.11571}	  
+      year={2026},
+	  journal = {ACM Transactions on Programming Languages and Systems},
+	  note = {to appear}
 }
   
 @inproceedings{buckley2024algebraic,
@@ -385,7 +383,7 @@ year={2024}
       year={2024},
       booktitle={The 7th International Conference on Applied Category Theory (ACT)}, 
       url={https://arxiv.org/abs/2404.08163},
-	  note={To Appear}
+	  doi={10.4204/EPTCS.429.13}
 }
 
 @inproceedings{lehmann2024egg,
@@ -395,36 +393,55 @@ year={2024}
     year = {2024}
 }
 
-@misc{cho2025verification,
-      title={Verification of Low T-count Quantum Circuits in Rocq}, 
-      author={Youngchan Cho and Robert Rand},
-      year={2025},
-	  note={In Submission}
+@inproceedings{cho2026efficiently,
+  title={Efficiently Verifying Quantum Programs with Few T Gates},
+  author={Cho, Youngchan and Rand, Robert},
+  booktitle={International Conference on Verification, Model Checking, and Abstract Interpretation},
+  doi={10.1007/978-3-032-15700-3_3},
+  url={https://rdcu.be/e00Th},
+  pages={44--57},
+  year={2026},
+  abstract={We mechanize a lightweight quantum logic in the Rocq proof assistant to verify Clifford+T quantum programs, particularly those with low T counts. Our tool is lightweight and automation-centric: Hoare triple validation composes simple rules, reduces all obligations to syntactic well-formedness side-conditions, and efficiently discharges those conditions. We demonstrate our tool using several case studies: a standard low-T Toffoli decomposition, graph-state generators, and the 7-qubit Steane encoder. A small empirical study on graph-state families shows near-linear growth in the number of Clifford gates and a slightly super-quadratic trend in the number of qubits, consistent with implementation overheads from list-based tensor representations, while repeated T gates on a single qubit exhibit an exponential blow-up due to additive branching. The results indicate that a rule-driven, syntax-directed approach suffices to verify low-T quantum circuits while keeping the trusted core and user-facing proofs simple.},
+  organization={Springer Nature Switzerland}
 }
 
 @misc{lehmann2025dcac,
       title={Domain-Specific Rocq Automation with E-Graphs}, 
       author={Adrian Lehmann and Robert Rand},
-      year={2025},
+      year={2026},
 	  note={In Submission}
 }
 
 @inproceedings{buckley2025pbkat,
-      title={A Language for Quantifying Quantum Network Behavior}, 
-      author={Buckley, Anita and Chuprikov, Pavel and Otoni, Rodrigo and Soul\'{e}, Robert and Rand, Robert and Eugster, Patrick},
-      year={2025},
-      booktitle={Proceedings of the ACM on Programming Languages},
-      number={OOPSLA2},
-	  note={To appear}
+	author = {Buckley, Anita and Chuprikov, Pavel and Otoni, Rodrigo and Soul\'{e}, Robert and Rand, Robert and Eugster, Patrick},
+	title = {A Language for Quantifying Quantum Network Behavior},
+	year = {2025},
+	publisher = {Association for Computing Machinery},
+	address = {New York, NY, USA},
+	volume = {9},
+	month = oct,
+	number = {OOPSLA2},
+	url = {https://doi.org/10.1145/3763135},
+	doi = {10.1145/3763135},
+	abstract = {Quantum networks have capabilities that are impossible to achieve using only classical information. They connect quantum capable nodes, with their fundamental unit of communication being the Bell pair, a pair of entangled quantum bits. Due to the nature of quantum phenomena, Bell pairs are fragile and difficult to transmit over long distances, thus requiring a network of repeaters along with dedicated hardware and software to ensure the desired results. The intrinsic challenges associated with quantum networks, such as competition over shared resources and high probabilities of failure, require quantitative reasoning about quantum network protocols. This paper develops PBKAT, an expressive language for specification, verification and optimization of quantum network protocols for Bell pair distribution. Our language is equipped with primitives for expressing probabilistic and possibilistic behaviors, and with semantics modeling protocol executions. We establish the properties of PBKAT’s semantics, which we use for quantitative analysis of protocol behavior. We further implement a tool to automate PBKAT’s usage, which we evaluated on real-world protocols drawn from the literature. Our results indicate that PBKAT is well suited for both expressing real-world quantum network protocols and reasoning about their quantitative properties.},
+	booktitle={Proceedings of the ACM on Programming Languages},
+	keywords = {entanglement distribution, probabilistic and possibilistic semantics}
 }
 
 @inproceedings{mints2025qunity,
-      title={Compositional Quantum Control Flow with Efficient Compilation in Qunity}, 
-      author={Mikhail Mints and Finn Voichick and Leonidas Lampropoulos and Robert Rand},
-      year={2025},
-      booktitle={Proceedings of the ACM on Programming Languages},
-      number={OOPSLA2},
-	  note={To appear}
+author = {Mints, Mikhail and Voichick, Finn and Lampropoulos, Leonidas and Rand, Robert},
+title = {Compositional Quantum Control Flow with Efficient Compilation in Qunity},
+year = {2025},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {9},
+number = {OOPSLA2},
+url = {https://doi.org/10.1145/3763056},
+doi = {10.1145/3763056},
+abstract = {Most existing quantum programming languages are based on the quantum circuit model of computation, as higher-level abstractions are particularly challenging to implement—especially ones relating to quantum control flow. The Qunity language, proposed by Voichick et al., offered such an abstraction in the form of a quantum control construct, with great care taken to ensure that the resulting language is still realizable. However, Qunity lacked a working implementation, and the originally proposed compilation procedure was very inefficient, with even simple quantum algorithms compiling to unreasonably large circuits.    In this work, we focus on the efficient compilation of high-level quantum control flow constructs, using Qunity as our starting point. We introduce a wider range of abstractions on top of Qunity's core language that offer compelling trade-offs compared to its existing control construct. We create a complete implementation of a Qunity compiler, which converts high-level Qunity code into the quantum assembly language OpenQASM 3. We develop optimization techniques for multiple stages of the Qunity compilation procedure, including both low-level circuit optimizations as well as methods that consider the high-level structure of a Qunity program, greatly reducing the number of qubits and gates used by the compiler.},
+booktitle={Proceedings of the ACM on Programming Languages},
+month = oct,
+keywords = {compiler optimizations, high-level programming languages, quantum control flow, quantum programming languages, quantum subroutines}
 }
 
 

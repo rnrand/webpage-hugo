@@ -40,8 +40,7 @@ publishDate: '2024-01-24T20:29:15.571026Z'
 publication_types:
 - '1'
 abstract: ''
-publication: '*2023 IEEE/ACM 4th International Workshop on Quantum Software Engineering
-  (Q-SE)*'
+publication: '*Quantum Software Engineering (Q-SE)*'
 doi: 10.1109/Q-SE59154.2023.00007
 url_video: https://youtu.be/GKwFNu-otyw?t=1493
 links:
