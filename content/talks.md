@@ -1,5 +1,6 @@
 ## Recent and Upcoming Talks
 
+- Formal Verification of Quantum Computation. [Dagstuhl Seminar on Formal Analysis and Verification in Quantum Programming Languages](https://www.dagstuhl.de/en/seminars/seminar-calendar/seminar-details/26111), 2026.
 - [An Invitation to Quantum Programming Languages](https://popl26.sigplan.org/details/PLMW-POPL-2026/5/-An-Invitation-to-Quantum-Programming-Languages). Programming Languages Mentoring Workshop, 2026.
 - [Quantum Programming in Qunity](https://www.mccormick.northwestern.edu/information-technology/inside-our-program/events/?eid=632644). CS Seminar, Northwestern University, 2025.
 - Writing and Compiling High-Level Quantum Programs. QSI Seminar, University of Technology Sydney, 2025.
