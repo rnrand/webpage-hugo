@@ -35,10 +35,10 @@ publication_types:
 - '3'
 abstract: ''
 publication: 
-doi: arXiv.2101.08939
+doi: 10.48550/arXiv.2101.08939
 links:
 - name: arXiv
-  url: https://arxiv.org/abs/2101.08939
+  url: https://arxiv.org/abs/2101.08939v3
 url_poster: files/qip_2022_poster.pdf
 ---
 In submission. 

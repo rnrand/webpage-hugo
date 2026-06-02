@@ -9,7 +9,7 @@ widget: blank
 ---
 
 
-- <a href="http://www.physics.emory.edu/home/about/news/WISQCE.html">WiSQCE 2020</a>: 
+- WiSQCE 2020: 
  <a href="files/wisqce.pdf">Quantum Circuits</a>, <a href="vqc/index.html">Verification</a>
 - <a href="popl_2020">POPL 2020 VQC Tutorial</a>
 - <a href="popl_2016">POPL 2016 Coq Tutorial</a>

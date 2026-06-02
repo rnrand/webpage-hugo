@@ -33,7 +33,6 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-lastmod: 2023-04-18T16:34:22-05:00
 publication_types:
 - '2'
 abstract: 'Quantum computing technology may soon deliver revolutionary improvements in algorithmic performance, but these are only

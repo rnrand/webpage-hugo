@@ -5,7 +5,6 @@
 
 title: Robert Rand # Website name
 baseurl: 'http://rand.cs.uchicago.edu/'
-# baseurl: 'https://example.com/' # Website URL
 copyright: '' # Footer text, e.g. '© {year} Me'
 
 ############################
